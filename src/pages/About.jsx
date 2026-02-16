@@ -1,19 +1,27 @@
 // FILE: src/pages/About.jsx
-// About / Star Chart page — uses enhanced Constellation
-import React from 'react';
+// About / Star Chart page — uses enhanced Constellation + StoryJourney
+import { lazy, Suspense } from 'react';
 import Constellation from '../components/Constellation';
+import StoryJourney from '../components/StoryJourney';
 import useSEO from '../hooks/useSEO';
 import { personJsonLd } from '../lib/seo';
+
+const AboutParticles = lazy(() => import('../components/AboutParticles'));
 
 export default function About() {
   useSEO({
     title: 'About',
-    description: 'Skills constellation and career timeline of a full-stack engineer specializing in React, Node.js, and creative web development.',
+    description: 'Skills constellation, life journey, and career story of Sundram Pathak — a full-stack engineer specializing in React, Node.js, and creative web development.',
     jsonLd: personJsonLd,
   });
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16" aria-label="About me">
+    <section className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16" aria-label="About me">
+      {/* Subtle floating particles background */}
+      <Suspense fallback={null}>
+        <AboutParticles />
+      </Suspense>
+
       <h1 className="font-heading text-3xl font-bold sm:text-4xl">
         <span className="text-gradient-aurora">Star</span> Chart
       </h1>
@@ -26,8 +34,11 @@ export default function About() {
         <Constellation />
       </div>
 
+      {/* Animated 7-part life story */}
+      <StoryJourney />
+
       {/* Bio section */}
-      <div className="mt-12 rounded-2xl border border-white/5 bg-nebula p-5 sm:mt-16 sm:p-8">
+      <div className="mt-12 rounded-2xl border border-white/5 bg-nebula/80 p-5 backdrop-blur-sm sm:mt-16 sm:p-8">
         <h2 className="font-heading text-2xl font-bold text-stardust">
           About the Pilot
         </h2>

@@ -1,8 +1,10 @@
 // FILE: src/pages/Contact.jsx
 // Contact / Docking Bay page — form POSTs to /api/contact + social links
-import React, { useState } from 'react';
-import { motion } from 'motion/react';
+// Features: client-side email validation, nebula collision success animation
+import { useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import useSEO from '../hooks/useSEO';
+import NebulaCollision from '../components/NebulaCollision';
 
 // Inline SVG brand icons (16×16)
 const LinkedInIcon = () => (
@@ -51,21 +53,57 @@ const socials = [
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState('idle'); // idle | sending | sent | error
+  const [status, setStatus] = useState('idle'); // idle | sending | animating | sent | error
   const [errorMsg, setErrorMsg] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
 
   useSEO({
     title: 'Contact',
     description: 'Get in touch — send a transmission to collaborate on your next project.',
   });
 
-  const handleChange = (e) =>
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    // Clear field error on change
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  // Client-side validation
+  const validate = useCallback(() => {
+    const errors = {};
+    if (!form.name.trim() || form.name.trim().length < 2) {
+      errors.name = 'Name must be at least 2 characters.';
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.email.trim()) {
+      errors.email = 'Email is required.';
+    } else if (!emailRegex.test(form.email.trim())) {
+      errors.email = 'Please input a valid email address.';
+    }
+    if (!form.message.trim() || form.message.trim().length < 10) {
+      errors.message = 'Message must be at least 10 characters.';
+    }
+    return errors;
+  }, [form]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate first
+    const errors = validate();
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setStatus('error');
+      setErrorMsg(Object.values(errors)[0]);
+      return;
+    }
+
     setStatus('sending');
     setErrorMsg('');
+    setFieldErrors({});
 
     try {
       const res = await fetch('/api/contact', {
@@ -95,7 +133,8 @@ export default function Contact() {
         );
       }
 
-      setStatus('sent');
+      // Success — trigger nebula animation
+      setStatus('animating');
       setForm({ name: '', email: '', message: '' });
     } catch (err) {
       setStatus('error');
@@ -103,8 +142,22 @@ export default function Contact() {
     }
   };
 
+  const handleAnimationComplete = useCallback(() => {
+    setStatus('sent');
+    // Auto-reset after a bit
+    setTimeout(() => setStatus('idle'), 3000);
+  }, []);
+
   return (
-    <section className="mx-auto max-w-2xl px-4 py-12 sm:px-6 sm:py-16" aria-label="Contact">
+    <>
+      {/* Nebula collision overlay */}
+      <AnimatePresence>
+        {status === 'animating' && (
+          <NebulaCollision onComplete={handleAnimationComplete} />
+        )}
+      </AnimatePresence>
+
+      <section className="mx-auto max-w-2xl px-4 py-12 sm:px-6 sm:py-16" aria-label="Contact">
       <h1 className="font-heading text-3xl font-bold sm:text-4xl">
         <span className="text-gradient-aurora">Docking</span> Bay
       </h1>
@@ -131,9 +184,12 @@ export default function Contact() {
             required
             value={form.name}
             onChange={handleChange}
-            className="w-full rounded-lg border border-white/10 bg-nebula px-4 py-3 text-stardust placeholder-cosmos-muted outline-none transition-colors focus:border-comet"
+            className={`w-full rounded-lg border ${fieldErrors.name ? 'border-supernova' : 'border-white/10'} bg-nebula px-4 py-3 text-stardust placeholder-cosmos-muted outline-none transition-colors focus:border-comet`}
             placeholder="Commander Shepard"
           />
+          {fieldErrors.name && (
+            <p className="mt-1 text-xs text-supernova">{fieldErrors.name}</p>
+          )}
         </div>
 
         <div>
@@ -147,9 +203,12 @@ export default function Contact() {
             required
             value={form.email}
             onChange={handleChange}
-            className="w-full rounded-lg border border-white/10 bg-nebula px-4 py-3 text-stardust placeholder-cosmos-muted outline-none transition-colors focus:border-comet"
+            className={`w-full rounded-lg border ${fieldErrors.email ? 'border-supernova' : 'border-white/10'} bg-nebula px-4 py-3 text-stardust placeholder-cosmos-muted outline-none transition-colors focus:border-comet`}
             placeholder="you@example.com"
           />
+          {fieldErrors.email && (
+            <p className="mt-1 text-xs text-supernova">{fieldErrors.email}</p>
+          )}
         </div>
 
         <div>
@@ -163,9 +222,12 @@ export default function Contact() {
             rows={5}
             value={form.message}
             onChange={handleChange}
-            className="w-full resize-none rounded-lg border border-white/10 bg-nebula px-4 py-3 text-stardust placeholder-cosmos-muted outline-none transition-colors focus:border-comet"
+            className={`w-full resize-none rounded-lg border ${fieldErrors.message ? 'border-supernova' : 'border-white/10'} bg-nebula px-4 py-3 text-stardust placeholder-cosmos-muted outline-none transition-colors focus:border-comet`}
             placeholder="Tell me about your mission…"
           />
+          {fieldErrors.message && (
+            <p className="mt-1 text-xs text-supernova">{fieldErrors.message}</p>
+          )}
         </div>
 
         <button
@@ -177,9 +239,14 @@ export default function Contact() {
         </button>
 
         {status === 'sent' && (
-          <p className="text-center text-sm text-aurora" role="status">
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-sm text-aurora"
+            role="status"
+          >
             ✓ Transmission received. I&apos;ll respond soon.
-          </p>
+          </motion.p>
         )}
         {status === 'error' && (
           <p className="text-center text-sm text-supernova" role="alert">
@@ -205,5 +272,6 @@ export default function Contact() {
         ))}
       </div>
     </section>
+    </>
   );
 }

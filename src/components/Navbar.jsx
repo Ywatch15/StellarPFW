@@ -1,15 +1,16 @@
 // FILE: src/components/Navbar.jsx
 // Accessible top navigation bar with mobile hamburger menu
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAudio } from './AudioEngine';
+import { HomeIcon, WorksIcon, AboutIcon, BeyondIcon, ContactIcon } from './NavIcons';
 
 const links = [
-  { to: '/', label: 'Home', icon: '☉' },
-  { to: '/works', label: 'Works', icon: '◐' },
-  { to: '/about', label: 'About', icon: '✦' },
-  { to: '/beyond', label: 'Beyond', icon: '◌' },
-  { to: '/contact', label: 'Contact', icon: '◈' },
+  { to: '/', label: 'Home', Icon: HomeIcon },
+  { to: '/works', label: 'Works', Icon: WorksIcon },
+  { to: '/about', label: 'About', Icon: AboutIcon },
+  { to: '/beyond', label: 'Beyond', Icon: BeyondIcon },
+  { to: '/contact', label: 'Contact', Icon: ContactIcon },
 ];
 
 export default function Navbar() {
@@ -49,7 +50,7 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <ul className="hidden items-center gap-1 rounded-full border border-white/10 bg-nebula/80 px-2 py-1 backdrop-blur-md md:flex">
-          {links.map(({ to, label, icon }) => (
+          {links.map(({ to, label, Icon }) => (
             <li key={to}>
               <NavLink
                 to={to}
@@ -64,7 +65,7 @@ export default function Navbar() {
                 onMouseEnter={playHover}
                 onClick={playClick}
               >
-                <span aria-hidden="true">{icon}</span>
+                <span aria-hidden="true"><Icon size={14} /></span>
                 {label}
               </NavLink>
             </li>
@@ -104,7 +105,7 @@ export default function Navbar() {
             className="flex min-h-screen flex-col items-center justify-center gap-6"
             onClick={(e) => e.stopPropagation()}
           >
-            {links.map(({ to, label, icon }) => (
+            {links.map(({ to, label, Icon }) => (
               <li key={to}>
                 <NavLink
                   to={to}
@@ -120,7 +121,7 @@ export default function Navbar() {
                     setMenuOpen(false);
                   }}
                 >
-                  <span aria-hidden="true" className="text-2xl">{icon}</span>
+                  <span aria-hidden="true" className="text-2xl"><Icon size={24} /></span>
                   {label}
                 </NavLink>
               </li>

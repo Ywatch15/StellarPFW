@@ -1,6 +1,6 @@
 // FILE: src/pages/Home.jsx
 // Home / Launch Pad page — hero + orbital navigation preview
-import React, { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import useWebGL from '../hooks/useWebGL';
 import useSEO from '../hooks/useSEO';
 import { websiteJsonLd, personJsonLd } from '../lib/seo';
@@ -8,6 +8,7 @@ import FallbackHero from '../components/FallbackHero';
 import Loader from '../components/Loader';
 import OrbitShell from '../components/OrbitShell';
 import HomeIntro from '../components/HomeIntro';
+import HomeHighlights from '../components/HomeHighlights';
 
 // Lazy-load the heavy 3D scene
 const HeroScene = lazy(() => import('../components/HeroScene'));
@@ -73,6 +74,9 @@ export default function Home({ onReady }) {
 
       {/* Personal intro section */}
       <HomeIntro />
+
+      {/* Stats, tech ticker, and highlight cards */}
+      <HomeHighlights />
     </section>
   );
 }

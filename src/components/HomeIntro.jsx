@@ -1,7 +1,7 @@
 // FILE: src/components/HomeIntro.jsx
 // Personal intro section rendered below the HeroScene / OrbitShell on Home page
-import React from 'react';
-import { motion } from 'motion/react';
+import { useState, useEffect, useRef } from 'react';
+import { motion, useInView } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 
 const fadeUp = {
@@ -12,6 +12,57 @@ const fadeUp = {
     transition: { delay: i * 0.15, duration: 0.6, ease: 'easeOut' },
   }),
 };
+
+/* Typewriter subtitle */
+const roles = [
+  'Fullstack Developer',
+  'Creative Coder',
+  'DevOps Enthusiast',
+  'Problem Solver',
+];
+
+function Typewriter() {
+  const [text, setText] = useState('');
+  const [roleIdx, setRoleIdx] = useState(0);
+  const [charIdx, setCharIdx] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (!inView) return;
+    const current = roles[roleIdx];
+    const speed = deleting ? 40 : 80;
+
+    const id = setTimeout(() => {
+      if (!deleting) {
+        setText(current.slice(0, charIdx + 1));
+        if (charIdx + 1 === current.length) {
+          setTimeout(() => setDeleting(true), 1500);
+        } else {
+          setCharIdx(charIdx + 1);
+        }
+      } else {
+        setText(current.slice(0, charIdx - 1));
+        if (charIdx - 1 === 0) {
+          setDeleting(false);
+          setCharIdx(0);
+          setRoleIdx((roleIdx + 1) % roles.length);
+        } else {
+          setCharIdx(charIdx - 1);
+        }
+      }
+    }, speed);
+    return () => clearTimeout(id);
+  }, [inView, charIdx, deleting, roleIdx]);
+
+  return (
+    <span ref={ref} className="text-aurora/80">
+      {text}
+      <span className="animate-pulse text-aurora">|</span>
+    </span>
+  );
+}
 
 export default function HomeIntro() {
   const navigate = useNavigate();
@@ -44,9 +95,10 @@ export default function HomeIntro() {
         whileInView="visible"
         viewport={{ once: true }}
         variants={fadeUp}
-        className="mt-3 text-lg font-medium text-aurora/80 sm:text-xl"
+        className="mt-3 text-lg font-medium sm:text-xl"
       >
-        Fullstack Developer &bull; Electronics Engineering Undergraduate
+        <Typewriter />
+        <span className="text-cosmos-muted"> &bull; Electronics Engineering Undergraduate</span>
       </motion.p>
 
       <motion.div

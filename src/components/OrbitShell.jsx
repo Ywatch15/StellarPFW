@@ -1,15 +1,14 @@
 // FILE: src/components/OrbitShell.jsx
 // Orbital navigation — central sun node with clickable satellite nav items
-// Progressive enhancement: falls back to Navbar on non-WebGL / reduced-motion
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const SATELLITES = [
-  { path: '/', label: 'Home', icon: '☉', angle: 0, color: '#6c63ff' },
-  { path: '/works', label: 'Works', icon: '◐', angle: 72, color: '#38bdf8' },
-  { path: '/about', label: 'About', icon: '✦', angle: 144, color: '#facc15' },
-  { path: '/beyond', label: 'Beyond', icon: '◌', angle: 216, color: '#a78bfa' },
-  { path: '/contact', label: 'Contact', icon: '◈', angle: 288, color: '#f43f5e' },
+  { path: '/', label: 'Home', icon: '⌂', angle: 0, color: '#6c63ff' },
+  { path: '/works', label: 'Works', icon: '⚒', angle: 72, color: '#38bdf8' },
+  { path: '/about', label: 'About', icon: '☺', angle: 144, color: '#facc15' },
+  { path: '/beyond', label: 'Beyond', icon: '∞', angle: 216, color: '#a78bfa' },
+  { path: '/contact', label: 'Contact', icon: '✉', angle: 288, color: '#f43f5e' },
 ];
 
 const ORBIT_RADIUS = 130;

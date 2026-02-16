@@ -1,0 +1,56 @@
+[
+  {
+    "id": "scatch-project",
+    "title": "ScatchProject",
+    "description": "A full-stack e-commerce platform built with Express, EJS templating, and MongoDB. Features product listings, user authentication, cart management, and an admin dashboard for inventory control.",
+    "tags": ["Node.js", "Express", "EJS", "MongoDB"],
+    "color": "#6c63ff",
+    "github": "https://github.com/Ywatch15/ScatchProject",
+    "demo": null
+  },
+  {
+    "id": "live-interview-platform",
+    "title": "Live Interview Platform",
+    "description": "A real-time video interview platform with built-in code editor and collaborative whiteboard. Connects interviewers and candidates through WebRTC-powered sessions.",
+    "tags": ["JavaScript", "Node.js", "WebRTC", "Express"],
+    "color": "#38bdf8",
+    "github": "https://github.com/Ywatch15/Live-Interview-Platform",
+    "demo": null
+  },
+  {
+    "id": "ai-chatbot",
+    "title": "AI Chatbot",
+    "description": "An intelligent conversational chatbot built with TypeScript. Leverages AI APIs for natural language understanding with a clean, responsive chat interface.",
+    "tags": ["TypeScript", "Node.js", "AI/ML", "REST API"],
+    "color": "#a78bfa",
+    "github": "https://github.com/Ywatch15/AI-Chatbot",
+    "demo": null
+  },
+  {
+    "id": "face-detector",
+    "title": "Face Detector",
+    "description": "A Python-based face detection application using computer vision libraries. Processes images and video streams to identify and highlight facial features in real time.",
+    "tags": ["Python", "OpenCV", "Computer Vision"],
+    "color": "#facc15",
+    "github": "https://github.com/Ywatch15/Face-Detector",
+    "demo": null
+  },
+  {
+    "id": "note-taking-app",
+    "title": "Note Taking App",
+    "description": "A clean, responsive note-taking application with create, edit, and delete functionality. Built with vanilla JavaScript and local persistence for a distraction-free writing experience.",
+    "tags": ["JavaScript", "HTML", "CSS"],
+    "color": "#22d3ee",
+    "github": "https://github.com/Ywatch15/Note-taking-app",
+    "demo": null
+  },
+  {
+    "id": "telecom-simulator",
+    "title": "TeleCom Network Simulator",
+    "description": "A network topology simulator and visualizer for telecommunications systems. Models signal propagation, routing algorithms, and network performance metrics — built as an Electronics Engineering project.",
+    "tags": ["Networking", "Simulation", "Visualization"],
+    "color": "#f43f5e",
+    "github": "https://github.com/Ywatch15/TeleCom-Network-Simulator-and-Visualizer",
+    "demo": null
+  }
+]

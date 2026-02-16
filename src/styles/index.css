@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-void: #050816;
+    --color-nebula: #0a0f2c;
+    --color-stardust: #e0e6ff;
+    --color-comet: #6c63ff;
+    --color-aurora: #38bdf8;
+    --color-solar: #facc15;
+    --color-supernova: #f43f5e;
+    --color-cosmos-muted: #64748b;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-void text-stardust font-body antialiased;
+  }
+
+  /* Focus ring — accessible and on-brand */
+  :focus-visible {
+    outline: 3px solid var(--color-aurora);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Reduced motion — disable all custom animations */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .gradient-nebula {
+    background: linear-gradient(135deg, #0a0f2c 0%, #1e1b4b 100%);
+  }
+  .gradient-aurora {
+    background: linear-gradient(90deg, #6c63ff 0%, #38bdf8 100%);
+  }
+  .text-gradient-aurora {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(90deg, #6c63ff 0%, #38bdf8 100%);
+  }
+}
+
+/* Theme: Minimal (light mode overrides) */
+.light {
+  --color-void: #f8fafc;
+  --color-nebula: #e2e8f0;
+  --color-stardust: #0f172a;
+  --color-comet: #1e293b;
+  --color-aurora: #0284c7;
+  --color-solar: #a16207;
+  --color-supernova: #be123c;
+  --color-cosmos-muted: #475569;
+}
+
+/* Theme: Dark */
+.dark.theme-dark {
+  --color-void: #000000;
+  --color-nebula: #0c0c0c;
+  --color-comet: #a78bfa;
+  --color-aurora: #818cf8;
+}

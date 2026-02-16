@@ -1,0 +1,4 @@
+# https://stellar-portfolio.vercel.app
+User-agent: *
+Allow: /
+Sitemap: https://stellar-portfolio.vercel.app/sitemap.xml

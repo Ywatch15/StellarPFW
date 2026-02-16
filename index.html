@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Stellar Portfolio — A space-themed developer portfolio showcasing projects, skills, and experience through orbital navigation and interactive 3D scenes." />
+    <meta name="theme-color" content="#050816" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Stellar Portfolio — Developer" />
+    <meta property="og:description" content="A space-themed developer portfolio showcasing projects, skills, and experience through orbital navigation and interactive 3D scenes." />
+    <meta property="og:url" content="https://stellar-portfolio.vercel.app" />
+    <meta property="og:image" content="https://stellar-portfolio.vercel.app/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Stellar Portfolio" />
+    <meta name="twitter:description" content="Space-themed developer portfolio with 3D orbital navigation." />
+
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap"
+    />
+
+    <title>Stellar Portfolio</title>
+
+    <!-- Inline critical CSS for the loader -->
+    <style>
+      body {
+        margin: 0;
+        background: #050816;
+        color: #e0e6ff;
+        font-family: Inter, system-ui, -apple-system, sans-serif;
+      }
+      #loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        background: #050816;
+        transition: opacity 0.4s ease;
+      }
+      #loader.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .planet-loader {
+        width: 48px;
+        height: 48px;
+        animation: spin 1.5s linear infinite;
+      }
+      .planet-loader circle {
+        fill: none;
+        stroke-width: 3;
+      }
+      .planet-body { stroke: #6c63ff; }
+      .planet-ring { stroke: #38bdf8; stroke-dasharray: 80 40; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+  </head>
+  <body>
+    <!-- SVG Microloader planet — visible until React hydrates -->
+    <div id="loader" aria-label="Loading portfolio">
+      <svg class="planet-loader" viewBox="0 0 64 64" role="img" aria-hidden="true">
+        <circle class="planet-body" cx="32" cy="32" r="14" />
+        <circle class="planet-ring" cx="32" cy="32" r="28" />
+      </svg>
+    </div>
+
+    <div id="root"></div>
+
+    <!-- Semantic HTML fallback for no-JS / search engines -->
+    <noscript>
+      <style>
+        #loader { display: none; }
+        .noscript-content { max-width: 48rem; margin: 4rem auto; padding: 1.5rem; }
+        .noscript-content h1 { font-size: 2rem; margin-bottom: 1rem; }
+        .noscript-content p { color: #94a3b8; line-height: 1.7; }
+        .noscript-content a { color: #6c63ff; text-decoration: underline; }
+        .noscript-content nav { margin: 2rem 0; }
+        .noscript-content nav a { margin-right: 1.5rem; color: #38bdf8; }
+      </style>
+      <div class="noscript-content">
+        <h1>Stellar Portfolio</h1>
+        <nav aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/works">Projects</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+        </nav>
+        <p>Full-stack engineer crafting performant, accessible digital experiences. This portfolio uses JavaScript for interactive 3D visualizations, but all content is accessible without it.</p>
+        <h2>Skills</h2>
+        <p>React, JavaScript, TypeScript, Three.js, Node.js, Express, MongoDB, PostgreSQL, GraphQL, Tailwind, Docker, AWS, Git, Vite</p>
+        <h2>Contact</h2>
+        <p>Reach out via <a href="https://github.com">GitHub</a>, <a href="https://linkedin.com">LinkedIn</a>, or <a href="https://x.com">Twitter/X</a>.</p>
+      </div>
+    </noscript>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

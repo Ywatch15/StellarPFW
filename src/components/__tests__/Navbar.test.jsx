@@ -7,10 +7,15 @@ import Navbar from '../Navbar';
 
 expect.extend(toHaveNoViolations);
 
+// Mock useAudio to avoid AudioContext issues in tests
+jest.mock('../AudioEngine', () => ({
+  useAudio: () => ({ playHover: jest.fn(), playClick: jest.fn(), playTransition: jest.fn() }),
+}));
+
 describe('Navbar', () => {
   const renderNav = () =>
     render(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Navbar />
       </MemoryRouter>,
     );
@@ -20,6 +25,7 @@ describe('Navbar', () => {
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('Works')).toBeInTheDocument();
     expect(screen.getByText('About')).toBeInTheDocument();
+    expect(screen.getByText('Beyond')).toBeInTheDocument();
     expect(screen.getByText('Contact')).toBeInTheDocument();
   });
 

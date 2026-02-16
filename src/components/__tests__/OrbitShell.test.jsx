@@ -7,18 +7,9 @@ import OrbitShell from '../OrbitShell';
 
 expect.extend(toHaveNoViolations);
 
-// Mock motion/react to avoid animation issues in tests
-jest.mock('motion/react', () => ({
-  motion: {
-    div: ({ children, ...props }) =>
-      React.createElement('div', props, children),
-  },
-  AnimatePresence: ({ children }) => children,
-}));
-
 const renderOrbit = () =>
   render(
-    <MemoryRouter initialEntries={['/']}>
+    <MemoryRouter initialEntries={['/']} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <OrbitShell />
     </MemoryRouter>,
   );
@@ -32,6 +23,7 @@ describe('OrbitShell', () => {
     expect(screen.getByLabelText(/navigate to home/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/navigate to works/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/navigate to about/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/navigate to beyond/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/navigate to contact/i)).toBeInTheDocument();
   });
 

@@ -1,6 +1,6 @@
 // FILE: src/components/Constellation.jsx
 // SVG-based skills constellation with hover-highlight, tooltips & doc links
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 
 const skills = [
   // ── Frontend (14) ──
@@ -202,7 +202,10 @@ export default function Constellation() {
   const hoverTimerRef = useRef(null);
 
   const active = hovered || focused;
-  const connectedSet = active ? getConnectedSkills(active) : new Set();
+  const connectedSet = useMemo(
+    () => (active ? getConnectedSkills(active) : new Set()),
+    [active],
+  );
 
   // Hover tooltip with 0.75s delay
   const handleMouseEnter = useCallback((skill) => {

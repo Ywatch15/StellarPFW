@@ -8,7 +8,7 @@
 // 3. Use <GLTFModel url="/models/planet-draco.glb" /> instead
 // 4. Ensure file size < 100 KB after Draco compression
 
-import React, { useRef, useMemo } from 'react';
+import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Float, MeshDistortMaterial } from '@react-three/drei';
 import * as THREE from 'three';

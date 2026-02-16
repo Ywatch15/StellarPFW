@@ -3,7 +3,7 @@
 // Keyboard controls: Arrow keys scrub, Enter activates entry
 // CSS scroll-snap fallback for non-JS environments
 import React, { useRef, useCallback, useState } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion } from 'motion/react';
 
 const timelineData = [
   {

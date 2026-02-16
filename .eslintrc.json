@@ -21,7 +21,50 @@
     "react": { "version": "detect" }
   },
   "rules": {
-    "react/prop-types": "warn",
-    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
-  }
+    "react/prop-types": "off",
+    "react/no-unescaped-entities": "off",
+    "react/no-unknown-property": [
+      "error",
+      {
+        "ignore": [
+          "args",
+          "attach",
+          "array",
+          "count",
+          "itemSize",
+          "flatShading",
+          "roughness",
+          "metalness",
+          "transparent",
+          "sizeAttenuation",
+          "side",
+          "rotation",
+          "position",
+          "intensity"
+        ]
+      }
+    ],
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^React$"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["api/**/*.js", "scripts/**/*.js", "vite.config.js"],
+      "env": {
+        "node": true
+      }
+    },
+    {
+      "files": ["**/__tests__/**/*.{js,jsx}", "**/*.test.{js,jsx}"],
+      "rules": {
+        "react/display-name": "off",
+        "no-unused-vars": "off"
+      }
+    }
+  ]
 }

@@ -3,7 +3,6 @@
 // Progressive enhancement: falls back to Navbar on non-WebGL / reduced-motion
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
 
 const SATELLITES = [
   { path: '/', label: 'Home', icon: '☉', angle: 0, color: '#6c63ff' },

@@ -3,7 +3,7 @@
 // No WebGL — works on every device
 import React, { useEffect, useRef, useState } from 'react';
 
-const PARTICLE_COUNT = 60;
+const PARTICLE_COUNT = 40;
 
 function generateParticles(count) {
   return Array.from({ length: count }, (_, i) => ({

@@ -30,7 +30,9 @@ export default defineConfig({
     },
     target: 'esnext',
     minify: 'esbuild',
-    sourcemap: true,
+    sourcemap: false,
+    cssMinify: true,
+    assetsInlineLimit: 4096,
   },
   server: {
     port: 3000,

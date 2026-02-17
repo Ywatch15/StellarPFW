@@ -4,9 +4,9 @@
 import React, { useRef, useCallback } from 'react';
 
 const STAR_LAYERS = [
-  { count: 60, speed: 0.015, size: 1, opacity: 0.4 },
-  { count: 40, speed: 0.025, size: 1.5, opacity: 0.6 },
-  { count: 20, speed: 0.04, size: 2, opacity: 0.8 },
+  { count: 40, speed: 0.015, size: 1, opacity: 0.4 },
+  { count: 25, speed: 0.025, size: 1.5, opacity: 0.6 },
+  { count: 12, speed: 0.04, size: 2, opacity: 0.8 },
 ];
 
 function generateStars(count) {

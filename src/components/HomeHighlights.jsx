@@ -58,7 +58,7 @@ const highlights = [
   {
     icon: '🧠',
     title: 'Competitive Coding',
-    desc: 'LeetCode, CodeChef, Codeforces — algorithmic thinking for scalable solutions.',
+    desc: 'LeetCode, CodeChef, GeeksforGeeks — algorithmic thinking for scalable solutions.',
     color: '#facc15',
   },
 ];

@@ -114,7 +114,7 @@ export default function HomeIntro() {
           undergraduate navigating the universe of full-stack development. I
           build immersive, realistic digital experiences and continuously explore
           new technologies. Along this journey, I sharpen my problem-solving
-          skills across platforms like LeetCode, CodeChef, Codeforces, and
+          skills across platforms like LeetCode, CodeChef, and
           GeeksforGeeks, always striving to evolve as a developer.
         </p>
         <p>
@@ -137,7 +137,7 @@ export default function HomeIntro() {
         className="mt-10 flex flex-wrap justify-center gap-4"
       >
         <a
-          href="/resume.pdf"
+          href="/springworks.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-comet px-7 py-3 font-heading text-sm font-semibold text-white transition-all hover:bg-comet/80 focus-visible:ring-2 focus-visible:ring-aurora"

@@ -44,7 +44,6 @@ PFW/
 │   │   ├── Starfield.jsx       # Parallax star background
 │   │   ├── PlanetModel.jsx     # 3D planet
 │   │   ├── ParallaxLayer.jsx   # Scroll parallax wrapper
-│   │   ├── AudioEngine.jsx     # Web Audio provider + toggle
 │   │   ├── OrbitalCursor.jsx   # Custom cursor
 │   │   ├── ThemeProvider.jsx   # Theme context + toggle
 │   │   ├── AnalyticsBanner.jsx # Consent banner

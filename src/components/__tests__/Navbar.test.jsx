@@ -7,11 +7,6 @@ import Navbar from '../Navbar';
 
 expect.extend(toHaveNoViolations);
 
-// Mock useAudio to avoid AudioContext issues in tests
-jest.mock('../AudioEngine', () => ({
-  useAudio: () => ({ playHover: jest.fn(), playClick: jest.fn(), playTransition: jest.fn() }),
-}));
-
 describe('Navbar', () => {
   const renderNav = () =>
     render(

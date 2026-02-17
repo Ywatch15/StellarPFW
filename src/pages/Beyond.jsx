@@ -12,8 +12,7 @@ const dataFragments = [
     id: 'mission',
     title: 'Mission Statement',
     icon: '🚀',
-    content:
-      'To build software that matters — products that are performant, accessible, and push the boundaries of what\'s possible on the web.',
+    content: null, // rendered custom
     color: '#6c63ff',
   },
   {
@@ -27,16 +26,14 @@ const dataFragments = [
     id: 'philosophy',
     title: 'Dev Philosophy',
     icon: '🧠',
-    content:
-      '"First, solve the problem. Then, write the code." — Every great product starts with understanding the user\'s pain point, not picking a framework.',
+    content: null, // rendered custom
     color: '#facc15',
   },
   {
     id: 'journey',
     title: 'The Journey',
     icon: '🌌',
-    content:
-      'From soldering circuits in Electronics Engineering to crafting full-stack applications. Every bug fixed, every feature shipped — all part of the trajectory toward singularity-level skill.',
+    content: null, // rendered custom
     color: '#f43f5e',
   },
   {
@@ -58,23 +55,25 @@ const dataFragments = [
 const stats = [
   { label: 'Projects Built', value: '15+', icon: '◐' },
   { label: 'Technologies', value: '40+', icon: '✦' },
-  { label: 'Cups of Coffee', value: '∞', icon: '☕' },
+  { label: 'Lines of Code', value: '50k+', icon: '⟨⟩' },
   { label: 'GitHub Repos', value: '10+', icon: '⟁' },
+  { label: 'DSA Problems', value: '500+', icon: '🧩' },
+  { label: 'Cups of Coffee', value: '∞', icon: '☕' },
 ];
 
 const platforms = [
-  { name: 'LeetCode', emoji: '🧩' },
-  { name: 'CodeChef', emoji: '👨‍🍳' },
-  { name: 'Codeforces', emoji: '🏆' },
-  { name: 'GeeksforGeeks', emoji: '🤓' },
+  { name: 'LeetCode', emoji: '🧩', link: 'https://leetcode.com/u/Sundram_Pathak/' },
+  { name: 'CodeChef', emoji: '👨‍🍳', link: 'https://www.codechef.com/users/pasu_1515' },
+  { name: 'GeeksforGeeks', emoji: '🤓', link: 'https://www.geeksforgeeks.org/profile/pathaksupkdl' },
 ];
 
 const funFacts = [
-  'Space has no sound, but my code has plenty of audio toggles. 🔊',
   'This portfolio has more stars than some GitHub repos. ⭐',
   'The black hole on this page uses 0 WebGL. Pure CSS + Canvas art.',
   'I debug with console.log and I\'m not ashamed. 🐛',
   'Dark mode isn\'t a preference, it\'s a lifestyle. 🌙',
+  'My first program was a "Hello, World!" in C++. Now I build entire galaxies. 🌌',
+  'I once spent 4 hours fixing a bug that was a missing semicolon. 🔍',
 ];
 
 const cardVariants = {
@@ -99,16 +98,6 @@ const pulseKeyframes = {
     '0 0 0 0 rgba(108,99,255,0)',
   ],
 };
-
-function StatCard({ stat }) {
-  return (
-    <div className="flex flex-col items-center gap-1">
-      <span className="text-2xl">{stat.icon}</span>
-      <span className="font-heading text-2xl font-bold text-stardust">{stat.value}</span>
-      <span className="text-xs text-cosmos-muted">{stat.label}</span>
-    </div>
-  );
-}
 
 function DataCard({ fragment, index }) {
   const [expanded, setExpanded] = useState(false);
@@ -161,33 +150,154 @@ function DataCard({ fragment, index }) {
               className="overflow-hidden"
             >
               <div className="mt-4">
-                {fragment.id === 'stats' && (
-                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                    {stats.map((s) => (
-                      <StatCard key={s.label} stat={s} />
-                    ))}
-                  </div>
-                )}
-
-                {fragment.id === 'competitive' && (
-                  <div className="space-y-3">
-                    <p className="text-sm text-cosmos-muted">
-                      Active competitive programmer sharpening algorithmic skills:
+                {/* ─── Mission Statement ─── */}
+                {fragment.id === 'mission' && (
+                  <div className="space-y-4">
+                    <p className="text-sm leading-relaxed text-cosmos-muted">
+                      To build software that matters — products that are performant, accessible,
+                      and push the boundaries of what's possible on the web.
                     </p>
-                    <div className="flex flex-wrap gap-3">
-                      {platforms.map((p) => (
-                        <span
-                          key={p.name}
-                          className="flex items-center gap-1.5 rounded-full bg-comet/10 px-4 py-1.5 text-sm text-stardust"
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                      {[
+                        { icon: '🎯', title: 'User-First', desc: 'Every feature starts with empathy — understanding what users truly need.' },
+                        { icon: '⚡', title: 'Performance', desc: 'Sub-second loads, optimized bundles, and buttery-smooth 60fps interactions.' },
+                        { icon: '♿', title: 'Accessibility', desc: 'Semantic HTML, ARIA patterns, keyboard-navigable — the web is for everyone.' },
+                      ].map((v) => (
+                        <motion.div
+                          key={v.title}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="rounded-lg border border-white/5 bg-void/40 p-3 text-center"
                         >
-                          <span>{p.emoji}</span>
-                          {p.name}
-                        </span>
+                          <span className="text-xl">{v.icon}</span>
+                          <h4 className="mt-1 text-xs font-semibold text-stardust">{v.title}</h4>
+                          <p className="mt-1 text-xs text-cosmos-muted">{v.desc}</p>
+                        </motion.div>
                       ))}
                     </div>
                   </div>
                 )}
 
+                {/* ─── Code Metrics ─── */}
+                {fragment.id === 'stats' && (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                      {stats.map((s, i) => (
+                        <motion.div
+                          key={s.label}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: i * 0.06 }}
+                          className="flex flex-col items-center gap-1"
+                        >
+                          <span className="text-2xl">{s.icon}</span>
+                          <span className="font-heading text-2xl font-bold text-stardust">{s.value}</span>
+                          <span className="text-xs text-cosmos-muted">{s.label}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                    <div className="rounded-lg border border-white/5 bg-void/30 p-3">
+                      <h4 className="mb-2 text-xs font-semibold text-stardust">Favourite Stack</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind', 'Docker', 'TypeScript', 'Vite'].map((t) => (
+                          <span key={t} className="rounded-full bg-comet/10 px-3 py-1 text-xs text-stardust/80">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* ─── Dev Philosophy ─── */}
+                {fragment.id === 'philosophy' && (
+                  <div className="space-y-4">
+                    {[
+                      { quote: '"First, solve the problem. Then, write the code."', takeaway: 'Every great product starts with understanding the user\'s pain point, not picking a framework.' },
+                      { quote: '"Make it work, make it right, make it fast."', takeaway: 'Ship MVPs fast, then refactor for quality and optimise bottlenecks with real data.' },
+                      { quote: '"Simplicity is the ultimate sophistication."', takeaway: 'The best code is the code you don\'t write. Keep abstractions minimal and intent clear.' },
+                    ].map((p, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="rounded-lg border-l-2 border-white/10 bg-void/30 py-2 pl-4 pr-3"
+                        style={{ borderLeftColor: fragment.color + '66' }}
+                      >
+                        <p className="text-sm font-medium italic text-stardust/90">{p.quote}</p>
+                        <p className="mt-1 text-xs text-cosmos-muted">{p.takeaway}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+
+                {/* ─── The Journey ─── */}
+                {fragment.id === 'journey' && (
+                  <div className="relative space-y-0 pl-5">
+                    {/* Vertical timeline line */}
+                    <div className="absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+                    {[
+                      { year: '2022', emoji: '🚀', title: 'The Spark', desc: 'Started Electronics Engineering and wrote my first lines of code in C/C++. Discovered HTML/CSS/JS and fell in love with building things for the web.' },
+                      { year: '2023', emoji: '⚛️', title: 'Fullstack & DSA', desc: 'Went all-in on React, Node.js, Express & MongoDB. Simultaneously dove into competitive programming — 500+ problems across LeetCode, CodeChef & GFG.' },
+                      { year: '2024', emoji: '🐳', title: 'DevOps & Scale', desc: 'Embraced Docker, CI/CD pipelines, AWS & Vercel. Learned to ship code reliably from local to production at scale.' },
+                      { year: '2025', emoji: '🌌', title: 'Creative Frontiers', desc: 'Three.js, immersive portfolios, and pushing the boundaries of what browsers can do — blending engineering with art.' },
+                    ].map((step, i) => (
+                      <motion.div
+                        key={step.year}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.08 }}
+                        className="relative pb-4"
+                      >
+                        <div className="absolute -left-5 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-nebula ring-2 ring-white/10">
+                          <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: fragment.color }} />
+                        </div>
+                        <div>
+                          <span className="text-xs font-semibold" style={{ color: fragment.color }}>{step.year}</span>
+                          <span className="ml-2 text-sm">{step.emoji}</span>
+                          <h4 className="text-sm font-semibold text-stardust">{step.title}</h4>
+                          <p className="text-xs text-cosmos-muted">{step.desc}</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+
+                {/* ─── Competitive Edge ─── */}
+                {fragment.id === 'competitive' && (
+                  <div className="space-y-4">
+                    <p className="text-sm text-cosmos-muted">
+                      Active competitive programmer sharpening algorithmic skills across multiple platforms:
+                    </p>
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      {platforms.map((p, i) => (
+                        <motion.a
+                          key={p.name}
+                          href={p.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.08 }}
+                          className="flex flex-col items-center gap-2 rounded-xl border border-white/5 bg-void/30 p-4 transition-all hover:border-comet/30 hover:bg-comet/10"
+                        >
+                          <span className="text-3xl">{p.emoji}</span>
+                          <span className="text-sm font-semibold text-stardust">{p.name}</span>
+                          <span className="text-xs text-cosmos-muted">View Profile →</span>
+                        </motion.a>
+                      ))}
+                    </div>
+                    <div className="rounded-lg border border-white/5 bg-void/30 p-3">
+                      <h4 className="mb-2 text-xs font-semibold text-stardust">Core Strengths</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {['Dynamic Programming', 'Graph Theory', 'Binary Search', 'Trees', 'Greedy', 'Sliding Window', 'Backtracking', 'Bit Manipulation'].map((t) => (
+                          <span key={t} className="rounded-full bg-comet/10 px-3 py-1 text-xs text-stardust/80">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* ─── Fun Facts ─── */}
                 {fragment.id === 'funfact' && (
                   <ul className="space-y-2">
                     {funFacts.map((fact, i) => (
@@ -196,8 +306,9 @@ function DataCard({ fragment, index }) {
                         initial={{ x: -10, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ delay: i * 0.08 }}
-                        className="text-sm text-cosmos-muted"
+                        className="flex items-start gap-2 text-sm text-cosmos-muted"
                       >
+                        <span className="mt-0.5 text-xs text-comet">✦</span>
                         {fact}
                       </motion.li>
                     ))}

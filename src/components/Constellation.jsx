@@ -263,7 +263,24 @@ export default function Constellation() {
         role="img"
         aria-label="Skills constellation graph showing technology expertise and connections"
       >
-        {/* Background particles */}
+        <defs>
+          {/* Glow filter for active nodes */}
+          <filter id="node-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="0.6" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          {/* Shooting star gradient */}
+          <linearGradient id="shooting-star" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#e0e6ff" stopOpacity="0" />
+            <stop offset="50%" stopColor="#e0e6ff" stopOpacity="0.7" />
+            <stop offset="100%" stopColor="#6c63ff" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {/* Background particles — twinkle */}
         {Array.from({ length: 50 }, (_, i) => (
           <circle
             key={`star-${i}`}
@@ -272,8 +289,31 @@ export default function Constellation() {
             r={0.15}
             fill="#e0e6ff"
             opacity={0.15 + Math.random() * 0.2}
-          />
+          >
+            <animate
+              attributeName="opacity"
+              values={`${0.1 + Math.random() * 0.15};${0.3 + Math.random() * 0.2};${0.1 + Math.random() * 0.15}`}
+              dur={`${2 + Math.random() * 3}s`}
+              repeatCount="indefinite"
+            />
+          </circle>
         ))}
+
+        {/* Shooting star animations */}
+        <line x1="-5" y1="15" x2="0" y2="14" stroke="url(#shooting-star)" strokeWidth="0.2" opacity="0">
+          <animate attributeName="x1" values="-5;105" dur="4s" repeatCount="indefinite" begin="0s" />
+          <animate attributeName="y1" values="15;10" dur="4s" repeatCount="indefinite" begin="0s" />
+          <animate attributeName="x2" values="0;110" dur="4s" repeatCount="indefinite" begin="0s" />
+          <animate attributeName="y2" values="14;9" dur="4s" repeatCount="indefinite" begin="0s" />
+          <animate attributeName="opacity" values="0;0;0.6;0.6;0" dur="4s" repeatCount="indefinite" begin="0s" />
+        </line>
+        <line x1="110" y1="70" x2="105" y2="71" stroke="url(#shooting-star)" strokeWidth="0.15" opacity="0">
+          <animate attributeName="x1" values="110;-10" dur="5s" repeatCount="indefinite" begin="2.5s" />
+          <animate attributeName="y1" values="70;75" dur="5s" repeatCount="indefinite" begin="2.5s" />
+          <animate attributeName="x2" values="105;-15" dur="5s" repeatCount="indefinite" begin="2.5s" />
+          <animate attributeName="y2" values="71;76" dur="5s" repeatCount="indefinite" begin="2.5s" />
+          <animate attributeName="opacity" values="0;0;0.5;0.5;0" dur="5s" repeatCount="indefinite" begin="2.5s" />
+        </line>
 
         {/* Connections */}
         {connections.map(([a, b]) => {
@@ -325,6 +365,7 @@ export default function Constellation() {
               r={skill.size}
               fill={groupColors[skill.group]}
               className="cursor-pointer"
+              filter={active === skill.name ? 'url(#node-glow)' : undefined}
               tabIndex={0}
               role="link"
               aria-label={`${skill.name} — ${skill.group}. Click to open documentation.`}
@@ -334,6 +375,15 @@ export default function Constellation() {
               onBlur={() => setFocused(null)}
               onClick={() => handleClick(skill.name)}
             >
+              {/* Subtle idle breathing */}
+              {!active && (
+                <animate
+                  attributeName="r"
+                  values={`${skill.size};${skill.size + 0.25};${skill.size}`}
+                  dur={`${3 + (skills.indexOf(skill) % 4)}s`}
+                  repeatCount="indefinite"
+                />
+              )}
               <title>{`${skill.name} (${skill.group}) — click for docs`}</title>
             </circle>
 
@@ -382,17 +432,49 @@ export default function Constellation() {
       </svg>
 
       {/* Legend */}
-      <div className="flex justify-center gap-6 border-t border-white/5 px-4 py-3 text-xs text-cosmos-muted">
-        {Object.entries(groupColors).map(([group, color]) => (
-          <span key={group} className="flex items-center gap-1.5 capitalize">
-            <span
-              className="inline-block h-2 w-2 rounded-full"
-              style={{ backgroundColor: color }}
-              aria-hidden="true"
-            />
-            {group}
-          </span>
-        ))}
+      <div className="relative overflow-hidden border-t border-white/5 px-4 py-3">
+        {/* Gradient fades for mobile scroll */}
+        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-6 bg-gradient-to-r from-nebula to-transparent md:hidden" />
+        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-6 bg-gradient-to-l from-nebula to-transparent md:hidden" />
+        <div className="flex justify-center gap-6 text-xs text-cosmos-muted md:flex-wrap">
+          <div className="flex animate-legend-scroll gap-6 whitespace-nowrap md:animate-none md:flex-wrap md:justify-center">
+            {Object.entries(groupColors).map(([group, color]) => (
+              <span key={group} className="flex items-center gap-1.5 capitalize">
+                <span
+                  className="inline-block h-2 w-2 rounded-full"
+                  style={{ backgroundColor: color }}
+                  aria-hidden="true"
+                />
+                {group}
+              </span>
+            ))}
+            {/* Duplicate set for seamless mobile loop */}
+            {Object.entries(groupColors).map(([group, color]) => (
+              <span key={`dup-${group}`} className="flex items-center gap-1.5 capitalize md:hidden">
+                <span
+                  className="inline-block h-2 w-2 rounded-full"
+                  style={{ backgroundColor: color }}
+                  aria-hidden="true"
+                />
+                {group}
+              </span>
+            ))}
+          </div>
+        </div>
+        <style>{`
+          @keyframes legend-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .animate-legend-scroll {
+            animation: legend-scroll 12s linear infinite;
+          }
+          @media (min-width: 768px) {
+            .animate-legend-scroll {
+              animation: none;
+            }
+          }
+        `}</style>
       </div>
     </div>
   );

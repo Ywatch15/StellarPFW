@@ -2,7 +2,6 @@
 // Accessible top navigation bar with mobile hamburger menu
 import { useState, useCallback, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { useAudio } from './AudioEngine';
 import { HomeIcon, WorksIcon, AboutIcon, BeyondIcon, ContactIcon } from './NavIcons';
 
 const links = [
@@ -14,7 +13,6 @@ const links = [
 ];
 
 export default function Navbar() {
-  const { playHover, playClick, playTransition } = useAudio();
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -42,8 +40,6 @@ export default function Navbar() {
           to="/"
           className="font-heading text-lg font-bold text-stardust transition-colors hover:text-comet sm:text-xl"
           aria-label="Stellar Portfolio Home"
-          onMouseEnter={playHover}
-          onClick={playTransition}
         >
           ☉ Stellar_Sundram
         </NavLink>
@@ -62,8 +58,6 @@ export default function Navbar() {
                   }`
                 }
                 aria-current={({ isActive }) => (isActive ? 'page' : undefined)}
-                onMouseEnter={playHover}
-                onClick={playClick}
               >
                 <span aria-hidden="true"><Icon size={14} /></span>
                 {label}
@@ -116,10 +110,7 @@ export default function Navbar() {
                         : 'text-cosmos-muted hover:text-stardust'
                     }`
                   }
-                  onClick={() => {
-                    playClick();
-                    setMenuOpen(false);
-                  }}
+                  onClick={() => setMenuOpen(false)}
                 >
                   <span aria-hidden="true" className="text-2xl"><Icon size={24} /></span>
                   {label}

@@ -49,7 +49,7 @@ export default function About() {
             build immersive, realistic digital experiences and continuously
             explore new technologies. Along this journey, I sharpen my
             problem-solving skills across platforms like LeetCode, CodeChef,
-            Codeforces, and GeeksforGeeks, always striving to evolve as a
+            and GeeksforGeeks, always striving to evolve as a
             developer.
           </p>
           <p>
@@ -70,7 +70,7 @@ export default function About() {
           <p>
             Competitive programming is the training ground that keeps my
             algorithmic thinking sharp. Regular practice on LeetCode, CodeChef,
-            Codeforces, and GeeksforGeeks helps me tackle complex data structure
+            and GeeksforGeeks helps me tackle complex data structure
             and algorithm challenges with confidence — skills that translate
             directly into writing efficient, scalable production code.
           </p>

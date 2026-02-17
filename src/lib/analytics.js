@@ -51,7 +51,7 @@ function injectPlausible() {
   script.src = PLAUSIBLE_SRC;
   // Gracefully handle ad-blocker / network errors
   script.onerror = () => {
-    console.info('[analytics] Script blocked or unavailable — analytics disabled.');
+    // Silently ignore — analytics blocked or unavailable
   };
   document.head.appendChild(script);
 }

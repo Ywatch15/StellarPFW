@@ -136,7 +136,6 @@ export default function HeroScene() {
     canvas.addEventListener('webglcontextlost', (e) => {
       e.preventDefault();
       lossCountRef.current += 1;
-      console.warn(`[HeroScene] WebGL context lost (attempt ${lossCountRef.current}) — falling back.`);
       // After 1 loss, permanently fall back — don't keep retrying
       setContextLost(true);
     });

@@ -12,8 +12,7 @@
     {
       "source": "/(.*).woff2",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
-        { "key": "Content-Type", "value": "font/woff2" }
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
     },
     {
@@ -33,35 +32,30 @@
     {
       "source": "/(.*).webp",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800" },
-        { "key": "Content-Type", "value": "image/webp" }
+        { "key": "Cache-Control", "value": "public, max-age=604800" }
       ]
     },
     {
       "source": "/(.*).pdf",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800" },
-        { "key": "Content-Type", "value": "application/pdf" }
+        { "key": "Cache-Control", "value": "public, max-age=604800" }
       ]
     },
     {
       "source": "/favicon.svg",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800" },
-        { "key": "Content-Type", "value": "image/svg+xml" }
+        { "key": "Cache-Control", "value": "public, max-age=604800" }
       ]
     },
     {
       "source": "/robots.txt",
       "headers": [
-        { "key": "Content-Type", "value": "text/plain" },
         { "key": "Cache-Control", "value": "public, max-age=86400" }
       ]
     },
     {
       "source": "/sitemap.xml",
       "headers": [
-        { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
         { "key": "Cache-Control", "value": "public, max-age=86400" }
       ]
     },

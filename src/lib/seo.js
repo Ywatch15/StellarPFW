@@ -8,27 +8,37 @@
 export const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: 'Stellar Developer',
-  url: 'https://stellar-portfolio.vercel.app',
+  '@id': 'https://stellar-pfw.vercel.app/#person',
+  name: 'Sundram Pathak',
+  url: 'https://stellar-pfw.vercel.app',
   jobTitle: 'Full-Stack Software Engineer',
   description:
     'Full-stack engineer crafting performant, accessible digital experiences with React, Node.js, and Three.js.',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'Customer Support',
+    email: 'pathaksundram1812@gmail.com',
+  },
   sameAs: [
-    'https://github.com/stellar-dev',
-    'https://linkedin.com/in/stellar-dev',
-    'https://x.com/stellar_dev',
+    'https://github.com/Sundram1812',
+    'https://www.linkedin.com/in/sundram-pathak-a34961257/',
+    'https://leetcode.com/u/Sundram_Pathak/',
   ],
   knowsAbout: [
     'React',
     'JavaScript',
     'TypeScript',
     'Node.js',
+    'Express',
     'Three.js',
     'WebGL',
     'MongoDB',
+    'MySQL',
     'PostgreSQL',
     'AWS',
     'Docker',
+    'GraphQL',
+    'Competitive Programming',
   ],
 };
 
@@ -42,10 +52,11 @@ export function projectJsonLd(project) {
     '@type': 'CreativeWork',
     name: project.title,
     description: project.description,
-    url: project.url || `https://stellar-portfolio.vercel.app/works#${project.id}`,
+    url: project.url || `https://stellar-pfw.vercel.app/works#${project.id}`,
     creator: {
       '@type': 'Person',
-      name: 'Stellar Developer',
+      '@id': 'https://stellar-pfw.vercel.app/#person',
+      name: 'Sundram Pathak',
     },
     keywords: project.tags?.join(', '),
   };
@@ -57,14 +68,57 @@ export function projectJsonLd(project) {
 export const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
+  '@id': 'https://stellar-pfw.vercel.app/#website',
   name: 'Stellar Portfolio',
-  url: 'https://stellar-portfolio.vercel.app',
-  description: 'Space-themed developer portfolio showcasing projects, skills, and experience.',
+  url: 'https://stellar-pfw.vercel.app',
+  description: 'Full-stack developer portfolio showcasing projects, skills, and experience with interactive 3D visualizations.',
   author: {
     '@type': 'Person',
-    name: 'Stellar Developer',
+    '@id': 'https://stellar-pfw.vercel.app/#person',
+    name: 'Sundram Pathak',
+  },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://stellar-pfw.vercel.app/works?q={search_term_string}',
+    },
+    'query-input': 'required name=search_term_string',
   },
 };
+
+/**
+ * Organization JSON-LD for the portfolio
+ */
+export const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': 'https://stellar-pfw.vercel.app/#organization',
+  name: 'Stellar Portfolio',
+  description: 'Full-stack development portfolio',
+  url: 'https://stellar-pfw.vercel.app',
+  founder: {
+    '@type': 'Person',
+    '@id': 'https://stellar-pfw.vercel.app/#person',
+    name: 'Sundram Pathak',
+  },
+};
+
+/**
+ * Breadcrumb JSON-LD for navigation
+ */
+export function breadcrumbJsonLd(items) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      item: `https://stellar-pfw.vercel.app${item.url}`,
+    })),
+  };
+}
 
 /**
  * Injects JSON-LD script tag into document head

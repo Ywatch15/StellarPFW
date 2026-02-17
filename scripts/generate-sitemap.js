@@ -5,14 +5,15 @@
 const fs = require('fs');
 const path = require('path');
 
-const BASE_URL = process.env.SITE_URL || 'https://stellar-portfolio.vercel.app';
+const BASE_URL = process.env.SITE_URL || 'https://stellar-pfw.vercel.app';
 const today = new Date().toISOString().split('T')[0];
 
 const routes = [
-  { path: '/', changefreq: 'monthly', priority: '1.0' },
-  { path: '/works', changefreq: 'monthly', priority: '0.9' },
+  { path: '/', changefreq: 'weekly', priority: '1.0' },
+  { path: '/works', changefreq: 'weekly', priority: '0.9' },
   { path: '/about', changefreq: 'monthly', priority: '0.8' },
-  { path: '/contact', changefreq: 'yearly', priority: '0.7' },
+  { path: '/beyond', changefreq: 'monthly', priority: '0.7' },
+  { path: '/contact', changefreq: 'yearly', priority: '0.6' },
 ];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>

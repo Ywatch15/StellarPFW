@@ -30,9 +30,9 @@ const PLANETS = [
     color: '#4da6ff',
   },
   {
-    id: 'mars', name: 'Mars', project: 'Interview Platform',
-    url: 'https://github.com/Ywatch15/Live-Interview-Platform',
-    type: 'github', orbit: 198, size: 15, speed: 28,
+    id: 'mars', name: 'Mars', project: 'Bank Transaction System',
+    url: 'https://bank-transaction-sys.onrender.com/dashboard',
+    type: 'deployed', orbit: 198, size: 15, speed: 28,
     gradient: 'radial-gradient(circle at 35% 30%, #e8735a, #c1440e 60%, #8b2500)',
     color: '#c1440e',
   },

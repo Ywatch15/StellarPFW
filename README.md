@@ -1,4 +1,4 @@
-# 🌌 Stellar Portfolio
+# 🌌 Stellar Portfolio - https://stellar-pfw.vercel.app/
 
 > A space-themed, production-grade React portfolio featuring an interactive solar system, constellation skills graph, asteroid timeline, 3D hero scene, and cinematic page transitions — all with progressive enhancement, keyboard accessibility, and performance-first engineering.
 
@@ -41,7 +41,6 @@
 | **Plasma Tentacles** | Clicking any planet triggers a 4-second canvas animation — two bézier-curved plasma tentacles extend from the Sun to the selected planet with multi-pass glow rendering and floating particles. After 4 seconds, the target URL opens in a new tab. |
 | **Black Hole Collapse** | Clicking the Sun converts it into a black hole — an accretion disk, gravitational lensing rings, particle streams, and a darkness overlay play over 4 seconds. All planets and stars collapse inward. The user is then redirected to the Home page with a themed popup. |
 | **Constellation Skills Graph** | SVG-based interactive node map with 40+ skills categorized by frontend, backend, databases, and DevOps — hover to highlight connected paths and view tooltips. |
-| **Asteroid Timeline** | Horizontal-scroll timeline (2019–2025+) with scroll-snap and Framer Motion animations depicting career milestones. Full keyboard navigation with arrow keys. |
 | **3D Hero Scene** | Three.js planet with orbiting particles in the Home hero section, powered by React Three Fiber. Lazy-loaded only when WebGL is confirmed. |
 | **Orbital Navigation** | SVG orbit shell on the Home page with keyboard-accessible planet links (arrow keys, Space, Enter) for navigating between site sections. |
 | **Satellite Cards** | Animated project detail modals with spring transitions, focus trapping, and accessible ARIA roles. |

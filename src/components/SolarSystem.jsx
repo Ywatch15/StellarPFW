@@ -37,9 +37,9 @@ const PLANETS = [
     color: '#c1440e',
   },
   {
-    id: 'jupiter', name: 'Jupiter', project: 'AI Chatbot',
-    url: 'https://github.com/Ywatch15/AI-Chatbot',
-    type: 'github', orbit: 248, size: 30, speed: 36,
+    id: 'jupiter', name: 'Jupiter', project: 'ColdCraft AI',
+    url: 'https://coldcraft-frontend.onrender.com',
+    type: 'deployed', orbit: 248, size: 30, speed: 36,
     gradient: 'radial-gradient(circle at 35% 30%, #f0d8a0, #c88b3a 40%, #a06020 70%, #805030)',
     color: '#c88b3a',
   },

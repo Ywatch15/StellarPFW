@@ -52,8 +52,8 @@ const PLANETS = [
   },
   {
     id: 'uranus', name: 'Uranus', project: 'Note Taking App',
-    url: 'https://github.com/Ywatch15/Note-taking-app',
-    type: 'github', orbit: 348, size: 22, speed: 52,
+    url: 'https://dev-graph-eight.vercel.app/',
+    type: 'deployed', orbit: 348, size: 22, speed: 52,
     gradient: 'radial-gradient(circle at 35% 30%, #b0f0f0, #73d9e8 50%, #4ab8c8)',
     color: '#73d9e8',
   },

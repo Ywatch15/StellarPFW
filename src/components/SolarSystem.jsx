@@ -51,7 +51,7 @@ const PLANETS = [
     color: '#e8d282',
   },
   {
-    id: 'uranus', name: 'Uranus', project: 'Note Taking App',
+    id: 'uranus', name: 'Uranus', project: 'DevGraph',
     url: 'https://dev-graph-eight.vercel.app/',
     type: 'deployed', orbit: 348, size: 22, speed: 52,
     gradient: 'radial-gradient(circle at 35% 30%, #b0f0f0, #73d9e8 50%, #4ab8c8)',

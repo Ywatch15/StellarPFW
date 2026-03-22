@@ -58,9 +58,9 @@ const PLANETS = [
     color: '#73d9e8',
   },
   {
-    id: 'neptune', name: 'Neptune', project: 'TeleCom Simulator',
-    url: 'https://github.com/Ywatch15/TeleCom-Network-Simulator-and-Visualizer',
-    type: 'github', orbit: 392, size: 21, speed: 60,
+    id: 'neptune', name: 'Neptune', project: 'AlgoVista - The Algo Explorer',
+    url: 'https://algovista-three.vercel.app',
+    type: 'deployed', orbit: 392, size: 21, speed: 60,
     gradient: 'radial-gradient(circle at 35% 30%, #8090e0, #3f54ba 50%, #2a3880)',
     color: '#3f54ba',
   },

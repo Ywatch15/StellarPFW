@@ -3,7 +3,6 @@
 import React from 'react';
 import Navbar from './Navbar';
 import Starfield from './Starfield';
-import OrbitalCursor from './OrbitalCursor';
 import { ThemeToggle } from './ThemeProvider';
 import AnalyticsBanner from './AnalyticsBanner';
 import PageTransition from './PageTransition';
@@ -20,7 +19,6 @@ export default function Layout() {
         <p>© {new Date().getFullYear()} Stellar Portfolio. Crafted by Sundram.</p>
       </footer>
       <ThemeToggle />
-      <OrbitalCursor />
       <AnalyticsBanner />
     </div>
   );

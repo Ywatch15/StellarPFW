@@ -30,9 +30,9 @@ function AnimatedCounter({ target, suffix = '', duration = 2000 }) {
 
 /* ---------- Data ---------- */
 const stats = [
-  { label: 'Projects Built', value: 12, suffix: '+', color: '#6c63ff' },
+  { label: 'Projects Built', value: 15, suffix: '+', color: '#6c63ff' },
   { label: 'Skills Mapped', value: 43, suffix: '', color: '#38bdf8' },
-  { label: 'DSA Problems', value: 500, suffix: '+', color: '#facc15' },
+  { label: 'DSA Problems', value: 700, suffix: '+', color: '#facc15' },
   { label: 'GitHub Repos', value: 20, suffix: '+', color: '#22c55e' },
 ];
 

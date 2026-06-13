@@ -98,7 +98,7 @@ export default function HomeIntro() {
         className="mt-3 text-lg font-medium sm:text-xl"
       >
         <Typewriter />
-        <span className="text-cosmos-muted"> &bull; Electronics Engineering Undergraduate</span>
+        <span className="text-cosmos-muted"> &bull; Electronics Engineering Graduate</span>
       </motion.p>
 
       <motion.div
@@ -111,7 +111,7 @@ export default function HomeIntro() {
       >
         <p>
           Hello, I&apos;m Sundram Pathak — an Electronics Engineering
-          undergraduate navigating the universe of full-stack development. I
+          graduate navigating the universe of full-stack development. I
           build immersive, realistic digital experiences and continuously explore
           new technologies. Along this journey, I sharpen my problem-solving
           skills across platforms like LeetCode, CodeChef, and
@@ -137,7 +137,7 @@ export default function HomeIntro() {
         className="mt-10 flex flex-wrap justify-center gap-4"
       >
         <a
-          href="/springworks.pdf"
+          href="/Sun D Ram.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-comet px-7 py-3 font-heading text-sm font-semibold text-white transition-all hover:bg-comet/80 focus-visible:ring-2 focus-visible:ring-aurora"

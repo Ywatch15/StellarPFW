@@ -1,37 +1,38 @@
 // FILE: src/components/HomeHighlights.jsx
 // Animated highlight cards + stats for the Home page
 import { useRef, useEffect, useState, useMemo } from 'react';
-import { motion, useInView } from 'motion/react';
+import { motion } from 'motion/react';
 
 /* ---------- Animated counter ---------- */
-function AnimatedCounter({ target, suffix = '', duration = 2000 }) {
+function AnimatedCounter({ target, suffix = '', duration = 1800, start }) {
   const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
 
   useEffect(() => {
-    if (!inView) return;
-    let start = 0;
-    const step = target / (duration / 16);
-    const id = setInterval(() => {
-      start += step;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(id);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(id);
-  }, [inView, target, duration]);
+    if (!start) return;
+    let rafId = 0;
+    const begin = performance.now();
 
-  return <span ref={ref}>{count}{suffix}</span>;
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+    const tick = (now) => {
+      const progress = Math.min((now - begin) / duration, 1);
+      const eased = easeOut(progress);
+      setCount(Math.round(eased * target));
+      if (progress < 1) {
+        rafId = window.requestAnimationFrame(tick);
+      }
+    };
+
+    rafId = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(rafId);
+  }, [start, target, duration]);
+
+  return <span>{count}{suffix}</span>;
 }
 
 /* ---------- Data ---------- */
 const stats = [
-  { label: 'Projects Built', value: 15, suffix: '+', color: '#6c63ff' },
-  { label: 'Skills Mapped', value: 43, suffix: '', color: '#38bdf8' },
+  { label: 'Skills Mapped', value: 52, suffix: '', color: '#38bdf8' },
   { label: 'DSA Problems', value: 700, suffix: '+', color: '#facc15' },
   { label: 'GitHub Repos', value: 20, suffix: '+', color: '#22c55e' },
 ];
@@ -65,7 +66,7 @@ const highlights = [
 
 const techStack = [
   'React', 'Next.js', 'Node.js', 'Express', 'MongoDB', 'PostgreSQL',
-  'Three.js', 'Tailwind CSS', 'Docker', 'GitHub Actions', 'TypeScript',
+  'Three.js', 'Tailwind CSS', 'Docker', 'GitHub Actions',
   'Python', 'Redis', 'WebSocket', 'Vite', 'Vercel',
 ];
 
@@ -104,10 +105,32 @@ function TechTicker() {
 
 /* ---------- Main component ---------- */
 export default function HomeHighlights() {
+  const statsRef = useRef(null);
+  const [statsVisible, setStatsVisible] = useState(false);
+
+  useEffect(() => {
+    const node = statsRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStatsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="relative z-10 mx-auto max-w-5xl px-4 pb-16 sm:px-6">
       {/* Stats row */}
       <motion.div
+        ref={statsRef}
         className="grid grid-cols-2 gap-4 sm:grid-cols-4"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -120,7 +143,7 @@ export default function HomeHighlights() {
             className="rounded-xl border border-white/5 bg-nebula/50 p-4 text-center backdrop-blur-sm"
           >
             <div className="font-heading text-2xl font-bold sm:text-3xl" style={{ color: stat.color }}>
-              <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+              <AnimatedCounter target={stat.value} suffix={stat.suffix} start={statsVisible} />
             </div>
             <div className="mt-1 text-xs text-cosmos-muted">{stat.label}</div>
           </div>

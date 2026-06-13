@@ -107,8 +107,16 @@ export default function HomeIntro() {
         whileInView="visible"
         viewport={{ once: true }}
         variants={fadeUp}
-        className="mt-8 space-y-4 text-base leading-relaxed text-cosmos-muted sm:text-lg"
+        className="relative mx-auto mt-8 max-w-3xl space-y-4 px-4 text-base leading-relaxed text-cosmos-muted sm:px-8 sm:text-lg"
       >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 rounded-[2rem]"
+          style={{
+            background:
+              'radial-gradient(circle at 50% 32%, rgba(10,10,40,0.4) 0%, rgba(10,10,40,0.24) 46%, rgba(10,10,40,0) 78%)',
+          }}
+        />
         <p>
           Hello, I&apos;m Sundram Pathak — an Electronics Engineering
           graduate navigating the universe of full-stack development. I

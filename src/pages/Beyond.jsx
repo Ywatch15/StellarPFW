@@ -54,7 +54,7 @@ const dataFragments = [
 
 const stats = [
   { label: 'Projects Built', value: '15+', icon: '◐' },
-  { label: 'Technologies', value: '40+', icon: '✦' },
+  { label: 'Technologies', value: '54+', icon: '✦' },
   { label: 'Lines of Code', value: '50k+', icon: '⟨⟩' },
   { label: 'GitHub Repos', value: '10+', icon: '⟁' },
   { label: 'DSA Problems', value: '500+', icon: '🧩' },

@@ -3,6 +3,7 @@
 import React from 'react';
 import Navbar from './Navbar';
 import Starfield from './Starfield';
+import OrbitalCursor from './OrbitalCursor';
 import { ThemeToggle } from './ThemeProvider';
 import AnalyticsBanner from './AnalyticsBanner';
 import PageTransition from './PageTransition';
@@ -18,6 +19,7 @@ export default function Layout() {
       <footer className="border-t border-white/5 px-4 py-6 text-center text-xs text-cosmos-muted sm:px-6 sm:py-8 sm:text-sm">
         <p>© {new Date().getFullYear()} Stellar Portfolio. Crafted by Sundram.</p>
       </footer>
+      <OrbitalCursor />
       <ThemeToggle />
       <AnalyticsBanner />
     </div>

@@ -561,17 +561,44 @@ export default function SolarSystem() {
                     position: 'relative',
                     width: ps, height: ps,
                     borderRadius: '50%',
-                    background: planet.gradient,
-                    boxShadow: `0 0 ${ps * 0.5}px ${planet.color}44, 0 0 ${ps}px ${planet.color}22`,
+                    background: [
+                      `conic-gradient(from 200deg, ${planet.color}14, transparent 28%, ${planet.color}20 56%, transparent 78%, ${planet.color}14)`,
+                      planet.gradient,
+                    ].join(', '),
+                    boxShadow: `0 0 ${ps * 0.6}px ${planet.color}50, inset -${Math.max(2, ps * 0.12)}px -${Math.max(2, ps * 0.12)}px ${Math.max(4, ps * 0.3)}px rgba(0,0,0,0.35), inset ${Math.max(1.5, ps * 0.08)}px ${Math.max(1.5, ps * 0.08)}px ${Math.max(4, ps * 0.25)}px rgba(255,255,255,0.15)`,
                     transition: 'transform 0.3s, box-shadow 0.3s',
                     ...(hovered === planet.id
                       ? {
                           transform: 'scale(1.4)',
-                          boxShadow: `0 0 ${ps}px ${planet.color}88, 0 0 ${ps * 2}px ${planet.color}44`,
+                          boxShadow: `0 0 ${ps * 1.1}px ${planet.color}88, 0 0 ${ps * 2}px ${planet.color}44, inset -${Math.max(2, ps * 0.12)}px -${Math.max(2, ps * 0.12)}px ${Math.max(5, ps * 0.35)}px rgba(0,0,0,0.4), inset ${Math.max(1.5, ps * 0.08)}px ${Math.max(1.5, ps * 0.08)}px ${Math.max(5, ps * 0.3)}px rgba(255,255,255,0.2)`,
                         }
                       : {}),
                   }}
                 >
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: '12% 18% auto 18%',
+                      height: '22%',
+                      borderRadius: '999px',
+                      background: 'linear-gradient(to right, rgba(255,255,255,0.38), rgba(255,255,255,0))',
+                      transform: 'rotate(-12deg)',
+                      pointerEvents: 'none',
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      right: '10%',
+                      bottom: '14%',
+                      width: '24%',
+                      height: '24%',
+                      borderRadius: '50%',
+                      background: 'rgba(0,0,0,0.18)',
+                      pointerEvents: 'none',
+                    }}
+                  />
+
                   {/* Saturn's ring */}
                   {planet.id === 'saturn' && (
                     <div

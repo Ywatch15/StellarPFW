@@ -3,60 +3,74 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 
 const skills = [
-  // ── Frontend (14) ──
-  { name: 'HTML5',        x: 8,  y: 8,   size: 1.2, group: 'frontend' },
-  { name: 'CSS3',         x: 24, y: 12,  size: 1.2, group: 'frontend' },
-  { name: 'JavaScript',   x: 42, y: 8,   size: 1.5, group: 'frontend' },
-  { name: 'TypeScript',   x: 62, y: 12,  size: 1.3, group: 'frontend' },
-  { name: 'React',        x: 80, y: 8,   size: 1.6, group: 'frontend' },
-  { name: 'Next.js',      x: 94, y: 16,  size: 1.3, group: 'frontend' },
-  { name: 'Bootstrap',    x: 6,  y: 24,  size: 1.0, group: 'frontend' },
-  { name: 'jQuery',       x: 20, y: 28,  size: 0.9, group: 'frontend' },
-  { name: 'Tailwind',     x: 36, y: 24,  size: 1.2, group: 'frontend' },
-  { name: 'MUI',          x: 50, y: 28,  size: 1.0, group: 'frontend' },
-  { name: 'Vite',         x: 64, y: 24,  size: 1.1, group: 'frontend' },
-  { name: 'Redux',        x: 80, y: 28,  size: 1.1, group: 'frontend' },
-  { name: 'React Router', x: 26, y: 38,  size: 1.0, group: 'frontend' },
-  { name: 'Context API',  x: 50, y: 38,  size: 0.9, group: 'frontend' },
+  // ── Frontend ──
+  { name: 'HTML5', x: 8, y: 8, size: 1.2, group: 'frontend' },
+  { name: 'CSS3', x: 24, y: 12, size: 1.2, group: 'frontend' },
+  { name: 'JavaScript', x: 42, y: 8, size: 1.5, group: 'frontend' },
+  { name: 'React', x: 80, y: 8, size: 1.6, group: 'frontend' },
+  { name: 'Next.js', x: 94, y: 16, size: 1.3, group: 'frontend' },
+  { name: 'Bootstrap', x: 6, y: 24, size: 1.0, group: 'frontend' },
+  { name: 'jQuery', x: 20, y: 28, size: 0.9, group: 'frontend' },
+  { name: 'Tailwind', x: 36, y: 24, size: 1.2, group: 'frontend' },
+  { name: 'MUI', x: 50, y: 28, size: 1.0, group: 'frontend' },
+  { name: 'Vite', x: 64, y: 24, size: 1.1, group: 'frontend' },
+  { name: 'Redux', x: 80, y: 28, size: 1.1, group: 'frontend' },
+  { name: 'React Router', x: 26, y: 38, size: 1.0, group: 'frontend' },
+  { name: 'Context API', x: 50, y: 38, size: 0.9, group: 'frontend' },
 
-  // ── Backend (7) ──
-  { name: 'Node.js',      x: 14, y: 50,  size: 1.4, group: 'backend' },
-  { name: 'Express',      x: 32, y: 54,  size: 1.2, group: 'backend' },
-  { name: 'GraphQL',      x: 50, y: 50,  size: 1.1, group: 'backend' },
-  { name: 'JWT',          x: 66, y: 54,  size: 1.0, group: 'backend' },
-  { name: 'Bun',          x: 82, y: 50,  size: 1.0, group: 'backend' },
-  { name: 'Nodemon',      x: 22, y: 64,  size: 0.9, group: 'backend' },
-  { name: 'EJS',          x: 40, y: 64,  size: 0.9, group: 'backend' },
+  // ── Backend ──
+  { name: 'Node.js', x: 14, y: 50, size: 1.4, group: 'backend' },
+  { name: 'Express', x: 32, y: 54, size: 1.2, group: 'backend' },
+  { name: 'JWT', x: 66, y: 54, size: 1.0, group: 'backend' },
+  { name: 'Supabase', x: 78, y: 48, size: 1.1, group: 'backend' },
+  { name: 'Appwrite', x: 92, y: 56, size: 1.1, group: 'backend' },
+  { name: 'Nodemon', x: 22, y: 64, size: 0.9, group: 'backend' },
+  { name: 'EJS', x: 40, y: 64, size: 0.9, group: 'backend' },
 
-  // ── Languages (4) ──
-  { name: 'C++',          x: 8,  y: 76,  size: 1.2, group: 'languages' },
-  { name: 'C',            x: 22, y: 80,  size: 1.1, group: 'languages' },
-  { name: 'Python',       x: 38, y: 76,  size: 1.3, group: 'languages' },
-  { name: 'Markdown',     x: 56, y: 80,  size: 0.9, group: 'languages' },
+  // ── Data Science / Python ──
+  { name: 'Python', x: 12, y: 76, size: 1.4, group: 'datascience' },
+  { name: 'NumPy', x: 28, y: 72, size: 1.0, group: 'datascience' },
+  { name: 'Pandas', x: 46, y: 76, size: 1.1, group: 'datascience' },
+  { name: 'Matplotlib', x: 64, y: 72, size: 1.0, group: 'datascience' },
+  { name: 'Seaborn', x: 82, y: 76, size: 1.0, group: 'datascience' },
 
-  // ── Databases (2) ──
-  { name: 'MongoDB',      x: 74, y: 76,  size: 1.3, group: 'databases' },
-  { name: 'MySQL',        x: 90, y: 80,  size: 1.2, group: 'databases' },
+  // ── Core Languages ──
+  { name: 'C++', x: 8, y: 90, size: 1.2, group: 'languages' },
+  { name: 'C', x: 22, y: 94, size: 1.1, group: 'languages' },
+  { name: 'Markdown', x: 56, y: 94, size: 0.9, group: 'languages' },
 
-  // ── DevOps & Cloud (6) ──
-  { name: 'Vercel',       x: 6,  y: 92,  size: 1.0, group: 'devops' },
-  { name: 'Render',       x: 20, y: 96,  size: 1.0, group: 'devops' },
-  { name: 'AWS',          x: 36, y: 92,  size: 1.2, group: 'devops' },
-  { name: 'Nginx',        x: 52, y: 96,  size: 1.0, group: 'devops' },
-  { name: 'Jenkins',      x: 68, y: 92,  size: 1.0, group: 'devops' },
-  { name: 'Kubernetes',   x: 86, y: 96,  size: 1.1, group: 'devops' },
+  // ── Databases ──
+  { name: 'MongoDB', x: 74, y: 102, size: 1.3, group: 'databases' },
+  { name: 'MySQL', x: 90, y: 106, size: 1.2, group: 'databases' },
 
-  // ── Tools (10) ──
-  { name: 'Git',          x: 6,  y: 108, size: 1.1, group: 'tools' },
-  { name: 'GitHub',       x: 20, y: 112, size: 1.1, group: 'tools' },
-  { name: 'NPM',          x: 34, y: 108, size: 1.0, group: 'tools' },
-  { name: 'Postman',      x: 48, y: 112, size: 1.0, group: 'tools' },
-  { name: 'PowerShell',   x: 64, y: 108, size: 0.9, group: 'tools' },
-  { name: 'Prettier',     x: 80, y: 112, size: 0.9, group: 'tools' },
-  { name: 'Win Terminal', x: 10, y: 122, size: 0.9, group: 'tools' },
-  { name: 'Canva',        x: 28, y: 122, size: 0.9, group: 'tools' },
-  { name: 'Anaconda',     x: 46, y: 122, size: 1.0, group: 'tools' },
-  { name: 'OpenCV',       x: 66, y: 122, size: 1.0, group: 'tools' },
+  // ── DevOps & Cloud ──
+  { name: 'Vercel', x: 6, y: 112, size: 1.0, group: 'devops' },
+  { name: 'Render', x: 20, y: 116, size: 1.0, group: 'devops' },
+  { name: 'AWS', x: 36, y: 112, size: 1.2, group: 'devops' },
+  { name: 'Kubernetes', x: 86, y: 116, size: 1.1, group: 'devops' },
+
+  // ── Tooling ──
+  { name: 'Git', x: 6, y: 122, size: 1.1, group: 'tools' },
+  { name: 'GitHub', x: 20, y: 126, size: 1.1, group: 'tools' },
+  { name: 'NPM', x: 34, y: 122, size: 1.0, group: 'tools' },
+  { name: 'Postman', x: 48, y: 126, size: 1.0, group: 'tools' },
+  { name: 'PowerShell', x: 64, y: 122, size: 0.9, group: 'tools' },
+  { name: 'Prettier', x: 80, y: 126, size: 0.9, group: 'tools' },
+  { name: 'Win Terminal', x: 10, y: 134, size: 0.9, group: 'tools' },
+  { name: 'Canva', x: 28, y: 134, size: 0.9, group: 'tools' },
+  { name: 'Anaconda', x: 46, y: 134, size: 1.0, group: 'tools' },
+  { name: 'OpenCV', x: 66, y: 134, size: 1.0, group: 'tools' },
+
+  // ── IDEs / AI Tools ──
+  { name: 'VS Code', x: 8, y: 144, size: 1.2, group: 'ide' },
+  { name: 'Google Antigravity', x: 26, y: 148, size: 1.0, group: 'ide' },
+  { name: 'Windsurf', x: 44, y: 144, size: 1.1, group: 'ide' },
+  { name: 'Cursor', x: 60, y: 148, size: 1.1, group: 'ide' },
+  { name: 'Claude Code', x: 76, y: 144, size: 1.0, group: 'ide' },
+  { name: 'Codex', x: 90, y: 148, size: 1.0, group: 'ide' },
+  { name: 'Lovable', x: 18, y: 156, size: 1.0, group: 'ide' },
+  { name: 'Bolt.new', x: 44, y: 156, size: 1.0, group: 'ide' },
+  { name: 'Orchid', x: 70, y: 156, size: 1.0, group: 'ide' },
 ];
 
 // Official documentation URLs for each skill
@@ -64,7 +78,6 @@ const docUrls = {
   'HTML5':        'https://developer.mozilla.org/en-US/docs/Web/HTML',
   'CSS3':         'https://developer.mozilla.org/en-US/docs/Web/CSS',
   'JavaScript':   'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
-  'TypeScript':   'https://www.typescriptlang.org/docs/',
   'React':        'https://react.dev/',
   'Next.js':      'https://nextjs.org/docs',
   'Bootstrap':    'https://getbootstrap.com/docs/',
@@ -77,22 +90,24 @@ const docUrls = {
   'Context API':  'https://react.dev/reference/react/createContext',
   'Node.js':      'https://nodejs.org/en/docs/',
   'Express':      'https://expressjs.com/en/starter/installing.html',
-  'GraphQL':      'https://graphql.org/learn/',
   'JWT':          'https://jwt.io/introduction',
-  'Bun':          'https://bun.sh/docs',
+  'Supabase':     'https://supabase.com/docs',
+  'Appwrite':     'https://appwrite.io/docs',
   'Nodemon':      'https://nodemon.io/',
   'EJS':          'https://ejs.co/#docs',
   'C++':          'https://en.cppreference.com/w/',
   'C':            'https://en.cppreference.com/w/c',
   'Python':       'https://docs.python.org/3/',
+  'NumPy':        'https://numpy.org/doc/',
+  'Pandas':       'https://pandas.pydata.org/docs/',
+  'Matplotlib':   'https://matplotlib.org/stable/users/index.html',
+  'Seaborn':      'https://seaborn.pydata.org/',
   'Markdown':     'https://www.markdownguide.org/',
   'MongoDB':      'https://www.mongodb.com/docs/',
   'MySQL':        'https://dev.mysql.com/doc/',
   'Vercel':       'https://vercel.com/docs',
   'Render':       'https://docs.render.com/',
   'AWS':          'https://docs.aws.amazon.com/',
-  'Nginx':        'https://nginx.org/en/docs/',
-  'Jenkins':      'https://www.jenkins.io/doc/',
   'Kubernetes':   'https://kubernetes.io/docs/home/',
   'Git':          'https://git-scm.com/doc',
   'GitHub':       'https://docs.github.com/',
@@ -104,15 +119,22 @@ const docUrls = {
   'Canva':        'https://www.canva.com/designschool/',
   'Anaconda':     'https://docs.anaconda.com/',
   'OpenCV':       'https://docs.opencv.org/',
+  'VS Code':      'https://code.visualstudio.com/docs',
+  'Google Antigravity': 'https://www.google.com/search?q=Google+Antigravity',
+  'Windsurf':     'https://windsurf.com/',
+  'Cursor':       'https://docs.cursor.com/',
+  'Claude Code':  'https://docs.anthropic.com/en/docs/claude-code',
+  'Codex':        'https://platform.openai.com/docs',
+  'Lovable':      'https://lovable.dev/',
+  'Bolt.new':     'https://bolt.new/',
+  'Orchid':       'https://www.google.com/search?q=Orchid+IDE',
 };
 
 const connections = [
   // Frontend chain
   ['HTML5', 'CSS3'],
   ['CSS3', 'JavaScript'],
-  ['JavaScript', 'TypeScript'],
   ['JavaScript', 'React'],
-  ['TypeScript', 'React'],
   ['React', 'Next.js'],
   ['CSS3', 'Bootstrap'],
   ['CSS3', 'Tailwind'],
@@ -129,23 +151,28 @@ const connections = [
 
   // Frontend ↔ Backend
   ['JavaScript', 'Node.js'],
-  ['TypeScript', 'Node.js'],
   ['React', 'Express'],
   ['Next.js', 'Node.js'],
 
   // Backend chain
   ['Node.js', 'Express'],
-  ['Express', 'GraphQL'],
   ['Express', 'JWT'],
-  ['Node.js', 'Bun'],
+  ['Express', 'Supabase'],
+  ['Express', 'Appwrite'],
+  ['Supabase', 'Appwrite'],
   ['Node.js', 'Nodemon'],
   ['Express', 'EJS'],
-  ['GraphQL', 'JWT'],
+
+  // Data science
+  ['Python', 'NumPy'],
+  ['NumPy', 'Pandas'],
+  ['Pandas', 'Matplotlib'],
+  ['Matplotlib', 'Seaborn'],
+  ['Python', 'Node.js'],
 
   // Languages
   ['C++', 'C'],
   ['C++', 'Python'],
-  ['Python', 'Node.js'],
 
   // Databases ↔ Backend
   ['MongoDB', 'Express'],
@@ -157,10 +184,6 @@ const connections = [
   ['Vercel', 'Next.js'],
   ['Render', 'Node.js'],
   ['AWS', 'Kubernetes'],
-  ['Nginx', 'Node.js'],
-  ['Jenkins', 'Git'],
-  ['Kubernetes', 'Jenkins'],
-  ['AWS', 'Nginx'],
 
   // Tools
   ['Git', 'GitHub'],
@@ -171,15 +194,27 @@ const connections = [
   ['OpenCV', 'Python'],
   ['Prettier', 'Vite'],
   ['Canva', 'CSS3'],
+
+  // IDEs / AI tools
+  ['VS Code', 'Cursor'],
+  ['Cursor', 'Windsurf'],
+  ['Windsurf', 'Claude Code'],
+  ['Claude Code', 'Codex'],
+  ['Codex', 'Lovable'],
+  ['Lovable', 'Bolt.new'],
+  ['Bolt.new', 'Orchid'],
+  ['VS Code', 'Google Antigravity'],
 ];
 
 const groupColors = {
   frontend: '#6c63ff',
   backend: '#38bdf8',
+  datascience: '#22c55e',
   languages: '#facc15',
   databases: '#f97316',
   devops: '#22d3ee',
   tools: '#a78bfa',
+  ide: '#e06090',
 };
 
 function getSkill(name) {
@@ -258,7 +293,7 @@ export default function Constellation() {
   return (
     <div className="overflow-hidden rounded-2xl border border-white/5 bg-nebula">
       <svg
-        viewBox="0 0 100 134"
+        viewBox="0 0 100 160"
         className="h-auto w-full"
         role="img"
         aria-label="Skills constellation graph showing technology expertise and connections"

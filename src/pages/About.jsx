@@ -45,7 +45,7 @@ export default function About() {
         <div className="mt-4 space-y-4 text-cosmos-muted leading-relaxed">
           <p>
             Hello, I&apos;m Sundram Pathak — an Electronics Engineering
-            undergraduate navigating the universe of full-stack development. I
+            Graduate navigating the universe of full-stack development. I
             build immersive, realistic digital experiences and continuously
             explore new technologies. Along this journey, I sharpen my
             problem-solving skills across platforms like LeetCode, CodeChef,

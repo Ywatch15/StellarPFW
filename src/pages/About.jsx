@@ -26,8 +26,21 @@ export default function About() {
         <span className="text-gradient-aurora">Star</span> Chart
       </h1>
       <p className="mt-2 text-cosmos-muted">
-        Skills mapped as constellations. Hover to see connections.
+        Skills mapped as constellations. Trace the systems, ideas, and experiments behind the work.
       </p>
+
+      <div className="mt-8 grid gap-3 sm:grid-cols-3" aria-label="Developer profile readout">
+        {[
+          ['Current vector', 'Full-stack + creative web', '#38bdf8'],
+          ['Origin point', 'Electronics engineering', '#a78bfa'],
+          ['Operating mode', 'Learning by shipping', '#facc15'],
+        ].map(([label, value, color]) => (
+          <div key={label} className="rounded-xl border border-white/8 bg-nebula/55 px-4 py-3 backdrop-blur-sm">
+            <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cosmos-muted">{label}</p>
+            <p className="mt-1 text-sm font-medium" style={{ color }}>{value}</p>
+          </div>
+        ))}
+      </div>
 
       {/* Interactive Constellation */}
       <div className="mt-12">
@@ -36,6 +49,43 @@ export default function About() {
 
       {/* Animated 7-part life story */}
       <StoryJourney />
+
+      {/* Pilot dossier */}
+      <section className="mt-12 grid gap-4 sm:mt-16 md:grid-cols-3" aria-labelledby="pilot-dossier-title">
+        <div className="md:col-span-3">
+          <p className="font-mono text-xs uppercase tracking-[0.24em] text-aurora/80">Pilot dossier</p>
+          <h2 id="pilot-dossier-title" className="mt-2 font-heading text-2xl font-bold text-stardust sm:text-3xl">
+            How I approach the work
+          </h2>
+        </div>
+        {[
+          {
+            code: 'PRINCIPLE_01',
+            title: 'Make complexity feel calm',
+            text: 'Good engineering should reduce cognitive load. I care about clear flows, useful defaults, and interfaces that explain themselves.',
+            color: '#38bdf8',
+          },
+          {
+            code: 'PRINCIPLE_02',
+            title: 'Ship, then sharpen',
+            text: 'I prefer a working slice over an abstract perfect plan, then use feedback, tests, and iteration to make the system stronger.',
+            color: '#a78bfa',
+          },
+          {
+            code: 'PRINCIPLE_03',
+            title: 'Leave a useful trail',
+            text: 'Readable code, documented decisions, and repeatable deployment workflows make the next mission easier for everyone.',
+            color: '#facc15',
+          },
+        ].map((item) => (
+          <article key={item.code} className="group relative overflow-hidden rounded-2xl border border-white/8 bg-nebula/65 p-5 backdrop-blur-sm transition-colors hover:border-white/15">
+            <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full opacity-20 blur-2xl transition-opacity group-hover:opacity-40" style={{ background: item.color }} aria-hidden="true" />
+            <p className="relative font-mono text-[0.62rem] tracking-[0.18em]" style={{ color: item.color }}>{item.code}</p>
+            <h3 className="relative mt-4 font-heading text-lg font-semibold text-stardust">{item.title}</h3>
+            <p className="relative mt-2 text-sm leading-relaxed text-cosmos-muted">{item.text}</p>
+          </article>
+        ))}
+      </section>
 
       {/* Bio section */}
       <div className="mt-12 rounded-2xl border border-white/5 bg-nebula/80 p-5 backdrop-blur-sm sm:mt-16 sm:p-8">

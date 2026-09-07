@@ -26,12 +26,19 @@ const cardVariants = {
  */
 export default function SatelliteCard({ project, onClose }) {
   const dialogRef = useRef(null);
+  const previousFocusRef = useRef(null);
 
   // Focus trap
   useEffect(() => {
     if (project && dialogRef.current) {
+      previousFocusRef.current = document.activeElement;
       dialogRef.current.focus();
     }
+    return () => {
+      if (previousFocusRef.current && typeof previousFocusRef.current.focus === 'function') {
+        previousFocusRef.current.focus();
+      }
+    };
   }, [project]);
 
   // Close on Escape
@@ -71,6 +78,7 @@ export default function SatelliteCard({ project, onClose }) {
             role="dialog"
             aria-modal="true"
             aria-label={`Project details: ${project.title}`}
+            aria-describedby="mission-brief"
           >
             {/* Close button */}
             <button
@@ -109,10 +117,9 @@ export default function SatelliteCard({ project, onClose }) {
 
             {/* Detail content placeholder */}
             <div className="mt-6 rounded-lg border border-white/5 bg-void/50 p-4 text-sm text-cosmos-muted">
-              <p>
-                <strong className="text-stardust">Mission Brief:</strong> This
-                project showcases full-stack development with real-time features,
-                responsive design, and performance optimization.
+              <p id="mission-brief">
+                <strong className="text-stardust">Mission Brief:</strong>{' '}
+                {project.missionBrief || 'A focused build that demonstrates practical engineering decisions, clear interaction design, and a deployable result.'}
               </p>
               <p className="mt-2">
                 <strong className="text-stardust">Stack:</strong>{' '}

@@ -4,6 +4,7 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/solar-system.css';
+import SatelliteCard from './SatelliteCard';
 
 /* ─────────────────────── PROJECT DATA ─────────────────────── */
 
@@ -14,6 +15,8 @@ const PLANETS = [
     type: 'deployed', orbit: 80, size: 14, speed: 12,
     gradient: 'radial-gradient(circle at 35% 30%, #d4d4d4, #8a8a8a 60%, #5a5a5a)',
     color: '#b0b0b0',
+    description: 'A space-themed portfolio that turns a developer profile into an explorable digital universe.',
+    tags: ['React', 'Three.js', 'Motion', 'Accessibility'],
   },
   {
     id: 'venus', name: 'Venus', project: 'ScatchProject',
@@ -21,6 +24,8 @@ const PLANETS = [
     type: 'deployed', orbit: 118, size: 18, speed: 17,
     gradient: 'radial-gradient(circle at 35% 30%, #ffe0a0, #e8a735 60%, #b07020)',
     color: '#e8a735',
+    description: 'A full-stack commerce platform with product listings, authentication, carts, and inventory management.',
+    tags: ['Node.js', 'Express', 'EJS', 'MongoDB'],
   },
   {
     id: 'earth', name: 'Earth', project: 'Resume Analyzer',
@@ -28,6 +33,8 @@ const PLANETS = [
     type: 'deployed', orbit: 158, size: 19, speed: 22,
     gradient: 'radial-gradient(circle at 35% 30%, #90d0ff, #4da6ff 50%, #2980b9 80%, #1a5276)',
     color: '#4da6ff',
+    description: 'A practical resume intelligence tool that helps candidates understand and improve their applications.',
+    tags: ['React', 'Node.js', 'AI', 'Deployment'],
   },
   {
     id: 'mars', name: 'Mars', project: 'Bank Transaction System',
@@ -35,6 +42,8 @@ const PLANETS = [
     type: 'deployed', orbit: 198, size: 15, speed: 28,
     gradient: 'radial-gradient(circle at 35% 30%, #e8735a, #c1440e 60%, #8b2500)',
     color: '#c1440e',
+    description: 'A transaction dashboard focused on clear financial flows, account activity, and responsive data presentation.',
+    tags: ['React', 'Node.js', 'REST API', 'Dashboard'],
   },
   {
     id: 'jupiter', name: 'Jupiter', project: 'ColdCraft AI',
@@ -42,6 +51,8 @@ const PLANETS = [
     type: 'deployed', orbit: 248, size: 30, speed: 36,
     gradient: 'radial-gradient(circle at 35% 30%, #f0d8a0, #c88b3a 40%, #a06020 70%, #805030)',
     color: '#c88b3a',
+    description: 'An AI-powered experience that explores conversational interfaces and useful generative workflows.',
+    tags: ['React', 'AI', 'Node.js', 'UX'],
   },
   {
     id: 'saturn', name: 'Saturn', project: 'Face Detector',
@@ -49,6 +60,8 @@ const PLANETS = [
     type: 'github', orbit: 300, size: 26, speed: 44,
     gradient: 'radial-gradient(circle at 35% 30%, #fff5d0, #e8d282 50%, #c8a050)',
     color: '#e8d282',
+    description: 'A computer-vision experiment that detects faces in images and video streams in real time.',
+    tags: ['Python', 'OpenCV', 'Computer Vision'],
   },
   {
     id: 'uranus', name: 'Uranus', project: 'DevGraph',
@@ -56,6 +69,8 @@ const PLANETS = [
     type: 'deployed', orbit: 348, size: 22, speed: 52,
     gradient: 'radial-gradient(circle at 35% 30%, #b0f0f0, #73d9e8 50%, #4ab8c8)',
     color: '#73d9e8',
+    description: 'A developer graph for visualizing technical relationships and making engineering knowledge easier to navigate.',
+    tags: ['React', 'Data Visualization', 'Vercel'],
   },
   {
     id: 'neptune', name: 'Neptune', project: 'AlgoVista - The Algo Explorer',
@@ -63,6 +78,8 @@ const PLANETS = [
     type: 'deployed', orbit: 392, size: 21, speed: 60,
     gradient: 'radial-gradient(circle at 35% 30%, #8090e0, #3f54ba 50%, #2a3880)',
     color: '#3f54ba',
+    description: 'An interactive algorithm explorer designed to make data structures and problem-solving patterns visual.',
+    tags: ['React', 'Algorithms', 'Visualization', 'Education'],
   },
 ];
 
@@ -72,17 +89,14 @@ const PLUTO = {
   type: 'star', orbit: 440, size: 9, speed: 72,
   gradient: 'radial-gradient(circle at 35% 30%, #f0e8d0, #d4c5a9 60%, #a89880)',
   color: '#d4c5a9',
+  description: 'The command center for my open-source work, experiments, repositories, and ongoing developer activity.',
+  tags: ['GitHub', 'Open Source', 'Repositories'],
+  missionBrief: 'Explore my GitHub profile to inspect source code, follow project evolution, and see the experiments behind this portfolio.',
 };
 
 const SUN_SIZE = 70;
 
 /* ─────────────────────── HELPERS ─────────────────────── */
-
-/** Cubic bézier point at parameter t */
-function bz(a, b, c, d, t) {
-  const m = 1 - t;
-  return m * m * m * a + 3 * m * m * t * b + 3 * m * t * t * c + t * t * t * d;
-}
 
 /** Generate random background stars */
 function makeStars(n) {
@@ -104,7 +118,7 @@ export default function SolarSystem() {
   const animRef = useRef(null);
 
   const [scale, setScale] = useState(1);
-  const [activePlanet, setActivePlanet] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
   const [isCollapsing, setIsCollapsing] = useState(false);
   const [hovered, setHovered] = useState(null);
 
@@ -144,104 +158,6 @@ export default function SolarSystem() {
   useEffect(() => () => {
     if (animRef.current) cancelAnimationFrame(animRef.current);
   }, []);
-
-  /* ═══════════ PLASMA TENTACLE ANIMATION ═══════════ */
-  function runPlasma(planet, pPos) {
-    const canvas = canvasRef.current;
-    const container = containerRef.current;
-    if (!canvas || !container) return;
-    const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    const cRect = container.getBoundingClientRect();
-
-    // Sun centre & planet position (in canvas-space)
-    const sx = (cRect.width / 2) * dpr;
-    const sy = (cRect.height / 2) * dpr;
-    const px = pPos.x * dpr;
-    const py = pPos.y * dpr;
-    const dx = px - sx;
-    const dy = py - sy;
-    const dist = Math.hypot(dx, dy) || 1;
-    const nx = -dy / dist;   // perpendicular
-    const ny = dx / dist;
-
-    const startTime = performance.now();
-
-    function frame(now) {
-      const elapsed = now - startTime;
-      const t = Math.min(elapsed / 4000, 1);       // 0→1 over 4 s
-      const time = elapsed / 1000;
-      const reach = Math.min(t / 0.45, 1);          // tentacle fully extends by ~1.8 s
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      /* -- Two plasma tentacles -- */
-      for (let tn = 0; tn < 2; tn++) {
-        const side = tn === 0 ? 1 : -1;
-        const w1 = Math.sin(time * 3 + tn * Math.PI) * 35 * dpr * side;
-        const w2 = Math.cos(time * 4.5 + tn * 2) * 25 * dpr * side;
-
-        const c1x = sx + dx * 0.3 + nx * (w1 + 22 * dpr * side);
-        const c1y = sy + dy * 0.3 + ny * (w1 + 22 * dpr * side);
-        const c2x = sx + dx * 0.7 + nx * (w2 - 12 * dpr * side);
-        const c2y = sy + dy * 0.7 + ny * (w2 - 12 * dpr * side);
-
-        // Multi-pass glow strokes
-        const passes = [
-          { w: 14, c: `rgba(255,80,0,${(0.10 + 0.05 * Math.sin(time * 5)).toFixed(3)})` },
-          { w: 8,  c: `rgba(255,140,20,${(0.28 + 0.12 * Math.sin(time * 4)).toFixed(3)})` },
-          { w: 4,  c: `rgba(255,200,60,${(0.55 + 0.2  * Math.sin(time * 6)).toFixed(3)})` },
-          { w: 1.5, c: 'rgba(255,240,180,0.85)' },
-        ];
-
-        for (const p of passes) {
-          ctx.beginPath();
-          ctx.moveTo(sx, sy);
-          const steps = 50;
-          for (let i = 1; i <= steps; i++) {
-            const s = (i / steps) * reach;
-            ctx.lineTo(bz(sx, c1x, c2x, px, s), bz(sy, c1y, c2y, py, s));
-          }
-          ctx.strokeStyle = p.c;
-          ctx.lineWidth = p.w * dpr;
-          ctx.lineCap = 'round';
-          ctx.stroke();
-        }
-      }
-
-      /* -- Floating plasma particles -- */
-      for (let i = 0; i < 18; i++) {
-        const pt = Math.random() * reach;
-        const tn = Math.floor(Math.random() * 2);
-        const side = tn === 0 ? 1 : -1;
-        const w1 = Math.sin(time * 3 + tn * Math.PI) * 35 * dpr * side;
-        const w2 = Math.cos(time * 4.5 + tn * 2) * 25 * dpr * side;
-        const c1x = sx + dx * 0.3 + nx * (w1 + 22 * dpr * side);
-        const c1y = sy + dy * 0.3 + ny * (w1 + 22 * dpr * side);
-        const c2x = sx + dx * 0.7 + nx * (w2 - 12 * dpr * side);
-        const c2y = sy + dy * 0.7 + ny * (w2 - 12 * dpr * side);
-
-        const ppx = bz(sx, c1x, c2x, px, pt);
-        const ppy = bz(sy, c1y, c2y, py, pt);
-        const off = (Math.random() - 0.5) * 14 * dpr;
-
-        ctx.beginPath();
-        ctx.arc(ppx + nx * off, ppy + ny * off, (1 + Math.random() * 2.5) * dpr, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,${(110 + Math.random() * 140) | 0},0,${(0.35 + Math.random() * 0.45).toFixed(2)})`;
-        ctx.fill();
-      }
-
-      if (t < 1) {
-        animRef.current = requestAnimationFrame(frame);
-      } else {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        setActivePlanet(null);
-        window.open(planet.url, '_blank', 'noopener,noreferrer');
-      }
-    }
-
-    animRef.current = requestAnimationFrame(frame);
-  }
 
   /* ═══════════ BLACK HOLE ANIMATION ═══════════ */
   function runBlackHole() {
@@ -337,22 +253,12 @@ export default function SolarSystem() {
   /* ═══════════ EVENT HANDLERS ═══════════ */
 
   function handlePlanetClick(planet) {
-    if (activePlanet || isCollapsing) return;
-    const el = containerRef.current?.querySelector(`[data-planet="${planet.id}"]`);
-    if (!el) return;
-    const cRect = containerRef.current.getBoundingClientRect();
-    const pRect = el.getBoundingClientRect();
-    // Capture position before state update triggers re-render
-    const planetPos = {
-      x: pRect.left + pRect.width / 2 - cRect.left,
-      y: pRect.top + pRect.height / 2 - cRect.top,
-    };
-    setActivePlanet(planet.id);
-    runPlasma(planet, planetPos);
+    if (isCollapsing) return;
+    setSelectedProject(planet);
   }
 
   function handleSunClick() {
-    if (activePlanet || isCollapsing) return;
+    if (isCollapsing) return;
     runBlackHole();
   }
 
@@ -493,7 +399,6 @@ export default function SolarSystem() {
       {allPlanets.map((planet, idx) => {
         const od = planet.orbit * 2 * scale;
         const ps = Math.max(planet.size * scale, 8);
-        const isPaused = activePlanet === planet.id;
         const delay = -planet.speed * (idx / total);
         const collapseDur = 1.5 + (idx / total) * 2;
 
@@ -513,7 +418,7 @@ export default function SolarSystem() {
               pointerEvents: 'none',
               animation: `orbitSpin ${planet.speed}s linear infinite`,
               animationDelay: `${delay}s`,
-              animationPlayState: isPaused ? 'paused' : 'running',
+              animationPlayState: 'running',
               willChange: 'transform',
               transition: isCollapsing
                 ? `width ${collapseDur}s ease-in, height ${collapseDur}s ease-in, margin-top ${collapseDur}s ease-in, margin-left ${collapseDur}s ease-in, opacity ${collapseDur - 0.3}s ease-in`
@@ -552,7 +457,7 @@ export default function SolarSystem() {
                 style={{
                   animation: `orbitSpin ${planet.speed}s linear infinite reverse`,
                   animationDelay: `${delay}s`,
-                  animationPlayState: isPaused ? 'paused' : 'running',
+                  animationPlayState: 'running',
                 }}
               >
                 {/* Planet sphere */}
@@ -687,14 +592,47 @@ export default function SolarSystem() {
         </span>
       </div>
 
+      {/* ── Persistent mission links ── */}
+      <nav
+        aria-label="Project mission links"
+        className="absolute bottom-12 left-1/2 z-10 flex w-[min(94vw,54rem)] -translate-x-1/2 flex-wrap justify-center gap-2 px-2 sm:gap-3"
+      >
+        {allPlanets.map((planet) => (
+          <a
+            key={planet.id}
+            href={planet.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border px-3 py-1.5 text-[0.68rem] font-medium transition-all hover:-translate-y-0.5 hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-aurora sm:px-4 sm:text-xs"
+            style={{
+              borderColor: `${planet.color}80`,
+              color: planet.color,
+              boxShadow: `0 0 14px ${planet.color}18`,
+            }}
+          >
+            {planet.project}
+          </a>
+        ))}
+      </nav>
+
       {/* ── Canvas overlay (plasma tentacles + black-hole vortex) ── */}
       <canvas
         ref={canvasRef}
         style={{
           position: 'absolute', inset: 0,
-          pointerEvents: (activePlanet || isCollapsing) ? 'all' : 'none',
+          pointerEvents: isCollapsing ? 'all' : 'none',
           zIndex: 20,
         }}
+      />
+
+      <SatelliteCard
+        project={selectedProject ? {
+          ...selectedProject,
+          title: selectedProject.project,
+          demo: selectedProject.type === 'deployed' ? selectedProject.url : null,
+          github: selectedProject.type === 'github' ? selectedProject.url : null,
+        } : null}
+        onClose={() => setSelectedProject(null)}
       />
     </div>
   );

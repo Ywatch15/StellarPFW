@@ -164,6 +164,26 @@ export default function Contact() {
       <p className="mt-2 text-cosmos-muted">
         Have a mission in mind? Send a transmission.
       </p>
+      <div className="relative mt-6 overflow-hidden rounded-2xl border border-aurora/20 bg-gradient-to-br from-aurora/10 via-nebula/70 to-comet/10 px-4 py-4 shadow-[0_0_30px_rgba(56,189,248,0.06)] sm:px-5">
+        <div className="pointer-events-none absolute -right-8 -top-10 h-28 w-28 rounded-full border border-aurora/15" aria-hidden="true" />
+        <div className="pointer-events-none absolute -right-3 -top-5 h-16 w-16 rounded-full border border-aurora/10" aria-hidden="true" />
+        <div className="relative flex items-start gap-3">
+          <span role="img" className="mt-1 flex h-3 w-3 shrink-0 rounded-full bg-green-400 shadow-[0_0_12px_rgba(74,222,128,0.9)]" aria-label="Transmission window open" />
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+              <p className="font-heading text-xs font-semibold uppercase tracking-[0.22em] text-aurora">
+                Transmission window: open
+              </p>
+              <span className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-stardust/45">
+                Signal stable // 01
+              </span>
+            </div>
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-stardust/75">
+              Send a brief about the mission, the problem, and where you want to go next. I usually return a signal within <span className="font-semibold text-stardust">1–2 business days</span>.
+            </p>
+          </div>
+        </div>
+      </div>
 
       <motion.form
         onSubmit={handleSubmit}
@@ -184,11 +204,14 @@ export default function Contact() {
             required
             value={form.name}
             onChange={handleChange}
+            autoComplete="name"
+            aria-invalid={Boolean(fieldErrors.name)}
+            aria-describedby={fieldErrors.name ? 'name-error' : undefined}
             className={`w-full rounded-lg border ${fieldErrors.name ? 'border-supernova' : 'border-white/10'} bg-nebula px-4 py-3 text-stardust placeholder-cosmos-muted outline-none transition-colors focus:border-comet`}
             placeholder="Commander Shepard"
           />
           {fieldErrors.name && (
-            <p className="mt-1 text-xs text-supernova">{fieldErrors.name}</p>
+            <p id="name-error" className="mt-1 text-xs text-supernova">{fieldErrors.name}</p>
           )}
         </div>
 
@@ -203,11 +226,14 @@ export default function Contact() {
             required
             value={form.email}
             onChange={handleChange}
+            autoComplete="email"
+            aria-invalid={Boolean(fieldErrors.email)}
+            aria-describedby={fieldErrors.email ? 'email-error' : undefined}
             className={`w-full rounded-lg border ${fieldErrors.email ? 'border-supernova' : 'border-white/10'} bg-nebula px-4 py-3 text-stardust placeholder-cosmos-muted outline-none transition-colors focus:border-comet`}
             placeholder="you@example.com"
           />
           {fieldErrors.email && (
-            <p className="mt-1 text-xs text-supernova">{fieldErrors.email}</p>
+            <p id="email-error" className="mt-1 text-xs text-supernova">{fieldErrors.email}</p>
           )}
         </div>
 
@@ -222,11 +248,13 @@ export default function Contact() {
             rows={5}
             value={form.message}
             onChange={handleChange}
+            aria-invalid={Boolean(fieldErrors.message)}
+            aria-describedby={fieldErrors.message ? 'message-error' : undefined}
             className={`w-full resize-none rounded-lg border ${fieldErrors.message ? 'border-supernova' : 'border-white/10'} bg-nebula px-4 py-3 text-stardust placeholder-cosmos-muted outline-none transition-colors focus:border-comet`}
             placeholder="Tell me about your mission…"
           />
           {fieldErrors.message && (
-            <p className="mt-1 text-xs text-supernova">{fieldErrors.message}</p>
+            <p id="message-error" className="mt-1 text-xs text-supernova">{fieldErrors.message}</p>
           )}
         </div>
 

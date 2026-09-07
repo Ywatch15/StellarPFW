@@ -20,9 +20,10 @@ export const personJsonLd = {
     email: 'pathaksundram1812@gmail.com',
   },
   sameAs: [
-    'https://github.com/Sundram1812',
-    'https://www.linkedin.com/in/sundram-pathak-a34961257/',
-    'https://leetcode.com/u/Sundram_Pathak/',
+    'https://github.com/Ywatch15',
+    'https://www.linkedin.com/in/sundram-pathak-3469b6256/',
+    'https://www.instagram.com/sundram_pathak150',
+    'https://x.com/Sun_D_Ram',
   ],
   knowsAbout: [
     'React',
@@ -160,8 +161,21 @@ export function injectJsonLd(data, id = 'json-ld') {
 export function updateMeta({ title, description }) {
   if (typeof document === 'undefined') return;
 
+  const pageTitle = title ? `${title} — Stellar Portfolio` : document.title;
+  const pageUrl = window.location.href;
+
+  const setMeta = (selector, attributes, content) => {
+    let meta = document.head.querySelector(selector);
+    if (!meta) {
+      meta = document.createElement('meta');
+      Object.entries(attributes).forEach(([key, value]) => meta.setAttribute(key, value));
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', content);
+  };
+
   if (title) {
-    document.title = `${title} — Stellar Portfolio`;
+    document.title = pageTitle;
   }
 
   if (description) {
@@ -173,4 +187,21 @@ export function updateMeta({ title, description }) {
     }
     meta.content = description;
   }
+
+  setMeta('meta[property="og:title"]', { property: 'og:title' }, pageTitle);
+  setMeta('meta[property="og:url"]', { property: 'og:url' }, pageUrl);
+  setMeta('meta[name="twitter:title"]', { name: 'twitter:title' }, pageTitle);
+
+  if (description) {
+    setMeta('meta[property="og:description"]', { property: 'og:description' }, description);
+    setMeta('meta[name="twitter:description"]', { name: 'twitter:description' }, description);
+  }
+
+  let canonical = document.head.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.rel = 'canonical';
+    document.head.appendChild(canonical);
+  }
+  canonical.href = pageUrl;
 }

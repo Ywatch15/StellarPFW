@@ -78,7 +78,10 @@ function TechTicker() {
     <div className="relative mt-10 overflow-hidden py-4">
       <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-void to-transparent" />
       <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-void to-transparent" />
-      <div className="animate-ticker flex gap-6 whitespace-nowrap">
+      <div
+        className="animate-ticker flex gap-6 whitespace-nowrap"
+        aria-label="Technology stack"
+      >
         {doubled.map((tech, i) => (
           <span
             key={i}
@@ -98,6 +101,15 @@ function TechTicker() {
         }
         .animate-ticker:hover {
           animation-play-state: paused;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-ticker {
+            animation: none;
+            overflow-x: auto;
+            justify-content: center;
+            flex-wrap: wrap;
+            white-space: normal;
+          }
         }
       `}</style>
     </div>

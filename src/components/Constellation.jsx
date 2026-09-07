@@ -235,6 +235,17 @@ export default function Constellation() {
   const [focused, setFocused] = useState(null);
   const [tooltip, setTooltip] = useState(null); // { name, x, y }
   const hoverTimerRef = useRef(null);
+  const starField = useMemo(
+    () => Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      x: 8 + ((i * 37) % 84),
+      y: 6 + ((i * 61) % 126),
+      opacity: 0.1 + ((i * 17) % 24) / 100,
+      peak: 0.3 + ((i * 13) % 20) / 100,
+      duration: 2 + (i % 4),
+    })),
+    [],
+  );
 
   const active = hovered || focused;
   const connectedSet = useMemo(
@@ -316,33 +327,33 @@ export default function Constellation() {
         </defs>
 
         {/* Background particles — twinkle */}
-        {Array.from({ length: 50 }, (_, i) => (
+        {starField.map((star) => (
           <circle
-            key={`star-${i}`}
-            cx={Math.random() * 100}
-            cy={Math.random() * 134}
+            key={`star-${star.id}`}
+            cx={star.x}
+            cy={star.y}
             r={0.15}
             fill="#e0e6ff"
-            opacity={0.15 + Math.random() * 0.2}
+            opacity={star.opacity}
           >
             <animate
               attributeName="opacity"
-              values={`${0.1 + Math.random() * 0.15};${0.3 + Math.random() * 0.2};${0.1 + Math.random() * 0.15}`}
-              dur={`${2 + Math.random() * 3}s`}
+              values={`${star.opacity};${star.peak};${star.opacity}`}
+              dur={`${star.duration}s`}
               repeatCount="indefinite"
             />
           </circle>
         ))}
 
         {/* Shooting star animations */}
-        <line x1="-5" y1="15" x2="0" y2="14" stroke="url(#shooting-star)" strokeWidth="0.2" opacity="0">
+        <line className="constellation-motion-line" x1="-5" y1="15" x2="0" y2="14" stroke="url(#shooting-star)" strokeWidth="0.2" opacity="0">
           <animate attributeName="x1" values="-5;105" dur="4s" repeatCount="indefinite" begin="0s" />
           <animate attributeName="y1" values="15;10" dur="4s" repeatCount="indefinite" begin="0s" />
           <animate attributeName="x2" values="0;110" dur="4s" repeatCount="indefinite" begin="0s" />
           <animate attributeName="y2" values="14;9" dur="4s" repeatCount="indefinite" begin="0s" />
           <animate attributeName="opacity" values="0;0;0.6;0.6;0" dur="4s" repeatCount="indefinite" begin="0s" />
         </line>
-        <line x1="110" y1="70" x2="105" y2="71" stroke="url(#shooting-star)" strokeWidth="0.15" opacity="0">
+        <line className="constellation-motion-line" x1="110" y1="70" x2="105" y2="71" stroke="url(#shooting-star)" strokeWidth="0.15" opacity="0">
           <animate attributeName="x1" values="110;-10" dur="5s" repeatCount="indefinite" begin="2.5s" />
           <animate attributeName="y1" values="70;75" dur="5s" repeatCount="indefinite" begin="2.5s" />
           <animate attributeName="x2" values="105;-15" dur="5s" repeatCount="indefinite" begin="2.5s" />
@@ -412,7 +423,7 @@ export default function Constellation() {
             >
               {/* Subtle idle breathing */}
               {!active && (
-                <animate
+                <animate className="constellation-motion-animation"
                   attributeName="r"
                   values={`${skill.size};${skill.size + 0.25};${skill.size}`}
                   dur={`${3 + (skills.indexOf(skill) % 4)}s`}
@@ -507,6 +518,12 @@ export default function Constellation() {
           @media (min-width: 768px) {
             .animate-legend-scroll {
               animation: none;
+            }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .constellation-motion-line,
+            .constellation-motion-animation {
+              display: none;
             }
           }
         `}</style>

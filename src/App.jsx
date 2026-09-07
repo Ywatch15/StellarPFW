@@ -12,6 +12,7 @@ const Works = lazy(() => import('./pages/Works'));
 const About = lazy(() => import('./pages/About'));
 const Beyond = lazy(() => import('./pages/Beyond'));
 const Contact = lazy(() => import('./pages/Contact'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 export default function App({ onReady }) {
   useEffect(() => {
@@ -30,6 +31,7 @@ export default function App({ onReady }) {
               <Route path="about" element={<About />} />
               <Route path="beyond" element={<Beyond />} />
               <Route path="contact" element={<Contact />} />
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </Suspense>

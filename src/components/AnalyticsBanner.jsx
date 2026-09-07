@@ -33,7 +33,7 @@ export default function AnalyticsBanner() {
     <div
       role="dialog"
       aria-label="Analytics consent"
-      className="fixed bottom-4 left-4 z-50 max-w-sm rounded-lg border border-white/10 bg-nebula/95 p-4 shadow-2xl backdrop-blur-md"
+      className="fixed bottom-4 left-4 right-4 z-50 max-w-sm rounded-lg border border-white/15 bg-nebula/95 p-4 shadow-2xl backdrop-blur-md sm:right-auto"
     >
       <p className="mb-3 text-sm text-stardust">
         I use privacy-friendly analytics (no cookies, no tracking) to improve this site.
@@ -48,7 +48,7 @@ export default function AnalyticsBanner() {
         </button>
         <button
           onClick={handleDecline}
-          className="rounded-md border border-white/10 px-3 py-1.5 text-xs text-cosmos-muted transition-colors hover:text-stardust"
+          className="rounded-md border border-white/20 px-3 py-1.5 text-xs text-stardust/80 transition-colors hover:border-white/40 hover:text-stardust"
         >
           No thanks
         </button>

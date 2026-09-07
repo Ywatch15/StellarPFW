@@ -11,6 +11,7 @@ import Loader from '../components/Loader';
 import OrbitShell from '../components/OrbitShell';
 import HomeIntro from '../components/HomeIntro';
 import HomeHighlights from '../components/HomeHighlights';
+import MissionModules from '../components/MissionModules';
 
 // Lazy-load the heavy 3D scene — only imported when WebGL is confirmed
 const HeroScene = lazy(() => import(/* webpackChunkName: "hero-3d" */ '../components/HeroScene'));
@@ -90,6 +91,9 @@ export default function Home({ onReady }) {
 
       {/* Personal intro section */}
       <HomeIntro />
+
+      {/* Outcome-focused capabilities */}
+      <MissionModules />
 
       {/* Stats, tech ticker, and highlight cards */}
       <HomeHighlights />

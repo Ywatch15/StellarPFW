@@ -101,6 +101,16 @@ const pulseKeyframes = {
 
 function DataCard({ fragment, index }) {
   const [expanded, setExpanded] = useState(false);
+  const [gravity, setGravity] = useState({ x: 0, y: 0 });
+
+  const handleGravity = (event) => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    setGravity({
+      x: ((event.clientX - rect.left) / rect.width - 0.5) * 7,
+      y: ((event.clientY - rect.top) / rect.height - 0.5) * -7,
+    });
+  };
 
   return (
     <motion.div
@@ -113,10 +123,13 @@ function DataCard({ fragment, index }) {
     >
       <motion.article
         onClick={() => setExpanded((e) => !e)}
+        onMouseMove={handleGravity}
+        onMouseLeave={() => setGravity({ x: 0, y: 0 })}
         animate={pulseKeyframes}
         transition={{ duration: 3, repeat: Infinity, delay: index * 0.5 }}
         className="cursor-pointer rounded-2xl border border-white/5 bg-nebula/90 p-5 backdrop-blur-sm transition-all hover:border-comet/30 sm:p-6"
         style={{ borderTopColor: fragment.color + '44' }}
+        whileHover={{ x: gravity.x, y: gravity.y }}
         role="button"
         aria-expanded={expanded}
         tabIndex={0}
@@ -238,7 +251,7 @@ function DataCard({ fragment, index }) {
                     {[
                       { year: '2022', emoji: '🚀', title: 'The Spark', desc: 'Started Electronics Engineering and wrote my first lines of code in C/C++. Discovered HTML/CSS/JS and fell in love with building things for the web.' },
                       { year: '2023', emoji: '⚛️', title: 'Fullstack & DSA', desc: 'Went all-in on React, Node.js, Express & MongoDB. Simultaneously dove into competitive programming — 500+ problems across LeetCode, CodeChef & GFG.' },
-                      { year: '2024', emoji: '🐳', title: 'DevOps & Scale', desc: 'Embraced Docker, CI/CD pipelines, AWS & Vercel. Learned to ship code reliably from local to production at scale.' },
+                      { year: '2024', emoji: '🤖', title: 'AI Orbit', desc: 'Explored AI-powered interfaces and practical generative workflows, learning how to make intelligent features feel useful and human.' },
                       { year: '2025', emoji: '🌌', title: 'Creative Frontiers', desc: 'Three.js, immersive portfolios, and pushing the boundaries of what browsers can do — blending engineering with art.' },
                     ].map((step, i) => (
                       <motion.div
@@ -370,6 +383,47 @@ export default function Beyond() {
         ⚠ Warning: You are approaching the event horizon. Information beyond this point
         may permanently expand your perspective.
       </motion.p>
+
+      <div className="mt-10 grid gap-4 rounded-2xl border border-aurora/15 bg-nebula/50 p-5 backdrop-blur-sm sm:grid-cols-[1fr_auto] sm:items-center sm:p-6">
+        <div>
+          <p className="font-mono text-[0.65rem] uppercase tracking-[0.24em] text-aurora/80">Current transmission</p>
+          <h2 className="mt-2 font-heading text-xl font-bold text-stardust sm:text-2xl">Building useful intelligence</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-cosmos-muted">
+            Exploring how AI can make interfaces more helpful without making them feel less human—one focused experiment at a time.
+          </p>
+        </div>
+        <div className="rounded-xl border border-white/10 bg-void/50 px-4 py-3 text-center sm:min-w-40">
+          <p className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-cosmos-muted">Signal strength</p>
+          <div className="mt-2 flex justify-center gap-1" aria-label="Signal strength 80 percent">
+            {[0, 1, 2, 3, 4].map((bar) => <span key={bar} className={`h-5 w-2 rounded-sm ${bar < 4 ? 'bg-aurora' : 'bg-white/10'}`} />)}
+          </div>
+          <p className="mt-1 text-xs text-stardust/70">80% focused</p>
+        </div>
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-white/8 bg-void/30 p-5 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="font-mono text-[0.65rem] uppercase tracking-[0.24em] text-comet/90">Singularity log</p>
+            <h2 className="mt-2 font-heading text-xl font-bold text-stardust">Flight recorder</h2>
+          </div>
+          <span className="rounded-full border border-white/10 px-3 py-1 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-cosmos-muted">2022—2026</span>
+        </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-5">
+          {[
+            ['2022', 'First engineering launch'],
+            ['2023', 'Full-stack systems online'],
+            ['2024', 'AI orbit established'],
+            ['2025', 'Creative web experiments detected'],
+            ['2026', 'Stellar portfolio deployed'],
+          ].map(([year, event]) => (
+            <div key={year} className="relative border-l border-comet/40 pl-3 sm:border-l-0 sm:border-t sm:pl-0 sm:pt-3">
+              <p className="font-mono text-xs text-aurora">{year}</p>
+              <p className="mt-1 text-xs leading-relaxed text-cosmos-muted">{event}</p>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Data fragment cards */}
       <div className="mt-12 grid gap-5 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">

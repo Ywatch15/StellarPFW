@@ -119,6 +119,7 @@ export default function SolarSystem() {
 
   const [scale, setScale] = useState(1);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [scanMode, setScanMode] = useState(false);
   const [isCollapsing, setIsCollapsing] = useState(false);
   const [hovered, setHovered] = useState(null);
 
@@ -292,6 +293,14 @@ export default function SolarSystem() {
         <p className="mt-1 text-xs text-cosmos-muted sm:text-sm">
           Click a planet to explore &middot; Click the Sun… if you dare
         </p>
+        <button
+          type="button"
+          onClick={() => setScanMode((value) => !value)}
+          aria-pressed={scanMode}
+          className={`mt-3 rounded-full border px-3 py-1.5 text-[0.65rem] font-medium uppercase tracking-[0.16em] transition-colors focus-visible:ring-2 focus-visible:ring-aurora ${scanMode ? 'border-aurora/70 bg-aurora/15 text-aurora' : 'border-white/15 text-cosmos-muted hover:border-aurora/50 hover:text-aurora'}`}
+        >
+          {scanMode ? 'Scan mode active' : 'Activate scan mode'}
+        </button>
       </div>
 
       {/* ── Background stars (collapse toward centre during black-hole) ── */}
@@ -416,7 +425,7 @@ export default function SolarSystem() {
                 ? '1px dashed rgba(255,255,255,0.04)'
                 : '1px solid rgba(255,255,255,0.06)',
               pointerEvents: 'none',
-              animation: `orbitSpin ${planet.speed}s linear infinite`,
+              animation: `orbitSpin ${planet.speed * (scanMode ? 2.8 : 1)}s linear infinite`,
               animationDelay: `${delay}s`,
               animationPlayState: 'running',
               willChange: 'transform',
@@ -455,7 +464,7 @@ export default function SolarSystem() {
               <div
                 className="solar-counter-rotate"
                 style={{
-                  animation: `orbitSpin ${planet.speed}s linear infinite reverse`,
+                  animation: `orbitSpin ${planet.speed * (scanMode ? 2.8 : 1)}s linear infinite reverse`,
                   animationDelay: `${delay}s`,
                   animationPlayState: 'running',
                 }}
@@ -551,7 +560,7 @@ export default function SolarSystem() {
                     transform: 'translateX(-50%)',
                     whiteSpace: 'nowrap', textAlign: 'center',
                     marginTop: 5, pointerEvents: 'none',
-                    opacity: hovered === planet.id ? 1 : 0.55,
+                    opacity: scanMode || hovered === planet.id ? 1 : 0.55,
                     transition: 'opacity 0.3s',
                     textShadow: '0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6)',
                   }}

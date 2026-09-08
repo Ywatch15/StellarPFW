@@ -7,6 +7,8 @@ import OrbitalCursor from './OrbitalCursor';
 import { ThemeToggle } from './ThemeProvider';
 import AnalyticsBanner from './AnalyticsBanner';
 import PageTransition from './PageTransition';
+import OrbitProgress from './OrbitProgress';
+import SoundToggle from './SoundToggle';
 
 export default function Layout() {
   return (
@@ -20,6 +22,8 @@ export default function Layout() {
         <p>© {new Date().getFullYear()} Stellar Portfolio. Crafted by Sundram.</p>
       </footer>
       <OrbitalCursor />
+      <OrbitProgress />
+      <SoundToggle />
       <ThemeToggle />
       <AnalyticsBanner />
     </div>

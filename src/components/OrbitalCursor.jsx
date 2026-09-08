@@ -8,6 +8,7 @@ export default function OrbitalCursor() {
     x: 0,
     y: 0,
     inside: false,
+    mode: 'orbit',
     particles: [],
   });
 
@@ -34,6 +35,7 @@ export default function OrbitalCursor() {
       state.x = event.clientX;
       state.y = event.clientY;
       state.inside = true;
+      state.mode = event.target.closest?.('a,button,[role="button"],summary') ? 'target' : 'orbit';
 
       for (let i = 0; i < 3; i += 1) {
         state.particles.push({
@@ -75,15 +77,32 @@ export default function OrbitalCursor() {
       }
 
       if (state.inside) {
-        ctx.beginPath();
-        ctx.arc(state.x, state.y, 4, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(165, 185, 255, 0.96)';
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(state.x, state.y, 9, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(120, 150, 255, 0.18)';
-        ctx.fill();
+        if (state.mode === 'target') {
+          ctx.strokeStyle = 'rgba(56, 189, 248, 0.9)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(state.x, state.y, 11, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(state.x - 16, state.y);
+          ctx.lineTo(state.x - 7, state.y);
+          ctx.moveTo(state.x + 7, state.y);
+          ctx.lineTo(state.x + 16, state.y);
+          ctx.moveTo(state.x, state.y - 16);
+          ctx.lineTo(state.x, state.y - 7);
+          ctx.moveTo(state.x, state.y + 7);
+          ctx.lineTo(state.x, state.y + 16);
+          ctx.stroke();
+        } else {
+          ctx.beginPath();
+          ctx.arc(state.x, state.y, 4, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(165, 185, 255, 0.96)';
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(state.x, state.y, 9, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(120, 150, 255, 0.18)';
+          ctx.fill();
+        }
       }
 
       rafId = window.requestAnimationFrame(draw);

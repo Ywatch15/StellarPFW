@@ -12,6 +12,7 @@ import OrbitShell from '../components/OrbitShell';
 import HomeIntro from '../components/HomeIntro';
 import HomeHighlights from '../components/HomeHighlights';
 import MissionModules from '../components/MissionModules';
+import NebulaBackdrop from '../components/NebulaBackdrop';
 
 // Lazy-load the heavy 3D scene — only imported when WebGL is confirmed
 const HeroScene = lazy(() => import(/* webpackChunkName: "hero-3d" */ '../components/HeroScene'));
@@ -45,6 +46,7 @@ export default function Home({ onReady }) {
   return (
     <section className="relative min-h-[90vh] overflow-x-hidden">
       {/* 3D background or fallback */}
+      <NebulaBackdrop />
       {webGL === null ? (
         <Loader message="Detecting capabilities…" />
       ) : webGL ? (

@@ -129,7 +129,7 @@ function DataCard({ fragment, index }) {
         transition={{ duration: 3, repeat: Infinity, delay: index * 0.5 }}
         className="cursor-pointer rounded-2xl border border-white/5 bg-nebula/90 p-5 backdrop-blur-sm transition-all hover:border-comet/30 sm:p-6"
         style={{ borderTopColor: fragment.color + '44' }}
-        whileHover={{ x: gravity.x, y: gravity.y }}
+        whileHover={{ x: gravity.x, y: gravity.y, boxShadow: `0 0 26px ${fragment.color}30` }}
         role="button"
         aria-expanded={expanded}
         tabIndex={0}
@@ -159,7 +159,7 @@ function DataCard({ fragment, index }) {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 22 }}
               className="overflow-hidden"
             >
               <div className="mt-4">
@@ -395,7 +395,7 @@ export default function Beyond() {
         <div className="rounded-xl border border-white/10 bg-void/50 px-4 py-3 text-center sm:min-w-40">
           <p className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-cosmos-muted">Signal strength</p>
           <div className="mt-2 flex justify-center gap-1" aria-label="Signal strength 80 percent">
-            {[0, 1, 2, 3, 4].map((bar) => <span key={bar} className={`h-5 w-2 rounded-sm ${bar < 4 ? 'bg-aurora' : 'bg-white/10'}`} />)}
+            {[0, 1, 2, 3, 4].map((bar) => <span key={bar} className={`signal-bar h-5 w-2 rounded-sm ${bar < 4 ? 'bg-aurora' : 'bg-white/10'}`} style={{ animationDelay: `${bar * 0.08}s` }} />)}
           </div>
           <p className="mt-1 text-xs text-stardust/70">80% focused</p>
         </div>
@@ -409,7 +409,7 @@ export default function Beyond() {
           </div>
           <span className="rounded-full border border-white/10 px-3 py-1 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-cosmos-muted">2022—2026</span>
         </div>
-        <div className="mt-5 grid gap-3 sm:grid-cols-5">
+        <div className="signal-trace mt-5 grid gap-3 sm:grid-cols-5">
           {[
             ['2022', 'First engineering launch'],
             ['2023', 'Full-stack systems online'],

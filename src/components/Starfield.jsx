@@ -4,9 +4,9 @@
 import React, { useRef, useCallback } from 'react';
 
 const STAR_LAYERS = [
-  { count: 40, speed: 0.015, size: 1, opacity: 0.4 },
-  { count: 25, speed: 0.025, size: 1.5, opacity: 0.6 },
-  { count: 12, speed: 0.04, size: 2, opacity: 0.8 },
+  { count: 40, speed: 0.2, size: 1, opacity: 0.4 },
+  { count: 25, speed: 0.6, size: 1.5, opacity: 0.6 },
+  { count: 12, speed: 1.2, size: 2, opacity: 0.8 },
 ];
 
 function generateStars(count) {
@@ -25,17 +25,24 @@ export default function Starfield() {
   );
 
   const containerRef = useRef(null);
+  const pointerRef = useRef({ x: null, y: null });
+  const offsetsRef = useRef(STAR_LAYERS.map(() => ({ x: 0, y: 0 })));
 
   const handleMouseMove = useCallback((e) => {
     if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    const last = pointerRef.current;
+    pointerRef.current = { x: e.clientX, y: e.clientY };
+    if (last.x === null) return;
+    const dx = e.clientX - last.x;
+    const dy = e.clientY - last.y;
 
     const svgs = containerRef.current.querySelectorAll('[data-parallax]');
-    svgs.forEach((svg) => {
-      const speed = parseFloat(svg.dataset.parallax);
-      svg.style.transform = `translate(${x * speed * 40}px, ${y * speed * 40}px)`;
+    svgs.forEach((svg, index) => {
+      const depth = parseFloat(svg.dataset.parallax);
+      const offset = offsetsRef.current[index];
+      offset.x = Math.max(-60, Math.min(60, offset.x + dx * depth));
+      offset.y = Math.max(-60, Math.min(60, offset.y + dy * depth));
+      svg.style.transform = `translate(${offset.x}px, ${offset.y}px)`;
     });
   }, []);
 

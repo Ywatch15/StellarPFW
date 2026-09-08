@@ -56,6 +56,7 @@ export default function Contact() {
   const [status, setStatus] = useState('idle'); // idle | sending | animating | sent | error
   const [errorMsg, setErrorMsg] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
+  const [burst, setBurst] = useState(false);
 
   useSEO({
     title: 'Contact',
@@ -134,6 +135,8 @@ export default function Contact() {
       }
 
       // Success — trigger nebula animation
+      setBurst(true);
+      window.setTimeout(() => setBurst(false), 500);
       setStatus('animating');
       setForm({ name: '', email: '', message: '' });
     } catch (err) {
@@ -157,7 +160,7 @@ export default function Contact() {
         )}
       </AnimatePresence>
 
-      <section className="mx-auto max-w-2xl px-4 py-12 sm:px-6 sm:py-16" aria-label="Contact">
+      <section className="docking-bay mx-auto max-w-2xl px-4 py-12 sm:px-6 sm:py-16" aria-label="Contact">
       <h1 className="font-heading text-3xl font-bold sm:text-4xl">
         <span className="text-gradient-aurora">Docking</span> Bay
       </h1>
@@ -258,13 +261,16 @@ export default function Contact() {
           )}
         </div>
 
-        <button
-          type="submit"
-          disabled={status === 'sending'}
-          className="w-full rounded-lg bg-comet px-6 py-3 font-heading text-sm font-semibold text-white transition-colors hover:bg-comet/80 disabled:opacity-50"
-        >
-          {status === 'sending' ? 'Transmitting…' : 'Send Transmission'}
-        </button>
+        <div className="relative">
+          <button
+            type="submit"
+            disabled={status === 'sending'}
+            className="docking-submit w-full rounded-lg bg-comet px-6 py-3 font-heading text-sm font-semibold text-white transition-colors hover:bg-comet/80 disabled:opacity-50"
+          >
+            {status === 'sending' ? 'Transmitting…' : 'Send Transmission'}
+            {burst && [1, 2, 3, 4].map((particle) => <span key={particle} className="docking-particle" aria-hidden="true" />)}
+          </button>
+        </div>
 
         {status === 'sent' && (
           <motion.p

@@ -129,6 +129,8 @@ function Lane({ lane, reverse = false }) {
 
   return (
     <div className="relative overflow-hidden rounded-[2rem] border border-white/6 bg-[#070b17]/75 px-4 py-6 sm:px-6 sm:py-8">
+      <div className="journey-aurora journey-aurora--one" style={{ '--journey-accent': lane.accent }} aria-hidden="true" />
+      <div className="journey-aurora journey-aurora--two" style={{ '--journey-accent': lane.accent }} aria-hidden="true" />
       <div
         className="pointer-events-none absolute inset-0 opacity-90"
         style={{ background: `radial-gradient(circle at 18% 30%, ${lane.glow}, transparent 34%), radial-gradient(circle at 82% 20%, ${lane.glow}, transparent 30%)` }}
@@ -181,6 +183,7 @@ export default function StoryJourney() {
   return (
     <section className="relative mt-14 sm:mt-16">
       <div className="relative overflow-hidden rounded-[2.5rem] border border-white/6 bg-[#050816] px-4 py-8 sm:px-6 sm:py-10">
+        <div className="journey-god-rays" aria-hidden="true"><span /><span /><span /></div>
         <div
           className="pointer-events-none absolute inset-0 opacity-90"
           style={{ background: 'radial-gradient(circle at 20% 10%, rgba(59, 130, 246, 0.18), transparent 28%), radial-gradient(circle at 82% 14%, rgba(244, 114, 182, 0.14), transparent 26%), radial-gradient(circle at 52% 100%, rgba(34, 197, 94, 0.12), transparent 22%)' }}

@@ -24,10 +24,20 @@ export default function BlackHole({ children, interactive = true }) {
   const animRef = useRef(null);
   const particlesRef = useRef(generateParticles(PARTICLE_COUNT));
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setPrefersReducedMotion(media.matches);
+    update();
+    media.addEventListener?.('change', update);
+    return () => media.removeEventListener?.('change', update);
+  }, []);
 
   // Particle animation loop on a 2D canvas
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (prefersReducedMotion) return undefined;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let running = true;
@@ -74,6 +84,13 @@ export default function BlackHole({ children, interactive = true }) {
         ctx.fillStyle = p.color;
         ctx.globalAlpha = p.opacity * Math.min(p.radius / 80, 1);
         ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(cx + Math.cos(rad) * (p.radius + 8), cy + Math.sin(rad) * (p.radius + 3));
+        ctx.strokeStyle = p.color;
+        ctx.globalAlpha = 0.16 * Math.min(p.radius / 80, 1);
+        ctx.lineWidth = 0.7;
+        ctx.stroke();
         ctx.globalAlpha = 1;
       });
 
@@ -86,7 +103,7 @@ export default function BlackHole({ children, interactive = true }) {
       cancelAnimationFrame(animRef.current);
       window.removeEventListener('resize', resize);
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   // Interactive gravitational warp on mouse move
   const handleMouseMove = (e) => {
@@ -115,7 +132,7 @@ export default function BlackHole({ children, interactive = true }) {
 
       {/* SVG black hole core */}
       <div
-        className="relative z-10 flex items-center justify-center"
+        className="black-hole-shell relative z-10 flex items-center justify-center"
         style={{
           transform: `perspective(600px) rotateX(${mouseOffset.y * 0.3}deg) rotateY(${mouseOffset.x * 0.3}deg)`,
           transition: 'transform 0.3s ease-out',
@@ -155,6 +172,9 @@ export default function BlackHole({ children, interactive = true }) {
             <filter id="bh-blur">
               <feGaussianBlur stdDeviation="3" />
             </filter>
+            <filter id="bh-wide-glow" x="-40%" y="-120%" width="180%" height="340%">
+              <feGaussianBlur stdDeviation="9" />
+            </filter>
           </defs>
 
           {/* Outer glow halo */}
@@ -164,7 +184,7 @@ export default function BlackHole({ children, interactive = true }) {
               type="rotate"
               from="0 200 200"
               to="360 200 200"
-              dur="30s"
+              dur="52s"
               repeatCount="indefinite"
             />
           </circle>
@@ -186,7 +206,7 @@ export default function BlackHole({ children, interactive = true }) {
               type="rotate"
               from="0 200 200"
               to="360 200 200"
-              dur="12s"
+              dur="52s"
               repeatCount="indefinite"
             />
           </ellipse>
@@ -207,13 +227,61 @@ export default function BlackHole({ children, interactive = true }) {
               type="rotate"
               from="0 200 200"
               to="-360 200 200"
-              dur="8s"
+              dur="40s"
               repeatCount="indefinite"
             />
           </ellipse>
 
+          {/* Evenly spread luminous rings around the dark horizon */}
+          <ellipse
+            className="black-hole-yellow-ring"
+            cx="200"
+            cy="200"
+            rx="132"
+            ry="42"
+            fill="none"
+            stroke="#facc15"
+            strokeWidth="11"
+            opacity="0.34"
+            filter="url(#bh-wide-glow)"
+          />
+          <ellipse
+            className="black-hole-yellow-ring"
+            cx="200"
+            cy="200"
+            rx="132"
+            ry="42"
+            fill="none"
+            stroke="#facc15"
+            strokeWidth="2.5"
+            opacity="0.98"
+          />
+          <ellipse
+            className="black-hole-blue-ring"
+            cx="200"
+            cy="200"
+            rx="158"
+            ry="54"
+            fill="none"
+            stroke="#38bdf8"
+            strokeWidth="9"
+            opacity="0.28"
+            filter="url(#bh-wide-glow)"
+          />
+          <ellipse
+            className="black-hole-blue-ring"
+            cx="200"
+            cy="200"
+            rx="158"
+            ry="54"
+            fill="none"
+            stroke="#38bdf8"
+            strokeWidth="1.8"
+            opacity="0.95"
+          />
+
           {/* Singularity (the black center) */}
-          <circle cx="200" cy="200" r="55" fill="url(#bh-singularity)" />
+          <circle cx="200" cy="200" r="55" fill="#000000" stroke="#000000" strokeWidth="3" />
 
           {/* Event horizon ring */}
           <circle

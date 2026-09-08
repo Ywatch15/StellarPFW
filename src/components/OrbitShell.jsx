@@ -86,7 +86,10 @@ export default function OrbitShell() {
           strokeWidth="0.5"
           strokeDasharray="4 4"
           opacity={0.3}
+          className="orbit-shell__ring"
         />
+
+        <circle className="orbit-shell__comet" cx={CENTER} cy={CENTER - ORBIT_RADIUS} r="2.5" />
 
         {/* Central sun */}
         <circle
@@ -95,7 +98,9 @@ export default function OrbitShell() {
           r={22}
           fill="url(#sunGradient)"
           className="cursor-pointer"
+          style={{ filter: 'drop-shadow(0 0 8px rgba(250,204,21,.7))' }}
         />
+        <ellipse className="orbit-shell__flare" cx={CENTER} cy={CENTER} rx="52" ry="8" />
         <text
           x={CENTER}
           y={CENTER + 1}

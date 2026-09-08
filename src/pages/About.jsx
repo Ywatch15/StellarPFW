@@ -11,7 +11,7 @@ const AboutParticles = lazy(() => import('../components/AboutParticles'));
 export default function About() {
   useSEO({
     title: 'About',
-    description: 'Skills constellation, life journey, and career story of Sundram Pathak — a full-stack engineer specializing in React, Node.js, and creative web development.',
+    description: 'Skills constellation, life journey, and founder story of Sundram Pathak — founder and CTO of TentDesk, building full-stack products for real users.',
     jsonLd: personJsonLd,
   });
 
@@ -31,9 +31,9 @@ export default function About() {
 
       <div className="mt-8 grid gap-3 sm:grid-cols-3" aria-label="Developer profile readout">
         {[
-          ['Current vector', 'Full-stack + creative web', '#38bdf8'],
+          ['Current vector', 'Founder + CTO · TentDesk', '#38bdf8'],
           ['Origin point', 'Electronics engineering', '#a78bfa'],
-          ['Operating mode', 'Learning by shipping', '#facc15'],
+          ['Operating mode', 'Shipping with customers', '#facc15'],
         ].map(([label, value, color]) => (
           <div key={label} className="rounded-xl border border-white/8 bg-nebula/55 px-4 py-3 backdrop-blur-sm">
             <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cosmos-muted">{label}</p>
@@ -94,13 +94,12 @@ export default function About() {
         </h2>
         <div className="mt-4 space-y-4 text-cosmos-muted leading-relaxed">
           <p>
-            Hello, I&apos;m Sundram Pathak — an Electronics Engineering
-            Graduate navigating the universe of full-stack development. I
-            build immersive, realistic digital experiences and continuously
-            explore new technologies. Along this journey, I sharpen my
-            problem-solving skills across platforms like LeetCode, CodeChef,
-            and GeeksforGeeks, always striving to evolve as a
-            developer.
+            Hello, I&apos;m Sundram Pathak — an Electronics Engineering graduate,
+            founder, and CTO building TentDesk for real tent and event-rental
+            businesses. It is live in production with early customers, so my
+            work now sits at the intersection of product decisions, full-stack
+            engineering, and the responsibility of keeping a useful system
+            running.
           </p>
           <p>
             My engineering background gives me a unique perspective on software.
@@ -111,11 +110,11 @@ export default function About() {
             Express backends backed by MongoDB.
           </p>
           <p>
-            Beyond the stack, I&apos;m actively diving into DevOps — learning
-            Docker, CI/CD pipelines, and cloud deployment workflows to bridge
-            the gap between development and operations. I believe shipping code
-            is just as important as writing it, and automation is the key to
-            velocity.
+            Beyond TentDesk, I&apos;m building CommandAtlas — a deterministic,
+            offline-first command reference with a validated content pipeline.
+            I&apos;m actively diving into DevOps because a git push is not the end
+            of a product: deployment, observability, recovery, and reliable
+            user-facing behaviour are part of the engineering too.
           </p>
           <p>
             Competitive programming is the training ground that keeps my

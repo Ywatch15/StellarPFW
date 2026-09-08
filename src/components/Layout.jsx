@@ -8,7 +8,6 @@ import { ThemeToggle } from './ThemeProvider';
 import AnalyticsBanner from './AnalyticsBanner';
 import PageTransition from './PageTransition';
 import OrbitProgress from './OrbitProgress';
-import SoundToggle from './SoundToggle';
 
 export default function Layout() {
   return (
@@ -23,7 +22,6 @@ export default function Layout() {
       </footer>
       <OrbitalCursor />
       <OrbitProgress />
-      <SoundToggle />
       <ThemeToggle />
       <AnalyticsBanner />
     </div>

@@ -1,454 +1,399 @@
 // FILE: src/pages/Beyond.jsx
-// "Beyond the Event Horizon" — An interactive black-hole-themed experience page
-// Shows achievements, coding stats, philosophies, and fun facts orbiting a black hole
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+// Beyond is an interactive engineering observatory, not a second project grid.
+import React, { useEffect, useState } from 'react';
+import { motion } from 'motion/react';
 import BlackHole from '../components/BlackHole';
 import useSEO from '../hooks/useSEO';
+import '../styles/beyond-observatory.css';
 
-// Data cards that orbit/float around the black hole
-const dataFragments = [
+const chapters = [
+  { id: 'beyond-now', label: 'Current orbit', short: 'NOW', color: '#38bdf8' },
+  { id: 'engineering-laws', label: 'Engineering laws', short: 'LAWS', color: '#facc15' },
+  { id: 'incident-field', label: 'Incident field', short: 'INCIDENTS', color: '#f43f5e' },
+  { id: 'active-systems', label: 'Active systems', short: 'SYSTEMS', color: '#a78bfa' },
+  { id: 'field-notes', label: 'Field notes', short: 'NOTES', color: '#22d3ee' },
+  { id: 'forward-vector', label: 'Forward vector', short: 'NEXT', color: '#22c55e' },
+];
+
+const laws = [
   {
-    id: 'mission',
-    title: 'Mission Statement',
-    icon: '🚀',
-    content: null, // rendered custom
-    color: '#6c63ff',
+    id: 'law-01', label: 'LAW 01', title: 'Complexity must earn its place', color: '#facc15',
+    text: 'I prefer starting with the smallest architecture that solves the actual problem. Complexity should appear because the system needs it, not because the technology makes it possible.',
   },
   {
-    id: 'stats',
-    title: 'Code Metrics',
-    icon: '📊',
-    content: null, // rendered custom
-    color: '#38bdf8',
+    id: 'law-02', label: 'LAW 02', title: 'Observability beats cleverness', color: '#38bdf8',
+    text: 'When something breaks in production, I want enough context to understand what happened, where it happened, and what the user was trying to do.',
   },
   {
-    id: 'philosophy',
-    title: 'Dev Philosophy',
-    icon: '🧠',
-    content: null, // rendered custom
-    color: '#facc15',
+    id: 'law-03', label: 'LAW 03', title: 'Test before refactoring', color: '#a78bfa',
+    text: 'Refactoring without a safety net can make an uncertain system harder to reason about. I establish behaviour first, then change structure.',
   },
   {
-    id: 'journey',
-    title: 'The Journey',
-    icon: '🌌',
-    content: null, // rendered custom
-    color: '#f43f5e',
-  },
-  {
-    id: 'competitive',
-    title: 'Competitive Edge',
-    icon: '⚡',
-    content: null, // rendered custom
-    color: '#a78bfa',
-  },
-  {
-    id: 'funfact',
-    title: 'Fun Facts',
-    icon: '🎲',
-    content: null, // rendered custom
-    color: '#22d3ee',
+    id: 'law-04', label: 'LAW 04', title: 'Production is the real environment', color: '#22c55e',
+    text: 'Browser behaviour, deployment constraints, caching, authentication boundaries, timeouts, and real user behaviour are part of the engineering problem.',
   },
 ];
 
-const stats = [
-  { label: 'Projects Built', value: '15+', icon: '◐' },
-  { label: 'Technologies', value: '54+', icon: '✦' },
-  { label: 'Lines of Code', value: '50k+', icon: '⟨⟩' },
-  { label: 'GitHub Repos', value: '10+', icon: '⟁' },
-  { label: 'DSA Problems', value: '500+', icon: '🧩' },
-  { label: 'Cups of Coffee', value: '∞', icon: '☕' },
+const incidents = [
+  {
+    id: 'lcp', label: '~25s LCP', title: 'The 25-second first paint', color: '#f43f5e',
+    summary: 'The app was live, but the first usable experience took too long.',
+    stages: [
+      ['DETECTED', 'Users were waiting too long for the first usable experience.'],
+      ['INVESTIGATED', 'Loading strategy, caching, and resource priorities became the search area.'],
+      ['ROOT CAUSE', 'The initial work made the product technically available but practically slow.'],
+      ['FIXED', 'Caching and loading optimizations were shipped and validated before merging.'],
+      ['LESSON', '“Deployed” is not the same as “usable.”'],
+    ],
+  },
+  {
+    id: 'mobile-auth', label: 'MOBILE AUTH', title: 'The session that disappeared', color: '#facc15',
+    summary: 'Mobile users were unexpectedly logged out after closing the app.',
+    stages: [
+      ['DETECTED', 'Session persistence failed after a mobile app was closed.'],
+      ['INVESTIGATED', 'The client was trying to read a browser-managed httpOnly cookie.'],
+      ['ROOT CAUSE', 'A security boundary was treated as if it were ordinary client state.'],
+      ['FIXED', 'Authentication handling was corrected so the browser managed the cookie properly.'],
+      ['LESSON', 'Security boundaries in browsers are architectural facts.'],
+    ],
+  },
+  {
+    id: 'react-loop', label: 'REACT LOOP', title: 'The recursive render orbit', color: '#a78bfa',
+    summary: 'useSyncExternalStore triggered a cached-snapshot and maximum-depth failure.',
+    stages: [
+      ['DETECTED', 'The render loop accelerated into “maximum update depth.”'],
+      ['INVESTIGATED', 'The snapshot contract was inspected instead of patching symptoms.'],
+      ['ROOT CAUSE', 'getSnapshot was not stable for the subscription boundary.'],
+      ['FIXED', 'The store read path was made stable and the loop collapsed.'],
+      ['LESSON', 'A small contract violation can become a system-wide orbit.'],
+    ],
+  },
+  {
+    id: 'sse', label: 'SSE 401', title: 'The reconnection spiral', color: '#f43f5e',
+    summary: 'Unauthenticated pages repeatedly attempted to reconnect to the sync stream.',
+    stages: [
+      ['DETECTED', 'The client received 401 responses and immediately reconnected.'],
+      ['INVESTIGATED', 'Authentication state and the /api/sync/stream boundary were separated.'],
+      ['ROOT CAUSE', 'The stream was treated as available before the user was authenticated.'],
+      ['FIXED', 'Connection gating and graceful reconnect behaviour were added.'],
+      ['LESSON', 'A reconnect strategy needs to understand why a connection ended.'],
+    ],
+  },
+  {
+    id: 'vercel', label: 'VERCEL TIMEOUT', title: 'The serverless boundary', color: '#facc15',
+    summary: 'Long-lived SSE connections had to survive a platform that is not indefinitely persistent.',
+    stages: [
+      ['DETECTED', 'A stream could outlive the serverless execution window.'],
+      ['INVESTIGATED', 'The connection lifecycle was compared with Vercel function limits.'],
+      ['ROOT CAUSE', 'Serverless does not mean permanently persistent.'],
+      ['FIXED', 'The stream gained graceful reconnection before the platform timeout.'],
+      ['LESSON', 'Infrastructure constraints belong in application architecture.'],
+    ],
+  },
+  {
+    id: 'pdf-font', label: 'PDF FONT', title: 'The font that existed locally', color: '#22c55e',
+    summary: 'PDFKit’s standard Helvetica resolution failed inside a Vercel serverless deployment.',
+    stages: [
+      ['DETECTED', 'A production PDF path failed even though local generation worked.'],
+      ['INVESTIGATED', 'The runtime’s font resolution and file tracing were inspected.'],
+      ['ROOT CAUSE', 'The deployment environment did not contain the assumed standard font path.'],
+      ['FIXED', 'Font embedding and file tracing made PDF generation explicit.'],
+      ['LESSON', 'If production needs an asset, package the asset.'],
+    ],
+  },
 ];
 
-const platforms = [
-  { name: 'LeetCode', emoji: '🧩', link: 'https://leetcode.com/u/Sundram_Pathak/' },
-  { name: 'CodeChef', emoji: '👨‍🍳', link: 'https://www.codechef.com/users/pasu_1515' },
-  { name: 'GeeksforGeeks', emoji: '🤓', link: 'https://www.geeksforgeeks.org/profile/pathaksupkdl' },
+const notes = [
+  { id: 'offline', label: 'WHY RENTAL SOFTWARE NEEDS OFFLINE-FIRST UX', text: 'A field-facing product cannot assume a perfect connection when inventory and returns still have to happen.' },
+  { id: 'serverless', label: 'WHAT SERVERLESS CHANGED ABOUT SSE', text: 'Authentication, reconnects, and platform timeouts become part of the architecture instead of an afterthought.' },
+  { id: 'migration', label: 'WHY I MIGRATED MONGOOSE → PRISMA', text: 'CommandAtlas turned a migration into a deliberate architecture decision, documented as ADR-013, rather than a hidden rewrite.' },
+  { id: 'lcp-note', label: 'WHAT A 25-SECOND LCP TAUGHT ME', text: 'A deployed feature is not finished until the first meaningful interaction respects the person waiting for it.' },
 ];
 
-const funFacts = [
-  'This portfolio has more stars than some GitHub repos. ⭐',
-  'The black hole on this page uses 0 WebGL. Pure CSS + Canvas art.',
-  'I debug with console.log and I\'m not ashamed. 🐛',
-  'Dark mode isn\'t a preference, it\'s a lifestyle. 🌙',
-  'My first program was a "Hello, World!" in C++. Now I build entire galaxies. 🌌',
-  'I once spent 4 hours fixing a bug that was a missing semicolon. 🔍',
-];
+function scrollToChapter(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
-const cardVariants = {
-  hidden: { opacity: 0, scale: 0.8, y: 40 },
-  visible: (i) => ({
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      delay: 0.1 + i * 0.12,
-      duration: 0.5,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  }),
-  exit: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } },
-};
+function useActiveChapter() {
+  const [active, setActive] = useState(chapters[0].id);
 
-const pulseKeyframes = {
-  boxShadow: [
-    '0 0 0 0 rgba(108,99,255,0)',
-    '0 0 20px 4px rgba(108,99,255,0.3)',
-    '0 0 0 0 rgba(108,99,255,0)',
-  ],
-};
+  useEffect(() => {
+    const targets = chapters.map(({ id }) => document.getElementById(id)).filter(Boolean);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: '-28% 0px -58% 0px', threshold: 0 });
+    targets.forEach((target) => observer.observe(target));
+    return () => observer.disconnect();
+  }, []);
 
-function DataCard({ fragment, index }) {
-  const [expanded, setExpanded] = useState(false);
-  const [gravity, setGravity] = useState({ x: 0, y: 0 });
+  return active;
+}
 
-  const handleGravity = (event) => {
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    setGravity({
-      x: ((event.clientX - rect.left) / rect.width - 0.5) * 7,
-      y: ((event.clientY - rect.top) / rect.height - 0.5) * -7,
-    });
-  };
+function ChapterLabel({ eyebrow, title, description, color = '#38bdf8' }) {
+  return (
+    <div className="observatory-heading">
+      <p className="observatory-eyebrow" style={{ color }}>{eyebrow}</p>
+      <h2 className="font-heading text-2xl font-bold text-stardust sm:text-4xl">{title}</h2>
+      <p className="observatory-heading__description">{description}</p>
+    </div>
+  );
+}
+
+function ObservatoryNav({ active }) {
+  return (
+    <nav className="observatory-nav" aria-label="Beyond chapters">
+      <span className="observatory-nav__line" aria-hidden="true" />
+      {chapters.map((chapter) => (
+        <button
+          key={chapter.id}
+          type="button"
+          className={`observatory-nav__item ${active === chapter.id ? 'is-active' : ''}`}
+          style={{ '--chapter-color': chapter.color }}
+          onClick={() => scrollToChapter(chapter.id)}
+          aria-label={`Go to ${chapter.label}`}
+          aria-current={active === chapter.id ? 'location' : undefined}
+        >
+          <span className="observatory-nav__dot" aria-hidden="true" />
+          <span>{chapter.short}</span>
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+function ObservatoryMap({ active }) {
+  const nodes = [
+    { id: 'beyond-now', label: 'NOW', color: '#38bdf8', className: 'orbit-node--top' },
+    { id: 'engineering-laws', label: 'LAWS', color: '#facc15', className: 'orbit-node--right' },
+    { id: 'incident-field', label: 'BATTLE LOG', color: '#f43f5e', className: 'orbit-node--bottom-right' },
+    { id: 'active-systems', label: 'TENTDESK', color: '#a78bfa', className: 'orbit-node--bottom-left' },
+    { id: 'field-notes', label: 'NOTES', color: '#22d3ee', className: 'orbit-node--left' },
+    { id: 'forward-vector', label: 'FORWARD', color: '#22c55e', className: 'orbit-node--top-left' },
+  ];
 
   return (
-    <motion.div
-      custom={index}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-30px' }}
-      variants={cardVariants}
-      className="group relative"
-    >
-      <motion.article
-        onClick={() => setExpanded((e) => !e)}
-        onMouseMove={handleGravity}
-        onMouseLeave={() => setGravity({ x: 0, y: 0 })}
-        animate={pulseKeyframes}
-        transition={{ duration: 3, repeat: Infinity, delay: index * 0.5 }}
-        className="cursor-pointer rounded-2xl border border-white/5 bg-nebula/90 p-5 backdrop-blur-sm transition-all hover:border-comet/30 sm:p-6"
-        style={{ borderTopColor: fragment.color + '44' }}
-        whileHover={{ x: gravity.x, y: gravity.y, boxShadow: `0 0 26px ${fragment.color}30` }}
-        role="button"
-        aria-expanded={expanded}
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setExpanded((v) => !v);
-          }
-        }}
-      >
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">{fragment.icon}</span>
-          <h3
-            className="font-heading text-base font-semibold sm:text-lg"
-            style={{ color: fragment.color }}
-          >
-            {fragment.title}
-          </h3>
-          <span className="ml-auto text-xs text-cosmos-muted">
-            {expanded ? '▲' : '▼'}
-          </span>
+    <section className="observatory-map" aria-labelledby="builder-orbit-title">
+      <div className="observatory-map__stars" aria-hidden="true" />
+      <div className="observatory-map__header">
+        <p className="observatory-eyebrow text-aurora">Spatial index · active route</p>
+        <h2 id="builder-orbit-title" className="mt-2 font-heading text-xl font-semibold text-stardust sm:text-2xl">The builder&apos;s orbit</h2>
+        <p className="mt-2 max-w-xl text-sm text-cosmos-muted">A map of the forces around the work. Select a node, or let the camera follow the signal as you scroll.</p>
+      </div>
+      <div className="observatory-map__stage">
+        <div className="observatory-orbit observatory-orbit--outer" aria-hidden="true" />
+        <div className="observatory-orbit observatory-orbit--inner" aria-hidden="true" />
+        <div className="observatory-core">
+          <span className="observatory-core__halo" aria-hidden="true" />
+          <strong>SUNDRAM</strong>
+          <span>ENGINEER · BUILDER</span>
+          <span>FOUNDER / CTO</span>
         </div>
+        {nodes.map((node) => (
+          <button key={node.id} type="button" className={`orbit-node ${node.className} ${active === node.id ? 'is-active' : ''}`} style={{ '--node-color': node.color }} onClick={() => scrollToChapter(node.id)}>
+            <span className="orbit-node__signal" aria-hidden="true" />
+            <span className="orbit-node__label">{node.label}</span>
+          </button>
+        ))}
+      </div>
+      <p className="observatory-map__hint"><span className="observatory-pulse-dot" aria-hidden="true" /> Scroll to move the camera · select a node to lock the signal</p>
+    </section>
+  );
+}
 
-        <AnimatePresence>
-          {expanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-              className="overflow-hidden"
-            >
-              <div className="mt-4">
-                {/* ─── Mission Statement ─── */}
-                {fragment.id === 'mission' && (
-                  <div className="space-y-4">
-                    <p className="text-sm leading-relaxed text-cosmos-muted">
-                      To build software that matters — products that are performant, accessible,
-                      and push the boundaries of what's possible on the web.
-                    </p>
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                      {[
-                        { icon: '🎯', title: 'User-First', desc: 'Every feature starts with empathy — understanding what users truly need.' },
-                        { icon: '⚡', title: 'Performance', desc: 'Sub-second loads, optimized bundles, and buttery-smooth 60fps interactions.' },
-                        { icon: '♿', title: 'Accessibility', desc: 'Semantic HTML, ARIA patterns, keyboard-navigable — the web is for everyone.' },
-                      ].map((v) => (
-                        <motion.div
-                          key={v.title}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="rounded-lg border border-white/5 bg-void/40 p-3 text-center"
-                        >
-                          <span className="text-xl">{v.icon}</span>
-                          <h4 className="mt-1 text-xs font-semibold text-stardust">{v.title}</h4>
-                          <p className="mt-1 text-xs text-cosmos-muted">{v.desc}</p>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+function CurrentOrbit() {
+  return (
+    <section id="beyond-now" data-observatory-chapter className="observatory-chapter observatory-chapter--now" aria-labelledby="current-orbit-title">
+      <ChapterLabel eyebrow="Scene 02 · live transmission" title="Current orbit" description="TentDesk is the active system: deployed, used by customers, and being improved from the inside of production." />
+      <div className="observatory-transmission observatory-transmission--live">
+        <div className="transmission-beam" aria-hidden="true" />
+        <div className="transmission-status"><span className="observatory-pulse-dot" /> LIVE TRANSMISSION</div>
+        <div className="transmission-main">
+          <div>
+            <p className="transmission-date">SEPTEMBER 2026 · SIGNAL LOCKED</p>
+            <h3 id="current-orbit-title" className="mt-3 font-heading text-2xl font-bold text-stardust sm:text-4xl">TentDesk</h3>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-cosmos-muted">A multi-tenant rental and inventory management PWA for tent and event-rental businesses. I&apos;m building and operating it as founder and CTO, with early customers already using the system.</p>
+          </div>
+          <div className="transmission-readout" aria-label="TentDesk status">
+            <span><i className="readout-dot readout-dot--green" /> IN PRODUCTION</span>
+            <span><i className="readout-dot readout-dot--green" /> LIVE CUSTOMERS</span>
+            <span><i className="readout-dot readout-dot--blue" /> ACTIVELY SHIPPING</span>
+          </div>
+        </div>
+        <div className="telemetry-strip" aria-label="Current vector">
+          <span className="telemetry-strip__label">CURRENT VECTOR</span>
+          <span>Mobile UX</span><span>Offline / install flows</span><span>Inventory reliability</span><span>Production refinement</span>
+        </div>
+      </div>
+      <div className="product-loop" aria-label="TentDesk product loop">
+        <div className="product-loop__track" aria-hidden="true" />
+        {['USER', 'PRODUCT', 'PRODUCTION', 'FEEDBACK', 'FIX', 'SHIP'].map((step, index) => (
+          <div className="product-loop__node" key={step} style={{ '--loop-index': index }}><span>{step}</span></div>
+        ))}
+        <p className="product-loop__caption">The loop is the product: build → ship → observe → fix → ship again.</p>
+      </div>
+    </section>
+  );
+}
 
-                {/* ─── Code Metrics ─── */}
-                {fragment.id === 'stats' && (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-                      {stats.map((s, i) => (
-                        <motion.div
-                          key={s.label}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: i * 0.06 }}
-                          className="flex flex-col items-center gap-1"
-                        >
-                          <span className="text-2xl">{s.icon}</span>
-                          <span className="font-heading text-2xl font-bold text-stardust">{s.value}</span>
-                          <span className="text-xs text-cosmos-muted">{s.label}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-                    <div className="rounded-lg border border-white/5 bg-void/30 p-3">
-                      <h4 className="mb-2 text-xs font-semibold text-stardust">Favourite Stack</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind', 'Docker', 'TypeScript', 'Vite'].map((t) => (
-                          <span key={t} className="rounded-full bg-comet/10 px-3 py-1 text-xs text-stardust/80">{t}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
+function EngineeringLaws() {
+  const [selected, setSelected] = useState(laws[0].id);
+  const law = laws.find((item) => item.id === selected) || laws[0];
+  return (
+    <section id="engineering-laws" data-observatory-chapter className="observatory-chapter observatory-chapter--laws" aria-labelledby="laws-title">
+      <ChapterLabel eyebrow="Scene 03 · gravitational laws" title="Engineering laws" description="Specific opinions formed by shipping systems, not motivational quotes collected from the internet." color="#facc15" />
+      <div className="law-orbit">
+        <div className="law-orbit__ring" aria-hidden="true" />
+        <div className="law-orbit__core"><span>DECISION</span><strong>GRAVITY</strong></div>
+        {laws.map((item, index) => (
+          <button key={item.id} type="button" className={`law-node law-node--${index + 1} ${selected === item.id ? 'is-active' : ''}`} style={{ '--law-color': item.color }} onClick={() => setSelected(item.id)} aria-pressed={selected === item.id}>
+            <span>{item.label}</span><strong>{item.title}</strong>
+          </button>
+        ))}
+      </div>
+      <motion.div key={law.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="law-readout" style={{ '--law-color': law.color }}>
+        <p className="observatory-eyebrow" style={{ color: law.color }}>{law.label} · frequency locked</p>
+        <h3 className="mt-2 font-heading text-xl font-semibold text-stardust sm:text-2xl">{law.title}</h3>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-cosmos-muted">{law.text}</p>
+      </motion.div>
+    </section>
+  );
+}
 
-                {/* ─── Dev Philosophy ─── */}
-                {fragment.id === 'philosophy' && (
-                  <div className="space-y-4">
-                    {[
-                      { quote: '"First, solve the problem. Then, write the code."', takeaway: 'Every great product starts with understanding the user\'s pain point, not picking a framework.' },
-                      { quote: '"Make it work, make it right, make it fast."', takeaway: 'Ship MVPs fast, then refactor for quality and optimise bottlenecks with real data.' },
-                      { quote: '"Simplicity is the ultimate sophistication."', takeaway: 'The best code is the code you don\'t write. Keep abstractions minimal and intent clear.' },
-                    ].map((p, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, x: -12 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="rounded-lg border-l-2 border-white/10 bg-void/30 py-2 pl-4 pr-3"
-                        style={{ borderLeftColor: fragment.color + '66' }}
-                      >
-                        <p className="text-sm font-medium italic text-stardust/90">{p.quote}</p>
-                        <p className="mt-1 text-xs text-cosmos-muted">{p.takeaway}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
-
-                {/* ─── The Journey ─── */}
-                {fragment.id === 'journey' && (
-                  <div className="relative space-y-0 pl-5">
-                    {/* Vertical timeline line */}
-                    <div className="absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent" />
-                    {[
-                      { year: '2022', emoji: '🚀', title: 'The Spark', desc: 'Started Electronics Engineering and wrote my first lines of code in C/C++. Discovered HTML/CSS/JS and fell in love with building things for the web.' },
-                      { year: '2023', emoji: '⚛️', title: 'Fullstack & DSA', desc: 'Went all-in on React, Node.js, Express & MongoDB. Simultaneously dove into competitive programming — 500+ problems across LeetCode, CodeChef & GFG.' },
-                      { year: '2024', emoji: '🤖', title: 'AI Orbit', desc: 'Explored AI-powered interfaces and practical generative workflows, learning how to make intelligent features feel useful and human.' },
-                      { year: '2025', emoji: '🌌', title: 'Creative Frontiers', desc: 'Three.js, immersive portfolios, and pushing the boundaries of what browsers can do — blending engineering with art.' },
-                    ].map((step, i) => (
-                      <motion.div
-                        key={step.year}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.08 }}
-                        className="relative pb-4"
-                      >
-                        <div className="absolute -left-5 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-nebula ring-2 ring-white/10">
-                          <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: fragment.color }} />
-                        </div>
-                        <div>
-                          <span className="text-xs font-semibold" style={{ color: fragment.color }}>{step.year}</span>
-                          <span className="ml-2 text-sm">{step.emoji}</span>
-                          <h4 className="text-sm font-semibold text-stardust">{step.title}</h4>
-                          <p className="text-xs text-cosmos-muted">{step.desc}</p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
-
-                {/* ─── Competitive Edge ─── */}
-                {fragment.id === 'competitive' && (
-                  <div className="space-y-4">
-                    <p className="text-sm text-cosmos-muted">
-                      Active competitive programmer sharpening algorithmic skills across multiple platforms:
-                    </p>
-                    <div className="grid gap-3 sm:grid-cols-3">
-                      {platforms.map((p, i) => (
-                        <motion.a
-                          key={p.name}
-                          href={p.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.08 }}
-                          className="flex flex-col items-center gap-2 rounded-xl border border-white/5 bg-void/30 p-4 transition-all hover:border-comet/30 hover:bg-comet/10"
-                        >
-                          <span className="text-3xl">{p.emoji}</span>
-                          <span className="text-sm font-semibold text-stardust">{p.name}</span>
-                          <span className="text-xs text-cosmos-muted">View Profile →</span>
-                        </motion.a>
-                      ))}
-                    </div>
-                    <div className="rounded-lg border border-white/5 bg-void/30 p-3">
-                      <h4 className="mb-2 text-xs font-semibold text-stardust">Core Strengths</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {['Dynamic Programming', 'Graph Theory', 'Binary Search', 'Trees', 'Greedy', 'Sliding Window', 'Backtracking', 'Bit Manipulation'].map((t) => (
-                          <span key={t} className="rounded-full bg-comet/10 px-3 py-1 text-xs text-stardust/80">{t}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* ─── Fun Facts ─── */}
-                {fragment.id === 'funfact' && (
-                  <ul className="space-y-2">
-                    {funFacts.map((fact, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ x: -10, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: i * 0.08 }}
-                        className="flex items-start gap-2 text-sm text-cosmos-muted"
-                      >
-                        <span className="mt-0.5 text-xs text-comet">✦</span>
-                        {fact}
-                      </motion.li>
-                    ))}
-                  </ul>
-                )}
-
-                {fragment.content && (
-                  <p className="text-sm leading-relaxed text-cosmos-muted">
-                    {fragment.content}
-                  </p>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+function IncidentField() {
+  const [selected, setSelected] = useState(incidents[0].id);
+  const incident = incidents.find((item) => item.id === selected) || incidents[0];
+  return (
+    <section id="incident-field" data-observatory-chapter className="observatory-chapter observatory-chapter--incidents" aria-labelledby="incident-field-title">
+      <ChapterLabel eyebrow="Scene 04 · recovered telemetry" title="Incident field" description="Real production pressure, represented as anomalies around the active system. Select one to open its flight recorder." color="#f43f5e" />
+      <div className="incident-map">
+        <div className="incident-map__constellation" aria-hidden="true"><span /><span /><span /><span /></div>
+        {incidents.map((item, index) => (
+          <button key={item.id} type="button" className={`incident-beacon incident-beacon--${index + 1} ${selected === item.id ? 'is-active' : ''}`} style={{ '--incident-color': item.color }} onClick={() => setSelected(item.id)} aria-pressed={selected === item.id}>
+            <span className="incident-beacon__flare" aria-hidden="true" /><span>{item.label}</span>
+          </button>
+        ))}
+        <div className="incident-map__legend"><span className="legend-dot legend-dot--resolved" /> resolved signal <span className="legend-dot legend-dot--warning" /> production anomaly</div>
+      </div>
+      <motion.article key={incident.id} initial={{ opacity: 0, x: 18 }} animate={{ opacity: 1, x: 0 }} className="incident-readout" style={{ '--incident-color': incident.color }}>
+        <div className="incident-readout__topline"><span className="observatory-eyebrow" style={{ color: incident.color }}>INCIDENT · STATUS: RESOLVED</span><span className="incident-readout__id">{incident.label}</span></div>
+        <h3 id="incident-field-title" className="mt-3 font-heading text-xl font-semibold text-stardust sm:text-3xl">{incident.title}</h3>
+        <p className="mt-2 text-sm text-cosmos-muted">{incident.summary}</p>
+        <div className="incident-stages">
+          {incident.stages.map(([stage, text], index) => (
+            <div className="incident-stage" key={stage} style={{ '--stage-index': index }}><span className="incident-stage__marker">{String(index + 1).padStart(2, '0')}</span><div><p className="font-mono text-[0.62rem] tracking-[0.2em]" style={{ color: incident.color }}>{stage}</p><p className="mt-1 text-sm leading-relaxed text-cosmos-muted">{text}</p></div></div>
+          ))}
+        </div>
       </motion.article>
-    </motion.div>
+    </section>
+  );
+}
+
+function ActiveSystems() {
+  return (
+    <section id="active-systems" data-observatory-chapter className="observatory-chapter observatory-chapter--systems" aria-labelledby="systems-title">
+      <ChapterLabel eyebrow="Scene 05 · system architecture" title="Two different bets" description="TentDesk and CommandAtlas share an engineering instinct, but they solve very different human problems." color="#a78bfa" />
+      <div className="system-trajectory">
+        <div className="system-trajectory__line" aria-hidden="true"><span /></div>
+        <article className="system-dock system-dock--primary">
+          <p className="observatory-eyebrow text-aurora">ACTIVE SYSTEM · 01</p>
+          <h3 id="systems-title" className="mt-2 font-heading text-2xl font-bold text-stardust">TentDesk</h3>
+          <p className="mt-2 text-sm leading-relaxed text-cosmos-muted">Operational software for rental businesses: inventory, rentals, returns, customers, payments, events, expenses, wages, PDFs, and real-time synchronization.</p>
+          <div className="system-stack"><span>Next.js</span><span>Prisma</span><span>MongoDB</span><span>TanStack Query</span><span>PWA</span><span>SSE</span></div>
+          <p className="system-dock__status"><i className="readout-dot readout-dot--green" /> DEPLOYED · ACTIVELY OPERATED</p>
+        </article>
+        <article className="system-dock system-dock--secondary">
+          <p className="observatory-eyebrow" style={{ color: '#a78bfa' }}>KNOWLEDGE CONSTELLATION · 02</p>
+          <h3 className="mt-2 font-heading text-2xl font-bold text-stardust">CommandAtlas</h3>
+          <p className="mt-2 text-sm leading-relaxed text-cosmos-muted">An offline-first command reference where Markdown becomes validated static packs and a local search index. 366 commands across 21 canonical topics.</p>
+          <div className="system-stack"><span>Next.js</span><span>Express</span><span>Prisma</span><span>PostgreSQL</span><span>Dexie</span><span>No AI by design</span></div>
+          <p className="system-dock__status"><i className="readout-dot readout-dot--blue" /> BUILDING · RESPONSIVE PASS</p>
+        </article>
+      </div>
+      <p className="system-principle"><span>CONNECTIVE TISSUE</span> I am learning DevOps because “git push” is not the end of a product. It is the start of deployment, observability, recovery, and responsibility.</p>
+    </section>
+  );
+}
+
+function FieldNotes() {
+  const [selected, setSelected] = useState(notes[0].id);
+  const note = notes.find((item) => item.id === selected) || notes[0];
+  return (
+    <section id="field-notes" data-observatory-chapter className="observatory-chapter observatory-chapter--notes" aria-labelledby="field-notes-title">
+      <ChapterLabel eyebrow="Scene 06 · intercepted transmissions" title="Field notes" description="Short records from the engineering process. The goal is not to sound certain; it is to leave a useful trail." color="#22d3ee" />
+      <div className="field-notes">
+        <div className="field-notes__signals" role="list" aria-label="Available field notes">
+          {notes.map((item, index) => (
+            <button key={item.id} type="button" role="listitem" className={`note-signal ${selected === item.id ? 'is-active' : ''}`} onClick={() => setSelected(item.id)} aria-pressed={selected === item.id}>
+              <span className="note-signal__index">0{index + 1}</span><span>{item.label}</span><span className="note-signal__arrow">↗</span>
+            </button>
+          ))}
+        </div>
+        <motion.article key={note.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="note-reading" aria-labelledby="field-notes-title">
+          <p className="observatory-eyebrow text-aurora">TRANSMISSION DECODED · {note.id.toUpperCase()}</p>
+          <h3 id="field-notes-title" className="mt-3 font-heading text-xl font-semibold text-stardust sm:text-2xl">{note.label}</h3>
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-cosmos-muted">{note.text}</p>
+          <span className="note-reading__cursor" aria-hidden="true">_</span>
+        </motion.article>
+      </div>
+    </section>
+  );
+}
+
+function ForwardVector() {
+  return (
+    <section id="forward-vector" data-observatory-chapter className="observatory-chapter observatory-chapter--forward" aria-labelledby="forward-vector-title">
+      <div className="forward-vector__trajectory" aria-hidden="true"><span /><span /><span /></div>
+      <ChapterLabel eyebrow="Scene 07 · unresolved region" title="Forward vector" description="The trajectory continues beyond the visible map. These are directions I am exploring, not expertise I am claiming." color="#22c55e" />
+      <div className="forward-vector__labels" aria-label="Areas being explored"><span>AI / ML</span><span>DEVOPS</span><span>DISTRIBUTED SYSTEMS</span><span>PRODUCT</span><span>???</span></div>
+      <p id="forward-vector-title" className="forward-vector__closing">Still building.<br />Still breaking things.<br /><em>Still learning why they broke.</em></p>
+    </section>
   );
 }
 
 export default function Beyond() {
+  const activeChapter = useActiveChapter();
+
   useSEO({
     title: 'Beyond',
-    description:
-      'Beyond the Event Horizon — explore achievements, philosophy, and fun facts in an interactive black hole experience.',
+    description: 'Beyond the Event Horizon — an interactive engineering observatory of Sundram Pathak\'s systems, decisions, incidents, and direction.',
   });
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16" aria-label="Beyond the Event Horizon">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <h1 className="font-heading text-3xl font-bold sm:text-4xl md:text-5xl">
-          <span className="text-gradient-aurora">Beyond</span>{' '}
-          <span className="text-stardust">the Event Horizon</span>
-        </h1>
-        <p className="mt-3 max-w-xl text-cosmos-muted">
-          Cross the point of no return. Discover what lies beyond — achievements,
-          philosophies, and the relentless curiosity that drives everything I build.
-        </p>
-      </motion.div>
+    <section className="beyond-observatory" aria-label="Beyond the Event Horizon engineering observatory">
+      <div className="beyond-observatory__ambient" aria-hidden="true"><span /><span /><span /></div>
+      <ObservatoryNav active={activeChapter} />
 
-      {/* Black hole visual */}
-      <div className="mt-10 sm:mt-16">
-        <BlackHole interactive />
-      </div>
+      <header className="beyond-hero">
+        <p className="observatory-eyebrow text-aurora">SOFTWARE ENGINEER · BUILDER · FOUNDER / CTO</p>
+        <h1 className="mt-4 font-heading text-4xl font-bold sm:text-6xl md:text-7xl"><span className="text-gradient-aurora">Beyond</span> <span className="text-stardust">the Event Horizon</span></h1>
+        <p className="beyond-hero__subtitle">The work behind the work.</p>
+        <p className="beyond-hero__description">Projects show what I build. Beyond shows how I think, what breaks, what I learn, and where I am heading next.</p>
+      </header>
 
-      {/* Gravitational warning */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.5, duration: 1 }}
-        className="mt-6 text-center text-sm italic text-cosmos-muted/60"
-      >
-        ⚠ Warning: You are approaching the event horizon. Information beyond this point
-        may permanently expand your perspective.
-      </motion.p>
+      {/* The black-hole visual and its animations are intentionally kept intact. */}
+      <div className="beyond-hero__black-hole"><BlackHole interactive /></div>
+      <p className="beyond-hero__warning">⚠ Warning: You are approaching the event horizon. Information beyond this point may permanently expand your perspective.</p>
 
-      <div className="mt-10 grid gap-4 rounded-2xl border border-aurora/15 bg-nebula/50 p-5 backdrop-blur-sm sm:grid-cols-[1fr_auto] sm:items-center sm:p-6">
-        <div>
-          <p className="font-mono text-[0.65rem] uppercase tracking-[0.24em] text-aurora/80">Current transmission</p>
-          <h2 className="mt-2 font-heading text-xl font-bold text-stardust sm:text-2xl">Building useful intelligence</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-cosmos-muted">
-            Exploring how AI can make interfaces more helpful without making them feel less human—one focused experiment at a time.
-          </p>
-        </div>
-        <div className="rounded-xl border border-white/10 bg-void/50 px-4 py-3 text-center sm:min-w-40">
-          <p className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-cosmos-muted">Signal strength</p>
-          <div className="mt-2 flex justify-center gap-1" aria-label="Signal strength 80 percent">
-            {[0, 1, 2, 3, 4].map((bar) => <span key={bar} className={`signal-bar h-5 w-2 rounded-sm ${bar < 4 ? 'bg-aurora' : 'bg-white/10'}`} style={{ animationDelay: `${bar * 0.08}s` }} />)}
-          </div>
-          <p className="mt-1 text-xs text-stardust/70">80% focused</p>
+      {/* Existing transmission preserved as a live signal, not removed. */}
+      <div className="observatory-transmission observatory-transmission--ai">
+        <div className="transmission-status"><span className="observatory-pulse-dot" /> CURRENT TRANSMISSION</div>
+        <div className="transmission-main">
+          <div><h2 className="font-heading text-xl font-bold text-stardust sm:text-2xl">Building useful intelligence</h2><p className="mt-2 max-w-2xl text-sm leading-relaxed text-cosmos-muted">Exploring how AI can make interfaces more helpful without making them feel less human—one focused experiment at a time.</p></div>
+          <div className="transmission-readout"><span>SIGNAL STRENGTH</span><div className="transmission-bars" aria-label="Signal strength 80 percent">{[0, 1, 2, 3, 4].map((bar) => <i key={bar} className={bar < 4 ? 'is-on' : ''} style={{ animationDelay: `${bar * 0.08}s` }} />)}</div><small>80% focused</small></div>
         </div>
       </div>
 
-      <div className="mt-6 rounded-2xl border border-white/8 bg-void/30 p-5 sm:p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="font-mono text-[0.65rem] uppercase tracking-[0.24em] text-comet/90">Singularity log</p>
-            <h2 className="mt-2 font-heading text-xl font-bold text-stardust">Flight recorder</h2>
-          </div>
-          <span className="rounded-full border border-white/10 px-3 py-1 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-cosmos-muted">2022—2026</span>
-        </div>
-        <div className="signal-trace mt-5 grid gap-3 sm:grid-cols-5">
-          {[
-            ['2022', 'First engineering launch'],
-            ['2023', 'Full-stack systems online'],
-            ['2024', 'AI orbit established'],
-            ['2025', 'Creative web experiments detected'],
-            ['2026', 'Stellar portfolio deployed'],
-          ].map(([year, event]) => (
-            <div key={year} className="relative border-l border-comet/40 pl-3 sm:border-l-0 sm:border-t sm:pl-0 sm:pt-3">
-              <p className="font-mono text-xs text-aurora">{year}</p>
-              <p className="mt-1 text-xs leading-relaxed text-cosmos-muted">{event}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Data fragment cards */}
-      <div className="mt-12 grid gap-5 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
-        {dataFragments.map((fragment, i) => (
-          <DataCard key={fragment.id} fragment={fragment} index={i} />
-        ))}
-      </div>
-
-      {/* Bottom singularity message */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.3, duration: 0.8 }}
-        className="mt-16 text-center sm:mt-20"
-      >
-        <div className="mx-auto mb-6 h-px w-32 bg-gradient-to-r from-transparent via-comet to-transparent" />
-        <p className="font-heading text-lg font-semibold text-stardust sm:text-xl">
-          "In the space between <span className="text-comet">0</span> and{' '}
-          <span className="text-aurora">1</span>, entire universes are built."
-        </p>
-        <p className="mt-3 text-sm text-cosmos-muted">
-          — Every line of code is a step closer to singularity.
-        </p>
-      </motion.div>
+      <ObservatoryMap active={activeChapter} />
+      <main className="beyond-observatory__chapters">
+        <CurrentOrbit />
+        <EngineeringLaws />
+        <IncidentField />
+        <ActiveSystems />
+        <FieldNotes />
+        <ForwardVector />
+      </main>
     </section>
   );
 }

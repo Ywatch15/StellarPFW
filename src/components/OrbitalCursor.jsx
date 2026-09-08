@@ -9,7 +9,8 @@ export default function OrbitalCursor() {
     y: 0,
     inside: false,
     mode: 'orbit',
-    particles: [],
+    cursorMode: 'normal',
+    trail: Array.from({ length: 6 }, () => ({ x: 0, y: 0 })),
   });
 
   useEffect(() => {
@@ -36,16 +37,10 @@ export default function OrbitalCursor() {
       state.y = event.clientY;
       state.inside = true;
       state.mode = event.target.closest?.('a,button,[role="button"],summary') ? 'target' : 'orbit';
-
-      for (let i = 0; i < 3; i += 1) {
-        state.particles.push({
-          x: state.x + (Math.random() - 0.5) * 5,
-          y: state.y + (Math.random() - 0.5) * 5,
-          vx: (Math.random() - 0.5) * 0.7,
-          vy: (Math.random() - 0.5) * 0.7,
-          life: 1,
-          r: Math.random() * 2.7 + 1.2,
-          hue: 205 + Math.random() * 55,
+      if (state.cursorMode === 'normal' && state.trail[0].x === 0 && state.trail[0].y === 0) {
+        state.trail.forEach((point) => {
+          point.x = state.x;
+          point.y = state.y;
         });
       }
     };
@@ -54,29 +49,38 @@ export default function OrbitalCursor() {
       stateRef.current.inside = false;
     };
 
+    const onCursorMode = (event) => {
+      const state = stateRef.current;
+      state.cursorMode = event.detail?.mode || 'normal';
+      state.inside = state.cursorMode !== 'disabled' && state.inside;
+      if (state.cursorMode !== 'normal') {
+        state.trail.forEach((point) => {
+          point.x = state.x;
+          point.y = state.y;
+        });
+      }
+    };
+
     const draw = () => {
       const state = stateRef.current;
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-      for (let i = state.particles.length - 1; i >= 0; i -= 1) {
-        const p = state.particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life -= 0.05;
-        p.r *= 0.97;
+      if (state.cursorMode === 'normal' && state.inside) {
+        state.trail.forEach((point, index) => {
+          const targetX = index === 0 ? state.x : state.trail[index - 1].x;
+          const targetY = index === 0 ? state.y : state.trail[index - 1].y;
+          const easing = index === 0 ? 0.42 : 0.24;
+          point.x += (targetX - point.x) * easing;
+          point.y += (targetY - point.y) * easing;
 
-        if (p.life <= 0) {
-          state.particles.splice(i, 1);
-          continue;
-        }
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${p.hue}, 90%, 74%, ${p.life * 0.8})`;
-        ctx.fill();
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, Math.max(1.3, 3.8 - index * 0.45), 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${index < 2 ? '165,185,255' : '56,189,248'}, ${(0.5 - index * 0.065).toFixed(3)})`;
+          ctx.fill();
+        });
       }
 
-      if (state.inside) {
+      if (state.inside && state.cursorMode !== 'disabled') {
         if (state.mode === 'target') {
           ctx.strokeStyle = 'rgba(56, 189, 248, 0.9)';
           ctx.lineWidth = 1;
@@ -112,6 +116,7 @@ export default function OrbitalCursor() {
     window.addEventListener('resize', resize);
     window.addEventListener('mousemove', onMove);
     document.addEventListener('mouseleave', onLeave);
+    window.addEventListener('stellar-cursor-mode', onCursorMode);
     document.body.style.cursor = 'none';
     rafId = window.requestAnimationFrame(draw);
 
@@ -120,6 +125,7 @@ export default function OrbitalCursor() {
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseleave', onLeave);
+      window.removeEventListener('stellar-cursor-mode', onCursorMode);
       document.body.style.cursor = '';
     };
   }, [isMobile, prefersReducedMotion]);

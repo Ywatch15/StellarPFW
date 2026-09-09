@@ -24,9 +24,9 @@ export default function OrbitProgress() {
   }, []);
 
   return (
-    <div className="fixed right-3 top-1/2 z-40 hidden -translate-y-1/2 sm:block" aria-label={`Page progress: ${Math.round(progress * 100)} percent`}>
+    <div className="orbit-progress pointer-events-none fixed right-3 top-1/2 z-40 -translate-y-1/2" aria-label={`Page progress: ${Math.round(progress * 100)} percent`}>
       <div
-        className="flex h-11 w-11 items-center justify-center rounded-full"
+        className="flex h-10 w-10 items-center justify-center rounded-full sm:h-11 sm:w-11"
         style={{ background: `conic-gradient(#38bdf8 ${progress * 360}deg, rgba(255,255,255,.1) 0deg)` }}
       >
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-void font-mono text-[0.55rem] text-aurora">

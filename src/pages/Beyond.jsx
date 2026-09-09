@@ -229,7 +229,7 @@ function CurrentOrbit() {
       <div className="product-loop" aria-label="TentDesk product loop">
         <div className="product-loop__track" aria-hidden="true" />
         {['USER', 'PRODUCT', 'PRODUCTION', 'FEEDBACK', 'FIX', 'SHIP'].map((step, index) => (
-          <div className="product-loop__node" key={step} style={{ '--loop-index': index }}><span>{step}</span></div>
+          <div className={`product-loop__node product-loop__node--${step.toLowerCase()}`} key={step} style={{ '--loop-index': index }}><span>{step}</span></div>
         ))}
         <p className="product-loop__caption">The loop is the product: build → ship → observe → fix → ship again.</p>
       </div>

@@ -11,7 +11,8 @@ describe('FallbackHero', () => {
     render(<FallbackHero />);
     expect(screen.getByText('Stellar')).toBeInTheDocument();
     expect(screen.getByText('Developer')).toBeInTheDocument();
-    expect(screen.getByText('View Projects')).toBeInTheDocument();
+    expect(screen.getByText('View Resume')).toBeInTheDocument();
+    expect(screen.getByText('Contact Me')).toBeInTheDocument();
   });
 
   it('has no accessibility violations', async () => {

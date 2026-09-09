@@ -854,6 +854,7 @@ export default function SolarSystem() {
 
       {/* ── Legend ── */}
       <div
+        className="solar-legend"
         style={{
           position: 'absolute', bottom: 10, left: 0, right: 0,
           textAlign: 'center', zIndex: 5,
@@ -869,7 +870,7 @@ export default function SolarSystem() {
       {/* ── Persistent mission links ── */}
       <nav
         aria-label="Project mission links"
-        className="absolute bottom-12 left-1/2 z-10 flex w-[min(94vw,54rem)] -translate-x-1/2 flex-wrap justify-center gap-2 px-2 sm:gap-3"
+        className="solar-mission-links absolute bottom-12 left-1/2 z-10 flex w-[min(94vw,54rem)] -translate-x-1/2 flex-wrap justify-center gap-2 px-2 sm:gap-3"
       >
         {allPlanets.map((planet) => (
           <a

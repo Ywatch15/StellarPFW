@@ -15,7 +15,10 @@ export default function useDeviceCapability() {
 
   useEffect(() => {
     const cores = navigator.hardwareConcurrency || 2;
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    const hasTouch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+    const supportsHover = window.matchMedia('(hover: hover)').matches;
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+      || (hasTouch && !supportsHover);
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches;

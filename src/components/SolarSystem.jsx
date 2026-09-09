@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/solar-system.css';
 import SatelliteCard from './SatelliteCard';
 import StellarEvents, { useStellarEvents } from './StellarEvents';
+import useDeviceCapability from '../hooks/useDeviceCapability';
 
 /* ─────────────────────── PROJECT DATA ─────────────────────── */
 
@@ -131,6 +132,7 @@ function makeAsteroids(n) {
 
 export default function SolarSystem() {
   const navigate = useNavigate();
+  const { isMobile } = useDeviceCapability();
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const animRef = useRef(null);
@@ -148,9 +150,11 @@ export default function SolarSystem() {
   const activityTimerRef = useRef(null);
   const transitionTimerRef = useRef(null);
   const projectHistoryRef = useRef(false);
+  const touchActivationRef = useRef(0);
   const sceneStateRef = useRef(sceneState);
   const stellarEvent = useStellarEvents(
-    !isCollapsing
+    !isMobile
+      && !isCollapsing
       && sceneState !== SCENE_STATE.TRANSITIONING
       && sceneState !== SCENE_STATE.PROJECT_VIEW
       && sceneState !== SCENE_STATE.RETURNING,
@@ -359,6 +363,20 @@ export default function SolarSystem() {
       setSelectedProject(planet);
       setSceneState(SCENE_STATE.PROJECT_VIEW);
     }, 260);
+  }
+
+  function handlePlanetPointerUp(event, planet) {
+    if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
+    event.preventDefault();
+    event.stopPropagation();
+    touchActivationRef.current = performance.now();
+    handlePlanetClick(planet);
+  }
+
+  function handlePlanetClickEvent(event, planet) {
+    event.stopPropagation();
+    if (performance.now() - touchActivationRef.current < 500) return;
+    handlePlanetClick(planet);
   }
 
   const closeProjectView = useCallback(({ fromHistory = false } = {}) => {
@@ -647,7 +665,8 @@ export default function SolarSystem() {
             {/* Planet anchor (sits at top-edge of orbit ring) */}
             <div
               data-planet={planet.id}
-              onClick={(e) => { e.stopPropagation(); handlePlanetClick(planet); }}
+              onPointerUp={(e) => handlePlanetPointerUp(e, planet)}
+              onClick={(e) => handlePlanetClickEvent(e, planet)}
               onMouseEnter={() => {
                 if (sceneState === SCENE_STATE.TRANSITIONING || sceneState === SCENE_STATE.PROJECT_VIEW || sceneState === SCENE_STATE.RETURNING || sceneState === SCENE_STATE.SCANNING) return;
                 setHovered(planet.id);
@@ -674,22 +693,34 @@ export default function SolarSystem() {
               style={{
                 position: 'absolute',
                 top: 0, left: '50%',
+                width: Math.max(56, ps + 16), height: Math.max(56, ps + 16),
+                display: 'grid', placeItems: 'center',
                 transform: 'translateX(-50%) translateY(-50%)',
                 pointerEvents: 'all',
                 cursor: 'pointer',
+                touchAction: 'manipulation',
               }}
             >
               {/* Positional anchor follows the orbit; visual and label orientation stay separate. */}
               <div
-                className="solar-planet-visual solar-counter-rotate"
+                className="solar-planet-visual-position"
                 style={{
-                  animation: `orbitSpin ${planet.speed * (scanMode ? 2.8 : 1)}s linear infinite reverse`,
-                  animationDelay: `${delay}s`,
-                  animationPlayState: 'running',
+                  position: 'absolute', top: '50%', left: '50%',
+                  width: ps, height: ps,
+                  transform: 'translate(-50%, -50%)',
+                  pointerEvents: 'none',
                 }}
               >
-                {/* Planet sphere */}
                 <div
+                  className="solar-planet-visual solar-counter-rotate"
+                  style={{
+                    animation: `orbitSpin ${planet.speed * (scanMode ? 2.8 : 1)}s linear infinite reverse`,
+                    animationDelay: `${delay}s`,
+                    animationPlayState: 'running',
+                  }}
+                >
+                  {/* Planet sphere */}
+                  <div
                   style={{
                     position: 'relative',
                     width: ps, height: ps,
@@ -773,6 +804,7 @@ export default function SolarSystem() {
                       />
                     </>
                   )}
+                  </div>
                 </div>
 
               </div>
@@ -781,7 +813,7 @@ export default function SolarSystem() {
               <div
                 className="solar-planet-label-position"
                 style={{
-                  position: 'absolute', top: ps + 5, left: '50%',
+                  position: 'absolute', top: `calc(50% + ${ps / 2 + 5}px)`, left: '50%',
                   transform: 'translateX(-50%)',
                   whiteSpace: 'nowrap', textAlign: 'center', pointerEvents: 'none',
                   opacity: scanMode || isPlanetFocused ? 1 : isPlanetDimmed ? 0.32 : 0.55,

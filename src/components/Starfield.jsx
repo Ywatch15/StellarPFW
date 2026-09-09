@@ -1,7 +1,8 @@
 // FILE: src/components/Starfield.jsx
 // Parallax starfield background (CSS-only, mouse-reactive layers via JS)
 // Falls back to a static gradient background when JS is disabled
-import React, { useRef, useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
+import useDeviceCapability from '../hooks/useDeviceCapability';
 
 const STAR_LAYERS = [
   { count: 40, speed: 0.2, size: 1, opacity: 0.4 },
@@ -17,6 +18,7 @@ function generateStars(count) {
 }
 
 export default function Starfield() {
+  const { isMobile, prefersReducedMotion } = useDeviceCapability();
   const layers = useRef(
     STAR_LAYERS.map((layer) => ({
       ...layer,
@@ -25,32 +27,42 @@ export default function Starfield() {
   );
 
   const containerRef = useRef(null);
-  const pointerRef = useRef({ x: null, y: null });
-  const offsetsRef = useRef(STAR_LAYERS.map(() => ({ x: 0, y: 0 })));
+  const layerRefs = useRef([]);
+  const frameRef = useRef(0);
+  const pointerRef = useRef({ x: 0.5, y: 0.5 });
 
-  const handleMouseMove = useCallback((e) => {
-    if (!containerRef.current) return;
-    const last = pointerRef.current;
-    pointerRef.current = { x: e.clientX, y: e.clientY };
-    if (last.x === null) return;
-    const dx = e.clientX - last.x;
-    const dy = e.clientY - last.y;
+  useEffect(() => {
+    if (isMobile || prefersReducedMotion) return undefined;
 
-    const svgs = containerRef.current.querySelectorAll('[data-parallax]');
-    svgs.forEach((svg, index) => {
-      const depth = parseFloat(svg.dataset.parallax);
-      const offset = offsetsRef.current[index];
-      offset.x = Math.max(-60, Math.min(60, offset.x + dx * depth));
-      offset.y = Math.max(-60, Math.min(60, offset.y + dy * depth));
-      svg.style.transform = `translate(${offset.x}px, ${offset.y}px)`;
-    });
-  }, []);
+    const update = () => {
+      frameRef.current = 0;
+      const { x, y } = pointerRef.current;
+      layerRefs.current.forEach((layer, index) => {
+        if (!layer) return;
+        const depth = STAR_LAYERS[index].speed;
+        const amount = depth * 10;
+        layer.style.transform = `translate3d(${((x - 0.5) * amount).toFixed(2)}px, ${((y - 0.5) * amount).toFixed(2)}px, 0)`;
+      });
+    };
+
+    const handlePointerMove = (event) => {
+      pointerRef.current.x = event.clientX / window.innerWidth;
+      pointerRef.current.y = event.clientY / window.innerHeight;
+      if (!frameRef.current) frameRef.current = window.requestAnimationFrame(update);
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+      frameRef.current = 0;
+    };
+  }, [isMobile, prefersReducedMotion]);
 
   return (
     <div
       ref={containerRef}
       className="pointer-events-none fixed inset-0 -z-20 overflow-hidden"
-      onMouseMove={handleMouseMove}
       aria-hidden="true"
     >
       {/* Static gradient fallback */}
@@ -60,7 +72,7 @@ export default function Starfield() {
       {layers.current.map((layer, li) => (
         <svg
           key={li}
-          data-parallax={layer.speed}
+          ref={(node) => { layerRefs.current[li] = node; }}
           className="absolute inset-0 h-full w-full transition-transform duration-700 ease-out"
           viewBox="0 0 100 100"
           preserveAspectRatio="none"

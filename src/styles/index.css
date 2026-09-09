@@ -16,10 +16,31 @@
 
   html {
     scroll-behavior: smooth;
+    min-width: 0;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   body {
     @apply bg-void text-stardust font-body antialiased;
+    overflow-x: clip;
+  }
+
+  img,
+  svg,
+  canvas {
+    max-width: 100%;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* Focus ring — accessible and on-brand */
@@ -141,29 +162,13 @@
 .signal-trace { position: relative; }
 .signal-trace::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: linear-gradient(90deg, transparent, #38bdf8 12%, transparent 24%, transparent 100%); background-size: 220% 100%; animation: signal-travel 5s linear infinite; }
 @keyframes signal-travel { from { background-position: 100% 0; } to { background-position: -120% 0; } }
+.orbit-progress { left: max(.75rem, env(safe-area-inset-left)); right: auto; }
+@media (max-width: 639px) {
+  .orbit-progress { left: max(.65rem, env(safe-area-inset-left)); }
+}
 @media (prefers-reduced-motion: reduce) {
   .journey-aurora, .journey-god-rays span, .docking-bay::before, .docking-submit:hover, .docking-particle, .signal-bar, .signal-trace::before, .black-hole-yellow-ring, .black-hole-blue-ring { animation: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .nebula-backdrop__blob, .orbit-shell__comet, .orbit-shell__flare { animation: none; }
-}
-
-/* Theme: Minimal (light mode overrides) */
-.light {
-  --color-void: #f8fafc;
-  --color-nebula: #e2e8f0;
-  --color-stardust: #0f172a;
-  --color-comet: #1e293b;
-  --color-aurora: #0284c7;
-  --color-solar: #a16207;
-  --color-supernova: #be123c;
-  --color-cosmos-muted: #475569;
-}
-
-/* Theme: Dark */
-.dark.theme-dark {
-  --color-void: #000000;
-  --color-nebula: #0c0c0c;
-  --color-comet: #a78bfa;
-  --color-aurora: #818cf8;
 }

@@ -23,16 +23,18 @@ export default function FallbackHero() {
 
       <div className="mt-8 flex gap-4">
         <a
-          href="/works"
+          href="/Sun D Ram.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
           className="rounded-lg bg-comet px-6 py-3 font-heading text-sm font-semibold text-white transition-colors hover:bg-comet/80 focus-visible:ring-2 focus-visible:ring-aurora"
         >
-          View Projects
+          View Resume
         </a>
         <a
           href="/contact"
           className="rounded-lg border border-cosmos-muted px-6 py-3 font-heading text-sm font-semibold text-stardust transition-colors hover:border-aurora hover:text-aurora"
         >
-          Get in Touch
+          Contact Me
         </a>
       </div>
     </section>

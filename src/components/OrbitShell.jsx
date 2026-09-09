@@ -66,7 +66,7 @@ export default function OrbitShell() {
   return (
     <nav
       ref={containerRef}
-      className="relative mx-auto hidden w-[380px] md:block"
+      className="relative mx-auto mt-4 w-[min(380px,88vw)] sm:mt-6"
       role="navigation"
       aria-label="Orbital navigation"
       onKeyDown={handleKeyDown}

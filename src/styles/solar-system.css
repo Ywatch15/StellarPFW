@@ -118,8 +118,49 @@
 }
 
 @media (max-width: 640px) {
+  .solar-system-stage {
+    min-height: max(48rem, calc(100svh - 4rem)) !important;
+  }
+  .solar-orbital-field {
+    top: 0;
+    bottom: 18rem;
+  }
+  .solar-planet-label-position {
+    max-width: 7.8rem;
+    white-space: normal;
+  }
+  .solar-planet-label {
+    font-size: .92em;
+    line-height: 1.15;
+  }
   .solar-scan-readout { flex-wrap: wrap; max-width: 18rem; margin-right: auto; margin-left: auto; font-size: .46rem; }
   .solar-parallax-layer--near { opacity: .035; }
   .stellar-event--flare { left: 12%; width: 82%; }
-  .solar-telemetry { bottom: 9rem; left: .8rem; max-width: 10rem; }
+  .solar-telemetry { right: .8rem; bottom: 15rem; left: .8rem; max-width: none; }
+  .solar-telemetry strong { white-space: normal; }
+  .solar-mission-links {
+    bottom: 1.25rem;
+    max-height: 12.5rem;
+    overflow-y: auto;
+    align-content: flex-start;
+    padding: 0 .25rem;
+    scrollbar-width: thin;
+  }
+  .solar-mission-links a {
+    max-width: 100%;
+    padding: .42rem .65rem;
+    font-size: .61rem;
+    line-height: 1.15;
+  }
+  .solar-legend {
+    bottom: 14rem !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .solar-system-stage { min-height: max(42rem, calc(100svh - 4rem)) !important; }
+  .solar-orbital-field { transform: scale(.9); }
+  .solar-system-stage.is-transitioning .solar-orbital-field,
+  .solar-system-stage.is-project-view .solar-orbital-field { transform: scale(.95); }
+  .solar-mission-links { width: min(94vw, 48rem); }
 }

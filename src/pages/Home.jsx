@@ -73,20 +73,6 @@ export default function Home({ onReady }) {
             {/* Orbital navigation */}
             <OrbitShell />
 
-            <div className="mt-4 flex gap-4 md:hidden">
-              <a
-                href="/works"
-                className="rounded-lg bg-comet px-6 py-3 font-heading text-sm font-semibold text-white transition-colors hover:bg-comet/80 focus-visible:ring-2 focus-visible:ring-aurora"
-              >
-                View Projects
-              </a>
-              <a
-                href="/contact"
-                className="rounded-lg border border-cosmos-muted px-6 py-3 font-heading text-sm font-semibold text-stardust transition-colors hover:border-aurora hover:text-aurora"
-              >
-                Get in Touch
-              </a>
-            </div>
           </>
         )}
       </div>

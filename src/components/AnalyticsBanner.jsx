@@ -1,7 +1,13 @@
 // FILE: src/components/AnalyticsBanner.jsx
 // GDPR-friendly opt-in consent banner for analytics
 import React, { useState, useEffect } from 'react';
-import { hasConsent, hasDeclined, grantConsent, declineConsent, initAnalytics } from '../lib/analytics';
+import {
+  hasConsent,
+  hasDeclined,
+  grantConsent,
+  declineConsent,
+  initAnalytics,
+} from '../lib/analytics';
 
 export default function AnalyticsBanner() {
   const [visible, setVisible] = useState(false);

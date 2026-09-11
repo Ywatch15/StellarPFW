@@ -17,8 +17,8 @@ export default function FallbackHero() {
       </h1>
 
       <p className="mt-4 max-w-lg text-lg text-cosmos-muted">
-        Full-stack engineer crafting performant, accessible digital experiences.
-        Explore my orbit to learn more.
+        Full-stack engineer crafting performant, accessible digital experiences. Explore
+        my orbit to learn more.
       </p>
 
       <div className="mt-8 flex gap-4">

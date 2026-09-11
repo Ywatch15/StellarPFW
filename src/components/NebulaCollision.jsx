@@ -33,7 +33,15 @@ class Particle {
   }
 }
 
-const COLORS = ['#6c63ff', '#38bdf8', '#facc15', '#f43f5e', '#a78bfa', '#e0e6ff', '#ffffff'];
+const COLORS = [
+  '#6c63ff',
+  '#38bdf8',
+  '#facc15',
+  '#f43f5e',
+  '#a78bfa',
+  '#e0e6ff',
+  '#ffffff',
+];
 
 export default function NebulaCollision({ onComplete }) {
   const canvasRef = useRef(null);
@@ -59,8 +67,20 @@ export default function NebulaCollision({ onComplete }) {
     const TOTAL_FRAMES = 210; // ~3.5s at 60fps
 
     // Two stars approaching
-    const star1 = { x: cx - W * 0.3, y: cy, targetX: cx - 10, size: 20, color: '#38bdf8' };
-    const star2 = { x: cx + W * 0.3, y: cy, targetX: cx + 10, size: 20, color: '#facc15' };
+    const star1 = {
+      x: cx - W * 0.3,
+      y: cy,
+      targetX: cx - 10,
+      size: 20,
+      color: '#38bdf8',
+    };
+    const star2 = {
+      x: cx + W * 0.3,
+      y: cy,
+      targetX: cx + 10,
+      size: 20,
+      color: '#facc15',
+    };
 
     // Background stars
     for (let i = 0; i < 120; i++) {
@@ -128,7 +148,13 @@ export default function NebulaCollision({ onComplete }) {
         ctx.globalAlpha = 1;
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(cx + l.offset * progress, cy + l.offset * 0.5 * progress, s, 0, Math.PI * 2);
+        ctx.arc(
+          cx + l.offset * progress,
+          cy + l.offset * 0.5 * progress,
+          s,
+          0,
+          Math.PI * 2,
+        );
         ctx.fill();
       });
     }
@@ -151,8 +177,8 @@ export default function NebulaCollision({ onComplete }) {
         // Approach phase
         const t = frame / collisionFrame;
         const ease = t * t * (3 - 2 * t); // smoothstep
-        star1.x = (cx - W * 0.3) + (star1.targetX - (cx - W * 0.3)) * ease;
-        star2.x = (cx + W * 0.3) + (star2.targetX - (cx + W * 0.3)) * ease;
+        star1.x = cx - W * 0.3 + (star1.targetX - (cx - W * 0.3)) * ease;
+        star2.x = cx + W * 0.3 + (star2.targetX - (cx + W * 0.3)) * ease;
         const glowPulse = 2 + t * 2;
         drawStar(ctx, star1.x, star1.y, star1.size, star1.color, glowPulse);
         drawStar(ctx, star2.x, star2.y, star2.size, star2.color, glowPulse);
@@ -164,7 +190,9 @@ export default function NebulaCollision({ onComplete }) {
             const angle = Math.random() * Math.PI * 2;
             const speed = Math.random() * 2 + 0.5;
             const life = 25;
-            particles.push(new Particle(fromStar.x, fromStar.y, fromStar.color, speed, angle, life));
+            particles.push(
+              new Particle(fromStar.x, fromStar.y, fromStar.color, speed, angle, life),
+            );
           }
         }
       } else if (frame === collisionFrame) {
@@ -183,7 +211,10 @@ export default function NebulaCollision({ onComplete }) {
 
       // Nebula formation
       if (frame >= nebulaStart) {
-        const nebulaProgress = Math.min(1, (frame - nebulaStart) / (TOTAL_FRAMES - nebulaStart));
+        const nebulaProgress = Math.min(
+          1,
+          (frame - nebulaStart) / (TOTAL_FRAMES - nebulaStart),
+        );
         drawNebula(ctx, nebulaProgress);
       }
 

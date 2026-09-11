@@ -24,7 +24,9 @@ export default function Navbar() {
   // Prevent body scroll when menu open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [menuOpen]);
 
   const toggleMenu = useCallback(() => setMenuOpen((o) => !o), []);
@@ -59,7 +61,9 @@ export default function Navbar() {
                 }
                 aria-current={({ isActive }) => (isActive ? 'page' : undefined)}
               >
-                <span aria-hidden="true"><Icon size={14} /></span>
+                <span aria-hidden="true">
+                  <Icon size={14} />
+                </span>
                 {label}
               </NavLink>
             </li>
@@ -75,12 +79,30 @@ export default function Navbar() {
         >
           <span className="sr-only">{menuOpen ? 'Close' : 'Menu'}</span>
           {menuOpen ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-stardust">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              className="text-stardust"
+            >
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           ) : (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-stardust">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              className="text-stardust"
+            >
               <line x1="3" y1="6" x2="21" y2="6" />
               <line x1="3" y1="12" x2="21" y2="12" />
               <line x1="3" y1="18" x2="21" y2="18" />
@@ -112,7 +134,9 @@ export default function Navbar() {
                   }
                   onClick={() => setMenuOpen(false)}
                 >
-                  <span aria-hidden="true" className="text-2xl"><Icon size={24} /></span>
+                  <span aria-hidden="true" className="text-2xl">
+                    <Icon size={24} />
+                  </span>
                   {label}
                 </NavLink>
               </li>

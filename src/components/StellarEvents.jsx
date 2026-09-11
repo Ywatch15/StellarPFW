@@ -16,7 +16,8 @@ export function useStellarEvents(enabled = true) {
   const [event, setEvent] = useState(null);
 
   useEffect(() => {
-    if (!enabled || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+    if (!enabled || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
+      return undefined;
 
     let stopped = false;
     let scheduleTimer;
@@ -26,14 +27,17 @@ export function useStellarEvents(enabled = true) {
       const types = Object.keys(EVENT_WINDOWS);
       const type = types[Math.floor(Math.random() * types.length)];
       const eventWindow = EVENT_WINDOWS[type];
-      scheduleTimer = window.setTimeout(() => {
-        if (stopped) return;
-        setEvent({ type, id: Date.now() });
-        clearTimer = window.setTimeout(() => {
-          setEvent(null);
-          schedule();
-        }, eventWindow.duration);
-      }, randomBetween(eventWindow.min, eventWindow.max));
+      scheduleTimer = window.setTimeout(
+        () => {
+          if (stopped) return;
+          setEvent({ type, id: Date.now() });
+          clearTimer = window.setTimeout(() => {
+            setEvent(null);
+            schedule();
+          }, eventWindow.duration);
+        },
+        randomBetween(eventWindow.min, eventWindow.max),
+      );
     };
 
     schedule();
@@ -50,17 +54,29 @@ export function useStellarEvents(enabled = true) {
 function MeteorShower() {
   return (
     <div className="stellar-event stellar-event--meteor" aria-hidden="true">
-      {[0, 1, 2, 3, 4].map((meteor) => <span key={meteor} style={{ '--meteor-index': meteor }} />)}
+      {[0, 1, 2, 3, 4].map((meteor) => (
+        <span key={meteor} style={{ '--meteor-index': meteor }} />
+      ))}
     </div>
   );
 }
 
 function SolarFlare() {
-  return <div className="stellar-event stellar-event--flare" aria-hidden="true"><span /><i>ENERGY WAVE</i></div>;
+  return (
+    <div className="stellar-event stellar-event--flare" aria-hidden="true">
+      <span />
+      <i>ENERGY WAVE</i>
+    </div>
+  );
 }
 
 function DistantComet() {
-  return <div className="stellar-event stellar-event--comet" aria-hidden="true"><span /><i>EXPLORING</i></div>;
+  return (
+    <div className="stellar-event stellar-event--comet" aria-hidden="true">
+      <span />
+      <i>EXPLORING</i>
+    </div>
+  );
 }
 
 export default function StellarEvents({ event }) {

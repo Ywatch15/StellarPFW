@@ -9,7 +9,10 @@ expect.extend(toHaveNoViolations);
 
 const renderOrbit = () =>
   render(
-    <MemoryRouter initialEntries={['/']} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <MemoryRouter
+      initialEntries={['/']}
+      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+    >
       <OrbitShell />
     </MemoryRouter>,
   );

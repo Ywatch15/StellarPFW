@@ -36,8 +36,14 @@ export default function OrbitalCursor() {
       state.x = event.clientX;
       state.y = event.clientY;
       state.inside = true;
-      state.mode = event.target.closest?.('a,button,[role="button"],summary') ? 'target' : 'orbit';
-      if (state.cursorMode === 'normal' && state.trail[0].x === 0 && state.trail[0].y === 0) {
+      state.mode = event.target.closest?.('a,button,[role="button"],summary')
+        ? 'target'
+        : 'orbit';
+      if (
+        state.cursorMode === 'normal' &&
+        state.trail[0].x === 0 &&
+        state.trail[0].y === 0
+      ) {
         state.trail.forEach((point) => {
           point.x = state.x;
           point.y = state.y;

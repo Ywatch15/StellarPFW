@@ -72,7 +72,9 @@ export default function Starfield() {
       {layers.current.map((layer, li) => (
         <svg
           key={li}
-          ref={(node) => { layerRefs.current[li] = node; }}
+          ref={(node) => {
+            layerRefs.current[li] = node;
+          }}
           className="absolute inset-0 h-full w-full transition-transform duration-700 ease-out"
           viewBox="0 0 100 100"
           preserveAspectRatio="none"

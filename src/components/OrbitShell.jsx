@@ -27,13 +27,26 @@ export default function OrbitShell() {
   const location = useLocation();
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const [focusedIdx, setFocusedIdx] = useState(-1);
+  const [activePulse, setActivePulse] = useState(false);
   const containerRef = useRef(null);
+
+  // Opportunistic prefetch on hover/focus
+  const prefetchTarget = useCallback((path) => {
+    if (path === '/works') import('../pages/Works').catch(() => {});
+    else if (path === '/about') import('../pages/About').catch(() => {});
+    else if (path === '/beyond') import('../pages/Beyond').catch(() => {});
+    else if (path === '/contact') import('../pages/Contact').catch(() => {});
+  }, []);
 
   const handleNav = useCallback(
     (path) => {
-      navigate(path);
+      setActivePulse(true);
+      prefetchTarget(path);
+      setTimeout(() => {
+        navigate(path);
+      }, 120);
     },
-    [navigate],
+    [navigate, prefetchTarget],
   );
 
   // Keyboard navigation for the orbit
@@ -56,12 +69,16 @@ export default function OrbitShell() {
   // Focus management
   useEffect(() => {
     if (focusedIdx >= 0 && containerRef.current) {
-      const btn = containerRef.current.querySelector(
-        `[data-orbit-idx="${focusedIdx}"]`,
-      );
-      if (btn) btn.focus();
+      const btn = containerRef.current.querySelector(`[data-orbit-idx="${focusedIdx}"]`);
+      if (btn) {
+        btn.focus();
+        prefetchTarget(SATELLITES[focusedIdx].path);
+      }
     }
-  }, [focusedIdx]);
+  }, [focusedIdx, prefetchTarget]);
+
+  const activeFocusIdx = hoveredIdx !== null ? hoveredIdx : focusedIdx;
+  const isInteracting = activeFocusIdx >= 0;
 
   return (
     <nav
@@ -73,7 +90,7 @@ export default function OrbitShell() {
     >
       <svg
         viewBox="0 0 340 340"
-        className="h-auto w-full"
+        className="h-auto w-full overflow-visible"
         role="presentation"
       >
         {/* Orbit ring */}
@@ -85,22 +102,61 @@ export default function OrbitShell() {
           stroke="#6c63ff"
           strokeWidth="0.5"
           strokeDasharray="4 4"
-          opacity={0.3}
-          className="orbit-shell__ring"
+          opacity={isInteracting ? 0.45 : 0.3}
+          className="orbit-shell__ring transition-opacity duration-300"
         />
 
-        <circle className="orbit-shell__comet" cx={CENTER} cy={CENTER - ORBIT_RADIUS} r="2.5" />
-
-        {/* Central sun */}
+        {/* Orbit track subtle guide circles */}
         <circle
           cx={CENTER}
           cy={CENTER}
-          r={22}
-          fill="url(#sunGradient)"
-          className="cursor-pointer"
-          style={{ filter: 'drop-shadow(0 0 8px rgba(250,204,21,.7))' }}
+          r={ORBIT_RADIUS - 16}
+          fill="none"
+          stroke="#38bdf8"
+          strokeWidth="0.3"
+          strokeDasharray="2 6"
+          opacity={0.15}
         />
-        <ellipse className="orbit-shell__flare" cx={CENTER} cy={CENTER} rx="52" ry="8" />
+
+        {/* Orbiting asteroid / comet */}
+        <circle
+          className="orbit-shell__comet"
+          cx={CENTER}
+          cy={CENTER - ORBIT_RADIUS}
+          r="2.5"
+        />
+
+        {/* Central sun corona & breathing glow (Change 13) */}
+        <circle
+          cx={CENTER}
+          cy={CENTER}
+          r={isInteracting ? 32 : 28}
+          fill="#facc15"
+          opacity={isInteracting ? 0.28 : 0.16}
+          className="solar-corona transition-all duration-300"
+        />
+
+        {/* Central sun body */}
+        <circle
+          cx={CENTER}
+          cy={CENTER}
+          r={activePulse ? 25 : isInteracting ? 24 : 22}
+          fill="url(#sunGradient)"
+          className="cursor-pointer transition-all duration-300"
+          style={{
+            filter: isInteracting
+              ? 'drop-shadow(0 0 16px rgba(250,204,21,0.95)) drop-shadow(0 0 30px rgba(245,158,11,0.5))'
+              : 'drop-shadow(0 0 8px rgba(250,204,21,0.7))',
+          }}
+          onClick={() => handleNav('/')}
+        />
+        <ellipse
+          className="orbit-shell__flare"
+          cx={CENTER}
+          cy={CENTER}
+          rx={isInteracting ? '62' : '52'}
+          ry={isInteracting ? '10' : '8'}
+        />
         <text
           x={CENTER}
           y={CENTER + 1}
@@ -109,36 +165,50 @@ export default function OrbitShell() {
           fill="#050816"
           fontSize="18"
           fontWeight="bold"
+          className="pointer-events-none select-none"
         >
           ☉
         </text>
 
-        {/* Gradient definition */}
+        {/* Gradient definitions */}
         <defs>
           <radialGradient id="sunGradient" cx="40%" cy="40%">
-            <stop offset="0%" stopColor="#facc15" />
+            <stop offset="0%" stopColor="#fef08a" />
+            <stop offset="50%" stopColor="#facc15" />
             <stop offset="100%" stopColor="#f59e0b" />
           </radialGradient>
         </defs>
 
-        {/* Satellite nodes */}
+        {/* Satellite nodes (Change 14) */}
         {SATELLITES.map((sat, i) => {
           const { x, y } = getPosition(sat.angle, ORBIT_RADIUS);
           const isActive = location.pathname === sat.path;
           const isHovered = hoveredIdx === i;
+          const isFocused = focusedIdx === i;
+          const isCurrentTarget = isHovered || isFocused;
+          const isDimmed = isInteracting && !isCurrentTarget;
 
           return (
-            <g key={sat.path}>
+            <g
+              key={sat.path}
+              className={`transition-opacity duration-300 ${isDimmed ? 'opacity-40' : 'opacity-100'}`}
+            >
               {/* Connection line from sun to satellite */}
-              {(isHovered || isActive) && (
+              {(isCurrentTarget || isActive) && (
                 <line
                   x1={CENTER}
                   y1={CENTER}
                   x2={x}
                   y2={y}
                   stroke={sat.color}
-                  strokeWidth="0.8"
-                  opacity={0.4}
+                  strokeWidth={isCurrentTarget ? '1.2' : '0.8'}
+                  opacity={isCurrentTarget ? 0.85 : 0.4}
+                  className="transition-all duration-300"
+                  style={{
+                    filter: isCurrentTarget
+                      ? `drop-shadow(0 0 4px ${sat.color})`
+                      : undefined,
+                  }}
                 />
               )}
 
@@ -146,12 +216,18 @@ export default function OrbitShell() {
               <circle
                 cx={x}
                 cy={y}
-                r={isActive ? 28 : 24}
+                r={isCurrentTarget ? 27 : isActive ? 26 : 24}
                 fill={isActive ? sat.color + '33' : '#0a0f2c'}
                 stroke={sat.color}
-                strokeWidth={isActive ? 2.5 : 1.5}
-                className="cursor-pointer transition-all"
-                style={{ filter: isHovered ? `drop-shadow(0 0 6px ${sat.color})` : undefined }}
+                strokeWidth={isCurrentTarget ? 2.8 : isActive ? 2.5 : 1.5}
+                className="cursor-pointer transition-all duration-200"
+                style={{
+                  filter: isCurrentTarget
+                    ? `drop-shadow(0 0 10px ${sat.color}) drop-shadow(0 0 20px ${sat.color}80)`
+                    : isActive
+                      ? `drop-shadow(0 0 6px ${sat.color}66)`
+                      : undefined,
+                }}
               />
 
               {/* Icon */}
@@ -161,7 +237,8 @@ export default function OrbitShell() {
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fill={sat.color}
-                fontSize="18"
+                fontSize={isCurrentTarget ? '19' : '18'}
+                className="pointer-events-none select-none transition-all"
               >
                 {sat.icon}
               </text>
@@ -171,10 +248,11 @@ export default function OrbitShell() {
                 x={x}
                 y={y + 13}
                 textAnchor="middle"
-                fill="#e0e6ff"
+                fill={isCurrentTarget ? '#ffffff' : '#e0e6ff'}
                 fontSize="10"
                 fontFamily="Inter, sans-serif"
-                fontWeight={isActive ? '700' : '500'}
+                fontWeight={isActive || isCurrentTarget ? '700' : '500'}
+                className="pointer-events-none select-none transition-all"
               >
                 {sat.label}
               </text>
@@ -192,9 +270,16 @@ export default function OrbitShell() {
                 aria-label={`Navigate to ${sat.label}`}
                 aria-current={isActive ? 'page' : undefined}
                 onClick={() => handleNav(sat.path)}
-                onMouseEnter={() => setHoveredIdx(i)}
+                onMouseEnter={() => {
+                  setHoveredIdx(i);
+                  prefetchTarget(sat.path);
+                }}
                 onMouseLeave={() => setHoveredIdx(null)}
-                onFocus={() => setFocusedIdx(i)}
+                onFocus={() => {
+                  setFocusedIdx(i);
+                  prefetchTarget(sat.path);
+                }}
+                onBlur={() => setFocusedIdx(-1)}
               />
             </g>
           );

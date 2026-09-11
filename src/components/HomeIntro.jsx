@@ -98,7 +98,10 @@ export default function HomeIntro() {
         className="mt-3 text-lg font-medium sm:text-xl"
       >
         <Typewriter />
-        <span className="text-cosmos-muted"> &bull; Electronics Engineering Graduate</span>
+        <span className="text-cosmos-muted">
+          {' '}
+          &bull; Electronics Engineering Graduate
+        </span>
       </motion.p>
 
       <motion.div
@@ -118,20 +121,18 @@ export default function HomeIntro() {
           }}
         />
         <p>
-          Hello, I&apos;m Sundram Pathak — an Electronics Engineering
-          graduate navigating the universe of full-stack development. I
-          build immersive, realistic digital experiences and continuously explore
-          new technologies. Along this journey, I sharpen my problem-solving
-          skills across platforms like LeetCode, CodeChef, and
+          Hello, I&apos;m Sundram Pathak — an Electronics Engineering graduate navigating
+          the universe of full-stack development. I build immersive, realistic digital
+          experiences and continuously explore new technologies. Along this journey, I
+          sharpen my problem-solving skills across platforms like LeetCode, CodeChef, and
           GeeksforGeeks, always striving to evolve as a developer.
         </p>
         <p>
-          From crafting responsive fullstack applications with React, Node.js,
-          and MongoDB to exploring DevOps workflows with Docker and CI/CD
-          pipelines, I thrive on turning complex ideas into polished, performant
-          products. Competitive programming fuels my algorithmic thinking, while
-          building immersive user experiences — like this very portfolio — keeps
-          my creative instincts sharp.
+          From crafting responsive fullstack applications with React, Node.js, and MongoDB
+          to exploring DevOps workflows with Docker and CI/CD pipelines, I thrive on
+          turning complex ideas into polished, performant products. Competitive
+          programming fuels my algorithmic thinking, while building immersive user
+          experiences — like this very portfolio — keeps my creative instincts sharp.
         </p>
       </motion.div>
 

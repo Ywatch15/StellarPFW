@@ -35,7 +35,10 @@ export default function SatelliteCard({ project, onClose }) {
       dialogRef.current.focus();
     }
     return () => {
-      if (previousFocusRef.current && typeof previousFocusRef.current.focus === 'function') {
+      if (
+        previousFocusRef.current &&
+        typeof previousFocusRef.current.focus === 'function'
+      ) {
         previousFocusRef.current.focus();
       }
     };
@@ -119,7 +122,8 @@ export default function SatelliteCard({ project, onClose }) {
             <div className="mt-6 rounded-lg border border-white/5 bg-void/50 p-4 text-sm text-cosmos-muted">
               <p id="mission-brief">
                 <strong className="text-stardust">Mission Brief:</strong>{' '}
-                {project.missionBrief || 'A focused build that demonstrates practical engineering decisions, clear interaction design, and a deployable result.'}
+                {project.missionBrief ||
+                  'A focused build that demonstrates practical engineering decisions, clear interaction design, and a deployable result.'}
               </p>
               <p className="mt-2">
                 <strong className="text-stardust">Stack:</strong>{' '}

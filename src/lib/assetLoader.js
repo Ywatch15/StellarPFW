@@ -88,7 +88,13 @@ export function createFallbackEnvMap(color = '#1a1a2e') {
     data[i * 4 + 3] = 1;
   }
 
-  const texture = new THREE.DataTexture(data, size, size, THREE.RGBAFormat, THREE.FloatType);
+  const texture = new THREE.DataTexture(
+    data,
+    size,
+    size,
+    THREE.RGBAFormat,
+    THREE.FloatType,
+  );
   texture.mapping = THREE.EquirectangularReflectionMapping;
   texture.needsUpdate = true;
 

@@ -75,59 +75,59 @@ const skills = [
 
 // Official documentation URLs for each skill
 const docUrls = {
-  'HTML5':        'https://developer.mozilla.org/en-US/docs/Web/HTML',
-  'CSS3':         'https://developer.mozilla.org/en-US/docs/Web/CSS',
-  'JavaScript':   'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
-  'React':        'https://react.dev/',
-  'Next.js':      'https://nextjs.org/docs',
-  'Bootstrap':    'https://getbootstrap.com/docs/',
-  'jQuery':       'https://api.jquery.com/',
-  'Tailwind':     'https://tailwindcss.com/docs',
-  'MUI':          'https://mui.com/getting-started/',
-  'Vite':         'https://vite.dev/guide/',
-  'Redux':        'https://redux.js.org/introduction/getting-started',
+  HTML5: 'https://developer.mozilla.org/en-US/docs/Web/HTML',
+  CSS3: 'https://developer.mozilla.org/en-US/docs/Web/CSS',
+  JavaScript: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
+  React: 'https://react.dev/',
+  'Next.js': 'https://nextjs.org/docs',
+  Bootstrap: 'https://getbootstrap.com/docs/',
+  jQuery: 'https://api.jquery.com/',
+  Tailwind: 'https://tailwindcss.com/docs',
+  MUI: 'https://mui.com/getting-started/',
+  Vite: 'https://vite.dev/guide/',
+  Redux: 'https://redux.js.org/introduction/getting-started',
   'React Router': 'https://reactrouter.com/en/main',
-  'Context API':  'https://react.dev/reference/react/createContext',
-  'Node.js':      'https://nodejs.org/en/docs/',
-  'Express':      'https://expressjs.com/en/starter/installing.html',
-  'JWT':          'https://jwt.io/introduction',
-  'Supabase':     'https://supabase.com/docs',
-  'Appwrite':     'https://appwrite.io/docs',
-  'Nodemon':      'https://nodemon.io/',
-  'EJS':          'https://ejs.co/#docs',
-  'C++':          'https://en.cppreference.com/w/',
-  'C':            'https://en.cppreference.com/w/c',
-  'Python':       'https://docs.python.org/3/',
-  'NumPy':        'https://numpy.org/doc/',
-  'Pandas':       'https://pandas.pydata.org/docs/',
-  'Matplotlib':   'https://matplotlib.org/stable/users/index.html',
-  'Seaborn':      'https://seaborn.pydata.org/',
-  'Markdown':     'https://www.markdownguide.org/',
-  'MongoDB':      'https://www.mongodb.com/docs/',
-  'MySQL':        'https://dev.mysql.com/doc/',
-  'Vercel':       'https://vercel.com/docs',
-  'Render':       'https://docs.render.com/',
-  'AWS':          'https://docs.aws.amazon.com/',
-  'Kubernetes':   'https://kubernetes.io/docs/home/',
-  'Git':          'https://git-scm.com/doc',
-  'GitHub':       'https://docs.github.com/',
-  'NPM':          'https://docs.npmjs.com/',
-  'Postman':      'https://learning.postman.com/docs/',
-  'PowerShell':   'https://learn.microsoft.com/en-us/powershell/',
-  'Prettier':     'https://prettier.io/docs/en/',
+  'Context API': 'https://react.dev/reference/react/createContext',
+  'Node.js': 'https://nodejs.org/en/docs/',
+  Express: 'https://expressjs.com/en/starter/installing.html',
+  JWT: 'https://jwt.io/introduction',
+  Supabase: 'https://supabase.com/docs',
+  Appwrite: 'https://appwrite.io/docs',
+  Nodemon: 'https://nodemon.io/',
+  EJS: 'https://ejs.co/#docs',
+  'C++': 'https://en.cppreference.com/w/',
+  C: 'https://en.cppreference.com/w/c',
+  Python: 'https://docs.python.org/3/',
+  NumPy: 'https://numpy.org/doc/',
+  Pandas: 'https://pandas.pydata.org/docs/',
+  Matplotlib: 'https://matplotlib.org/stable/users/index.html',
+  Seaborn: 'https://seaborn.pydata.org/',
+  Markdown: 'https://www.markdownguide.org/',
+  MongoDB: 'https://www.mongodb.com/docs/',
+  MySQL: 'https://dev.mysql.com/doc/',
+  Vercel: 'https://vercel.com/docs',
+  Render: 'https://docs.render.com/',
+  AWS: 'https://docs.aws.amazon.com/',
+  Kubernetes: 'https://kubernetes.io/docs/home/',
+  Git: 'https://git-scm.com/doc',
+  GitHub: 'https://docs.github.com/',
+  NPM: 'https://docs.npmjs.com/',
+  Postman: 'https://learning.postman.com/docs/',
+  PowerShell: 'https://learn.microsoft.com/en-us/powershell/',
+  Prettier: 'https://prettier.io/docs/en/',
   'Win Terminal': 'https://learn.microsoft.com/en-us/windows/terminal/',
-  'Canva':        'https://www.canva.com/designschool/',
-  'Anaconda':     'https://docs.anaconda.com/',
-  'OpenCV':       'https://docs.opencv.org/',
-  'VS Code':      'https://code.visualstudio.com/docs',
+  Canva: 'https://www.canva.com/designschool/',
+  Anaconda: 'https://docs.anaconda.com/',
+  OpenCV: 'https://docs.opencv.org/',
+  'VS Code': 'https://code.visualstudio.com/docs',
   'Google Antigravity': 'https://www.google.com/search?q=Google+Antigravity',
-  'Windsurf':     'https://windsurf.com/',
-  'Cursor':       'https://docs.cursor.com/',
-  'Claude Code':  'https://docs.anthropic.com/en/docs/claude-code',
-  'Codex':        'https://platform.openai.com/docs',
-  'Lovable':      'https://lovable.dev/',
-  'Bolt.new':     'https://bolt.new/',
-  'Orchid':       'https://www.google.com/search?q=Orchid+IDE',
+  Windsurf: 'https://windsurf.com/',
+  Cursor: 'https://docs.cursor.com/',
+  'Claude Code': 'https://docs.anthropic.com/en/docs/claude-code',
+  Codex: 'https://platform.openai.com/docs',
+  Lovable: 'https://lovable.dev/',
+  'Bolt.new': 'https://bolt.new/',
+  Orchid: 'https://www.google.com/search?q=Orchid+IDE',
 };
 
 const connections = [
@@ -236,14 +236,15 @@ export default function Constellation() {
   const [tooltip, setTooltip] = useState(null); // { name, x, y }
   const hoverTimerRef = useRef(null);
   const starField = useMemo(
-    () => Array.from({ length: 50 }, (_, i) => ({
-      id: i,
-      x: 8 + ((i * 37) % 84),
-      y: 6 + ((i * 61) % 126),
-      opacity: 0.1 + ((i * 17) % 24) / 100,
-      peak: 0.3 + ((i * 13) % 20) / 100,
-      duration: 2 + (i % 4),
-    })),
+    () =>
+      Array.from({ length: 50 }, (_, i) => ({
+        id: i,
+        x: 8 + ((i * 37) % 84),
+        y: 6 + ((i * 61) % 126),
+        opacity: 0.1 + ((i * 17) % 24) / 100,
+        peak: 0.3 + ((i * 13) % 20) / 100,
+        duration: 2 + (i % 4),
+      })),
     [],
   );
 
@@ -346,19 +347,97 @@ export default function Constellation() {
         ))}
 
         {/* Shooting star animations */}
-        <line className="constellation-motion-line" x1="-5" y1="15" x2="0" y2="14" stroke="url(#shooting-star)" strokeWidth="0.2" opacity="0">
-          <animate attributeName="x1" values="-5;105" dur="4s" repeatCount="indefinite" begin="0s" />
-          <animate attributeName="y1" values="15;10" dur="4s" repeatCount="indefinite" begin="0s" />
-          <animate attributeName="x2" values="0;110" dur="4s" repeatCount="indefinite" begin="0s" />
-          <animate attributeName="y2" values="14;9" dur="4s" repeatCount="indefinite" begin="0s" />
-          <animate attributeName="opacity" values="0;0;0.6;0.6;0" dur="4s" repeatCount="indefinite" begin="0s" />
+        <line
+          className="constellation-motion-line"
+          x1="-5"
+          y1="15"
+          x2="0"
+          y2="14"
+          stroke="url(#shooting-star)"
+          strokeWidth="0.2"
+          opacity="0"
+        >
+          <animate
+            attributeName="x1"
+            values="-5;105"
+            dur="4s"
+            repeatCount="indefinite"
+            begin="0s"
+          />
+          <animate
+            attributeName="y1"
+            values="15;10"
+            dur="4s"
+            repeatCount="indefinite"
+            begin="0s"
+          />
+          <animate
+            attributeName="x2"
+            values="0;110"
+            dur="4s"
+            repeatCount="indefinite"
+            begin="0s"
+          />
+          <animate
+            attributeName="y2"
+            values="14;9"
+            dur="4s"
+            repeatCount="indefinite"
+            begin="0s"
+          />
+          <animate
+            attributeName="opacity"
+            values="0;0;0.6;0.6;0"
+            dur="4s"
+            repeatCount="indefinite"
+            begin="0s"
+          />
         </line>
-        <line className="constellation-motion-line" x1="110" y1="70" x2="105" y2="71" stroke="url(#shooting-star)" strokeWidth="0.15" opacity="0">
-          <animate attributeName="x1" values="110;-10" dur="5s" repeatCount="indefinite" begin="2.5s" />
-          <animate attributeName="y1" values="70;75" dur="5s" repeatCount="indefinite" begin="2.5s" />
-          <animate attributeName="x2" values="105;-15" dur="5s" repeatCount="indefinite" begin="2.5s" />
-          <animate attributeName="y2" values="71;76" dur="5s" repeatCount="indefinite" begin="2.5s" />
-          <animate attributeName="opacity" values="0;0;0.5;0.5;0" dur="5s" repeatCount="indefinite" begin="2.5s" />
+        <line
+          className="constellation-motion-line"
+          x1="110"
+          y1="70"
+          x2="105"
+          y2="71"
+          stroke="url(#shooting-star)"
+          strokeWidth="0.15"
+          opacity="0"
+        >
+          <animate
+            attributeName="x1"
+            values="110;-10"
+            dur="5s"
+            repeatCount="indefinite"
+            begin="2.5s"
+          />
+          <animate
+            attributeName="y1"
+            values="70;75"
+            dur="5s"
+            repeatCount="indefinite"
+            begin="2.5s"
+          />
+          <animate
+            attributeName="x2"
+            values="105;-15"
+            dur="5s"
+            repeatCount="indefinite"
+            begin="2.5s"
+          />
+          <animate
+            attributeName="y2"
+            values="71;76"
+            dur="5s"
+            repeatCount="indefinite"
+            begin="2.5s"
+          />
+          <animate
+            attributeName="opacity"
+            values="0;0;0.5;0.5;0"
+            dur="5s"
+            repeatCount="indefinite"
+            begin="2.5s"
+          />
         </line>
 
         {/* Connections */}
@@ -423,7 +502,8 @@ export default function Constellation() {
             >
               {/* Subtle idle breathing */}
               {!active && (
-                <animate className="constellation-motion-animation"
+                <animate
+                  className="constellation-motion-animation"
                   attributeName="r"
                   values={`${skill.size};${skill.size + 0.25};${skill.size}`}
                   dur={`${3 + (skills.indexOf(skill) % 4)}s`}
@@ -496,7 +576,10 @@ export default function Constellation() {
             ))}
             {/* Duplicate set for seamless mobile loop */}
             {Object.entries(groupColors).map(([group, color]) => (
-              <span key={`dup-${group}`} className="flex items-center gap-1.5 capitalize md:hidden">
+              <span
+                key={`dup-${group}`}
+                className="flex items-center gap-1.5 capitalize md:hidden"
+              >
                 <span
                   className="inline-block h-2 w-2 rounded-full"
                   style={{ backgroundColor: color }}

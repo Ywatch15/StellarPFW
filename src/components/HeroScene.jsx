@@ -8,13 +8,20 @@ import * as THREE from 'three';
 import useDeviceCapability from '../hooks/useDeviceCapability';
 import FallbackHero from './FallbackHero';
 
-/** Low-poly icosahedron planet with atmosphere glow */
+/** Low-poly icosahedron planet with breathing atmosphere glow */
 function Planet() {
   const meshRef = useRef();
+  const atmosphereRef = useRef();
+  const ringRef = useRef();
 
-  // Slowly rotate the planet
-  useFrame((_, delta) => {
+  // Slowly rotate the planet and breathe atmosphere
+  useFrame(({ clock }, delta) => {
     if (meshRef.current) meshRef.current.rotation.y += delta * 0.15;
+    if (ringRef.current) ringRef.current.rotation.z += delta * 0.05;
+    if (atmosphereRef.current) {
+      const breath = 1.2 + Math.sin(clock.getElapsedTime() * 1.5) * 0.04;
+      atmosphereRef.current.scale.set(breath, breath, breath);
+    }
   });
 
   return (
@@ -31,22 +38,22 @@ function Planet() {
           />
         </mesh>
         {/* Atmosphere glow */}
-        <mesh scale={1.2}>
+        <mesh ref={atmosphereRef} scale={1.2}>
           <icosahedronGeometry args={[1.6, 1]} />
           <meshBasicMaterial
             color="#38bdf8"
             transparent
-            opacity={0.08}
+            opacity={0.09}
             side={THREE.BackSide}
           />
         </mesh>
         {/* Ring */}
-        <mesh rotation={[Math.PI / 2.5, 0, 0]}>
+        <mesh ref={ringRef} rotation={[Math.PI / 2.5, 0, 0]}>
           <torusGeometry args={[2.6, 0.06, 8, 48]} />
           <meshStandardMaterial
             color="#38bdf8"
             transparent
-            opacity={0.5}
+            opacity={0.55}
             roughness={0.3}
           />
         </mesh>
@@ -55,12 +62,20 @@ function Planet() {
   );
 }
 
-/** Tiny orbiting moon */
+/** Orbiting moon / asteroid with physical variation */
 function Moon() {
   const ref = useRef();
   useFrame(({ clock }) => {
-    const t = clock.getElapsedTime() * 0.4;
-    ref.current.position.set(Math.cos(t) * 4, Math.sin(t) * 0.5, Math.sin(t) * 4);
+    const t = clock.getElapsedTime() * 0.38;
+    // Slight orbital inclination and speed variation
+    const radius = 4.1 + Math.sin(t * 0.5) * 0.15;
+    ref.current.position.set(
+      Math.cos(t) * radius,
+      Math.sin(t * 1.2) * 0.6,
+      Math.sin(t) * radius,
+    );
+    ref.current.rotation.x += 0.01;
+    ref.current.rotation.y += 0.02;
   });
   return (
     <mesh ref={ref}>
@@ -100,7 +115,13 @@ function OrbitalParticles({ count = 80 }) {
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial color="#6c63ff" size={0.02} transparent opacity={0.6} sizeAttenuation />
+      <pointsMaterial
+        color="#6c63ff"
+        size={0.02}
+        transparent
+        opacity={0.6}
+        sizeAttenuation
+      />
     </points>
   );
 }
@@ -170,7 +191,14 @@ export default function HeroScene() {
         <ambientLight intensity={0.4} />
         <directionalLight position={[5, 5, 5]} intensity={1} />
 
-        <Stars radius={80} depth={60} count={starCount} factor={3} fade speed={prefersReducedMotion ? 0 : 0.8} />
+        <Stars
+          radius={80}
+          depth={60}
+          count={starCount}
+          factor={3}
+          fade
+          speed={prefersReducedMotion ? 0 : 0.8}
+        />
         <Planet />
         <Moon />
         {showParticles && <OrbitalParticles count={80} />}

@@ -16,12 +16,17 @@ export default function useDeviceCapability() {
   useEffect(() => {
     const cores = navigator.hardwareConcurrency || 2;
     const hasTouch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
-    const supportsHover = window.matchMedia('(hover: hover)').matches;
-    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-      || (hasTouch && !supportsHover);
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
+    const supportsHover =
+      typeof window.matchMedia === 'function'
+        ? window.matchMedia('(hover: hover)').matches
+        : true;
+    const isMobile =
+      /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+      (hasTouch && !supportsHover);
+    const prefersReducedMotion =
+      typeof window.matchMedia === 'function'
+        ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        : false;
 
     let tier = 'medium';
     if (cores >= 8 && !isMobile) tier = 'high';

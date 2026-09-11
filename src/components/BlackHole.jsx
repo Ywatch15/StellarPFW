@@ -86,7 +86,10 @@ export default function BlackHole({ children, interactive = true }) {
         ctx.fill();
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(cx + Math.cos(rad) * (p.radius + 8), cy + Math.sin(rad) * (p.radius + 3));
+        ctx.lineTo(
+          cx + Math.cos(rad) * (p.radius + 8),
+          cy + Math.sin(rad) * (p.radius + 3),
+        );
         ctx.strokeStyle = p.color;
         ctx.globalAlpha = 0.16 * Math.min(p.radius / 80, 1);
         ctx.lineWidth = 0.7;
@@ -281,7 +284,14 @@ export default function BlackHole({ children, interactive = true }) {
           />
 
           {/* Singularity (the black center) */}
-          <circle cx="200" cy="200" r="55" fill="#000000" stroke="#000000" strokeWidth="3" />
+          <circle
+            cx="200"
+            cy="200"
+            r="55"
+            fill="#000000"
+            stroke="#000000"
+            strokeWidth="3"
+          />
 
           {/* Event horizon ring */}
           <circle
@@ -331,9 +341,7 @@ export default function BlackHole({ children, interactive = true }) {
 
       {/* Content overlay (children render around the black hole) */}
       {children && (
-        <div className="pointer-events-auto absolute inset-0 z-20">
-          {children}
-        </div>
+        <div className="pointer-events-auto absolute inset-0 z-20">{children}</div>
       )}
     </div>
   );

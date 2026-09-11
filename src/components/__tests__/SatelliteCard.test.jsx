@@ -9,11 +9,37 @@ expect.extend(toHaveNoViolations);
 // Mock motion/react — use require() inside factory to avoid out-of-scope variable error
 jest.mock('motion/react', () => {
   const ReactMock = require('react');
-  const MotionDiv = ReactMock.forwardRef(function MotionDiv({ children, variants, initial, animate, exit, whileInView, viewport, custom, ...domProps }, ref) {
+  const MotionDiv = ReactMock.forwardRef(function MotionDiv(
+    {
+      children,
+      variants,
+      initial,
+      animate,
+      exit,
+      whileInView,
+      viewport,
+      custom,
+      ...domProps
+    },
+    ref,
+  ) {
     return ReactMock.createElement('div', { ...domProps, ref }, children);
   });
   MotionDiv.displayName = 'MotionDiv';
-  const MotionArticle = ReactMock.forwardRef(function MotionArticle({ children, variants, initial, animate, exit, whileInView, viewport, custom, ...domProps }, ref) {
+  const MotionArticle = ReactMock.forwardRef(function MotionArticle(
+    {
+      children,
+      variants,
+      initial,
+      animate,
+      exit,
+      whileInView,
+      viewport,
+      custom,
+      ...domProps
+    },
+    ref,
+  ) {
     return ReactMock.createElement('div', { ...domProps, ref }, children);
   });
   MotionArticle.displayName = 'MotionArticle';
@@ -33,9 +59,7 @@ const mockProject = {
 
 describe('SatelliteCard', () => {
   it('renders nothing when project is null', () => {
-    const { container } = render(
-      <SatelliteCard project={null} onClose={() => {}} />,
-    );
+    const { container } = render(<SatelliteCard project={null} onClose={() => {}} />);
     expect(container.innerHTML).toBe('');
   });
 

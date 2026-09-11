@@ -90,11 +90,7 @@ export default function TimelineBelt() {
   );
 
   return (
-    <section
-      className="relative py-8"
-      aria-label="Career timeline"
-      role="region"
-    >
+    <section className="relative py-8" aria-label="Career timeline" role="region">
       {/* Track line */}
       <div className="absolute left-0 right-0 top-1/2 h-px bg-gradient-to-r from-transparent via-comet/30 to-transparent" />
 
@@ -160,7 +156,11 @@ export default function TimelineBelt() {
       </div>
 
       {/* Navigation dots */}
-      <div className="mt-4 flex justify-center gap-2" role="tablist" aria-label="Timeline navigation">
+      <div
+        className="mt-4 flex justify-center gap-2"
+        role="tablist"
+        aria-label="Timeline navigation"
+      >
         {timelineData.map((entry, i) => (
           <button
             key={entry.year}

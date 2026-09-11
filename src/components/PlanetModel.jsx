@@ -63,11 +63,7 @@ export default function PlanetModel({
         {/* Optional ring */}
         <mesh rotation={[Math.PI / 2.2, 0.3, 0]}>
           <torusGeometry args={[size * 1.6, 0.03, 8, 64]} />
-          <meshStandardMaterial
-            color="#38bdf8"
-            transparent
-            opacity={0.4}
-          />
+          <meshStandardMaterial color="#38bdf8" transparent opacity={0.4} />
         </mesh>
       </group>
     </Float>

@@ -27,7 +27,12 @@ function AnimatedCounter({ target, suffix = '', duration = 1800, start }) {
     return () => window.cancelAnimationFrame(rafId);
   }, [start, target, duration]);
 
-  return <span>{count}{suffix}</span>;
+  return (
+    <span>
+      {count}
+      {suffix}
+    </span>
+  );
 }
 
 /* ---------- Data ---------- */
@@ -66,9 +71,21 @@ const highlights = [
 ];
 
 const techStack = [
-  'React', 'Next.js', 'Node.js', 'Express', 'MongoDB', 'PostgreSQL',
-  'Three.js', 'Tailwind CSS', 'Docker', 'GitHub Actions',
-  'Python', 'Redis', 'WebSocket', 'Vite', 'Vercel',
+  'React',
+  'Next.js',
+  'Node.js',
+  'Express',
+  'MongoDB',
+  'PostgreSQL',
+  'Three.js',
+  'Tailwind CSS',
+  'Docker',
+  'GitHub Actions',
+  'Python',
+  'Redis',
+  'WebSocket',
+  'Vite',
+  'Vercel',
 ];
 
 /* ---------- Tech ticker ---------- */
@@ -155,8 +172,15 @@ export default function HomeHighlights() {
             key={stat.label}
             className="rounded-xl border border-white/5 bg-nebula/50 p-4 text-center backdrop-blur-sm"
           >
-            <div className="font-heading text-2xl font-bold sm:text-3xl" style={{ color: stat.color }}>
-              <AnimatedCounter target={stat.value} suffix={stat.suffix} start={statsVisible} />
+            <div
+              className="font-heading text-2xl font-bold sm:text-3xl"
+              style={{ color: stat.color }}
+            >
+              <AnimatedCounter
+                target={stat.value}
+                suffix={stat.suffix}
+                start={statsVisible}
+              />
             </div>
             <div className="mt-1 text-xs text-cosmos-muted">{stat.label}</div>
           </div>

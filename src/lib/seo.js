@@ -85,7 +85,8 @@ export const websiteJsonLd = {
   '@id': 'https://stellar-pfw.vercel.app/#website',
   name: 'Stellar Portfolio',
   url: 'https://stellar-pfw.vercel.app',
-  description: 'Full-stack developer portfolio showcasing projects, skills, and experience with interactive 3D visualizations.',
+  description:
+    'Full-stack developer portfolio showcasing projects, skills, and experience with interactive 3D visualizations.',
   author: {
     '@type': 'Person',
     '@id': 'https://stellar-pfw.vercel.app/#person',
@@ -193,8 +194,16 @@ export function updateMeta({ title, description }) {
   setMeta('meta[name="twitter:title"]', { name: 'twitter:title' }, pageTitle);
 
   if (description) {
-    setMeta('meta[property="og:description"]', { property: 'og:description' }, description);
-    setMeta('meta[name="twitter:description"]', { name: 'twitter:description' }, description);
+    setMeta(
+      'meta[property="og:description"]',
+      { property: 'og:description' },
+      description,
+    );
+    setMeta(
+      'meta[name="twitter:description"]',
+      { name: 'twitter:description' },
+      description,
+    );
   }
 
   let canonical = document.head.querySelector('link[rel="canonical"]');

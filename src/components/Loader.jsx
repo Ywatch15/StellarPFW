@@ -9,19 +9,8 @@ export default function Loader({ message = 'Loading…' }) {
       role="status"
       aria-live="polite"
     >
-      <svg
-        className="h-12 w-12 animate-spin-slow"
-        viewBox="0 0 64 64"
-        aria-hidden="true"
-      >
-        <circle
-          cx="32"
-          cy="32"
-          r="14"
-          fill="none"
-          strokeWidth="3"
-          stroke="#6c63ff"
-        />
+      <svg className="h-12 w-12 animate-spin-slow" viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="14" fill="none" strokeWidth="3" stroke="#6c63ff" />
         <circle
           cx="32"
           cy="32"

@@ -1,6 +1,6 @@
 // FILE: src/hooks/useStellarPreload.js
-// Orchestrates weighted real readiness: fonts, critical styles, WebGL detection,
-// opportunistic route prefetching, and smooth cinematic lerp progression.
+// Robust, non-blocking readiness coordination with timeout-guaranteed fallbacks,
+// strictly monotonic progress, and master watchdog safety to prevent deadlocks.
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 const TELEMETRY_STAGES = [
@@ -11,6 +11,8 @@ const TELEMETRY_STAGES = [
   { threshold: 78, text: 'ALIGNING DESTINATION NODES' },
   { threshold: 92, text: 'STELLAR SYSTEM ONLINE' },
 ];
+
+const timeoutPromise = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default function useStellarPreload({
   enabled = true,
@@ -25,12 +27,17 @@ export default function useStellarPreload({
   const animFrameRef = useRef(null);
   const startTimeRef = useRef(null);
   const completedRef = useRef(false);
+  const watchdogTimerRef = useRef(null);
 
   // Clean cancellation
   const cancel = useCallback(() => {
     if (animFrameRef.current) {
       cancelAnimationFrame(animFrameRef.current);
       animFrameRef.current = null;
+    }
+    if (watchdogTimerRef.current) {
+      clearTimeout(watchdogTimerRef.current);
+      watchdogTimerRef.current = null;
     }
   }, []);
 
@@ -45,18 +52,29 @@ export default function useStellarPreload({
     completedRef.current = false;
     startTimeRef.current = performance.now();
 
-    // ── 1. Measure & Execute Real Readiness Tasks ──
+    // ── Master Watchdog: Unconditionally unblocks intro if any task hangs ──
+    const maxSafetyTimeout = Math.max(minDuration + 1400, 6200);
+    watchdogTimerRef.current = setTimeout(() => {
+      if (isMounted) {
+        realProgressRef.current = 100;
+      }
+    }, maxSafetyTimeout);
+
+    // ── 1. Measure & Execute Real Readiness Tasks with strict timeouts ──
     const runReadinessTasks = async () => {
       // Step A: Base environment ready (15%)
       realProgressRef.current = Math.max(realProgressRef.current, 15);
 
-      // Step B: Font validation (15% -> 30%)
+      // Step B: Font validation with race timeout (15% -> 32%)
       try {
-        if (document.fonts) {
-          await document.fonts.ready;
-          // Verify actual font faces to prevent FOUT
-          document.fonts.check('16px "Space Grotesk"');
-          document.fonts.check('16px "Inter"');
+        if (typeof document !== 'undefined' && document.fonts) {
+          await Promise.race([document.fonts.ready, timeoutPromise(1200)]);
+          try {
+            document.fonts.check('16px "Space Grotesk"');
+            document.fonts.check('16px "Inter"');
+          } catch {
+            // Non-critical check
+          }
         }
       } catch {
         // Fallback gracefully
@@ -64,7 +82,7 @@ export default function useStellarPreload({
       if (!isMounted) return;
       realProgressRef.current = Math.max(realProgressRef.current, 32);
 
-      // Step C: WebGL context capability (25% -> 57%)
+      // Step C: WebGL context capability (25% -> 58%)
       try {
         if (typeof navigator !== 'undefined' && !navigator.userAgent.includes('jsdom')) {
           const testCanvas = document.createElement('canvas');
@@ -82,31 +100,36 @@ export default function useStellarPreload({
       if (!isMounted) return;
       realProgressRef.current = Math.max(realProgressRef.current, 58);
 
-      // Step D: Navigation & DOM layout readiness (15% -> 73%)
+      // Step D: Navigation & DOM layout readiness (15% -> 75%)
       realProgressRef.current = Math.max(realProgressRef.current, 75);
 
-      // Step E: Opportunistic route prefetch in background (15% -> 88%)
-      // High priority: Works. Low priority: About, Beyond, Contact
+      // Step E: Opportunistic route prefetch with race timeout (15% -> 90%)
       const prefetchRoutes = async () => {
         try {
-          // Preload Works module
-          const worksPromise = import('../pages/Works').catch(() => null);
-          // Non-blocking opportunistic prefetch of other routes via idle callback
-          if (typeof window.requestIdleCallback === 'function') {
-            window.requestIdleCallback(
-              () => {
+          // Preload Works module with timeout
+          const worksPromise = Promise.race([
+            import('../pages/Works').catch(() => null),
+            timeoutPromise(1500),
+          ]);
+
+          // Non-blocking opportunistic prefetch of other routes
+          if (typeof window !== 'undefined') {
+            if (typeof window.requestIdleCallback === 'function') {
+              window.requestIdleCallback(
+                () => {
+                  import('../pages/About').catch(() => null);
+                  import('../pages/Beyond').catch(() => null);
+                  import('../pages/Contact').catch(() => null);
+                },
+                { timeout: 2000 },
+              );
+            } else {
+              setTimeout(() => {
                 import('../pages/About').catch(() => null);
                 import('../pages/Beyond').catch(() => null);
                 import('../pages/Contact').catch(() => null);
-              },
-              { timeout: 2000 },
-            );
-          } else {
-            setTimeout(() => {
-              import('../pages/About').catch(() => null);
-              import('../pages/Beyond').catch(() => null);
-              import('../pages/Contact').catch(() => null);
-            }, 100);
+              }, 150);
+            }
           }
           await worksPromise;
         } catch {
@@ -124,7 +147,7 @@ export default function useStellarPreload({
 
     runReadinessTasks();
 
-    // ── 2. Cinematic Smooth Lerp Animation Loop ──
+    // ── 2. Cinematic Monotonic Progress Animation Loop ──
     let currentProgress = 0;
 
     const tick = (now) => {
@@ -133,20 +156,18 @@ export default function useStellarPreload({
       const elapsed = now - (startTimeRef.current || now);
       // Theoretical linear progress based on minimum staging duration
       const timeRatio = Math.min(elapsed / minDuration, 1);
-      // Pacing ease curve
       const timeProgress = timeRatio * 100;
 
-      // Actual display target is constrained by real readiness AND time progress
-      // Ensures the progress never outpaces reality nor halts artificially
+      // Target progress is constrained by real readiness AND time progress
       const targetProgress = Math.min(
         realProgressRef.current,
         Math.max(timeProgress, realProgressRef.current * 0.95),
       );
 
-      // Smooth lerp toward target
+      // Strictly monotonic progression: never regresses
       const delta = targetProgress - currentProgress;
       const step = Math.max(0.4, delta * 0.12);
-      currentProgress = Math.min(100, currentProgress + step);
+      currentProgress = Math.max(currentProgress, Math.min(100, currentProgress + step));
 
       const rounded = Math.floor(currentProgress);
       setDisplayProgress(rounded);
@@ -159,13 +180,17 @@ export default function useStellarPreload({
         }
       }
 
-      // Completion check: Both real readiness (100) and display lerp (>= 100)
+      // Completion check: Both real readiness (100) and display progress (>= 100)
       if (
         currentProgress >= 100 &&
         realProgressRef.current >= 100 &&
         !completedRef.current
       ) {
         completedRef.current = true;
+        if (watchdogTimerRef.current) {
+          clearTimeout(watchdogTimerRef.current);
+          watchdogTimerRef.current = null;
+        }
         setDisplayProgress(100);
         setIsReady(true);
         if (onComplete) onComplete();

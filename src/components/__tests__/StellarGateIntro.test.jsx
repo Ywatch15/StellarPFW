@@ -12,7 +12,7 @@ describe('StellarGateIntro', () => {
 
   it('renders initialization screen and telemetry brand', () => {
     const onEnterHome = jest.fn();
-    render(<StellarGateIntro onEnterHome={onEnterHome} />);
+    const { unmount } = render(<StellarGateIntro onEnterHome={onEnterHome} />);
 
     expect(
       screen.getByRole('alert', { name: /initializing sundram's stellar verse/i }),
@@ -21,11 +21,12 @@ describe('StellarGateIntro', () => {
     expect(
       screen.getByRole('button', { name: /skip introduction/i }),
     ).toBeInTheDocument();
+    unmount();
   });
 
   it('cleanly cancels and enters Home when Skip Intro is clicked', async () => {
     const onEnterHome = jest.fn();
-    render(<StellarGateIntro onEnterHome={onEnterHome} />);
+    const { unmount } = render(<StellarGateIntro onEnterHome={onEnterHome} />);
 
     const skipButton = screen.getByRole('button', { name: /skip introduction/i });
     await act(async () => {
@@ -34,20 +35,23 @@ describe('StellarGateIntro', () => {
 
     expect(onEnterHome).toHaveBeenCalledWith({ immediate: true });
     expect(sessionStorage.getItem('stellar_verse_initialized')).toBe('true');
+    unmount();
   });
 
   it('immediately hands off if session has already initialized the verse', () => {
     sessionStorage.setItem('stellar_verse_initialized', 'true');
     const onEnterHome = jest.fn();
-    render(<StellarGateIntro onEnterHome={onEnterHome} />);
+    const { unmount } = render(<StellarGateIntro onEnterHome={onEnterHome} />);
 
     expect(onEnterHome).toHaveBeenCalledWith({ immediate: false, isReturning: true });
+    unmount();
   });
 
   it('has no accessibility violations', async () => {
     const onEnterHome = jest.fn();
-    const { container } = render(<StellarGateIntro onEnterHome={onEnterHome} />);
-    const results = await axe(container);
+    const { unmount } = render(<StellarGateIntro onEnterHome={onEnterHome} />);
+    const results = await axe(document.body);
     expect(results).toHaveNoViolations();
+    unmount();
   });
 });

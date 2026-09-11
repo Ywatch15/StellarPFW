@@ -12,6 +12,10 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: () => {},
     addEventListener: () => {},
     removeEventListener: () => {},
-    dispatchEvent: () => {},
   }),
 });
+
+// Standard jsdom scrollTo mock
+if (typeof window !== 'undefined') {
+  window.scrollTo = () => {};
+}

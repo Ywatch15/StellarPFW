@@ -1,7 +1,9 @@
 // FILE: src/components/StellarIntro/StellarGateIntro.jsx
-// Cinematic entry sequence for STELLAR_SUNDRAM — constructs the actual Home universe.
-// State machine: BOOT -> LOADING -> READY -> WARNING -> ENTERING -> complete.
+// Viewport-level cinematic entry sequence for STELLAR_SUNDRAM.
+// Uses createPortal directly to document.body, locks background scroll,
+// establishes an impenetrable interaction barrier, and cleanly constructs the universe.
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import useStellarPreload from '../../hooks/useStellarPreload';
 import useDeviceCapability from '../../hooks/useDeviceCapability';
 
@@ -31,6 +33,7 @@ export default function StellarGateIntro({ onEnterHome }) {
   const [phase, setPhase] = useState('BOOT'); // 'BOOT' | 'LOADING' | 'READY' | 'WARNING' | 'ENTERING'
   const [warningStep, setWarningStep] = useState(0); // 0: none, 1: BEWARE, 2: YOU ARE ENTERING, 3: SUNDRAM'S STELLAR VERSE
   const [isSkipped, setIsSkipped] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   const timersRef = useRef([]);
 
@@ -72,6 +75,31 @@ export default function StellarGateIntro({ onEnterHome }) {
     }
     onEnterHome({ immediate: true });
   }, [clearAllTimers, cancelPreload, onEnterHome]);
+
+  // Viewport scroll lock: lock scroll during intro and reset to top
+  useEffect(() => {
+    setIsMounted(true);
+
+    if (typeof document === 'undefined') return undefined;
+
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+    const originalBodyOverflow = document.body.style.overflow;
+
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+
+    // Ensure page starts at top
+    try {
+      window.scrollTo(0, 0);
+    } catch {
+      // Safe fallback
+    }
+
+    return () => {
+      document.documentElement.style.overflow = originalHtmlOverflow;
+      document.body.style.overflow = originalBodyOverflow;
+    };
+  }, []);
 
   // Initial Boot check
   useEffect(() => {
@@ -171,12 +199,24 @@ export default function StellarGateIntro({ onEnterHome }) {
   const nodesOpacity =
     displayProgress >= 85 ? Math.min(1, (displayProgress - 85) / 15) : 0;
 
-  return (
+  const introContent = (
     <div
-      className="stellar-intro-screen flex flex-col items-center justify-center p-4"
+      className="stellar-intro-screen fixed inset-0 top-0 left-0 z-[99999] flex h-[100dvh] w-[100dvw] flex-col items-center justify-center bg-void p-4 select-none touch-none"
       role="alert"
       aria-live="polite"
       aria-label="Initializing Sundram's Stellar Verse"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100dvh',
+        zIndex: 99999,
+        backgroundColor: '#050816',
+        pointerEvents: 'auto',
+      }}
     >
       {/* Ambient background particles (lightweight SVG/CSS, no duplicate WebGL - Change 02) */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden opacity-40">
@@ -408,7 +448,7 @@ export default function StellarGateIntro({ onEnterHome }) {
               {displayProgress}%
             </div>
 
-            {/* Telemetry Status Line (Change 17) */}
+            {/* Telemetry Status Line */}
             <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-cosmos-muted">
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-aurora animate-ping" />
               <span>{statusMessage}</span>
@@ -446,11 +486,19 @@ export default function StellarGateIntro({ onEnterHome }) {
       {/* Subtle "Skip intro →" in bottom right corner (Change 08, Change 18) */}
       <button
         onClick={handleSkip}
-        className="absolute bottom-6 right-6 z-50 rounded-full border border-white/10 bg-nebula/60 px-4 py-1.5 font-mono text-xs text-cosmos-muted backdrop-blur-sm transition-colors hover:border-aurora/40 hover:text-stardust focus-visible:ring-2 focus-visible:ring-aurora"
+        className="absolute bottom-6 right-6 z-[100000] rounded-full border border-white/10 bg-nebula/60 px-4 py-1.5 font-mono text-xs text-cosmos-muted backdrop-blur-sm transition-colors hover:border-aurora/40 hover:text-stardust focus-visible:ring-2 focus-visible:ring-aurora"
         aria-label="Skip introduction and proceed to home"
+        style={{ pointerEvents: 'auto' }}
       >
         Skip intro &rarr;
       </button>
     </div>
   );
+
+  // Render via portal to document.body to guarantee viewport-level overlay
+  if (typeof document !== 'undefined' && document.body && isMounted) {
+    return createPortal(introContent, document.body);
+  }
+
+  return introContent;
 }

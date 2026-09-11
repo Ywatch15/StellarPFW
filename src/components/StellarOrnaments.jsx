@@ -126,16 +126,6 @@ export default function StellarOrnaments() {
           ))}
         </div>
       )}
-
-      {/* Qualitative Telemetry Status (Change 17) */}
-      <div className="absolute top-6 left-6 hidden items-center gap-2 font-mono text-[10px] tracking-widest text-cosmos-muted/80 uppercase sm:flex">
-        <span className="inline-block h-1.5 w-1.5 rounded-full bg-aurora/80 animate-pulse" />
-        <span>STELLAR CORE // NOMINAL</span>
-        <span className="opacity-30">/</span>
-        <span>ORBITAL SYSTEM // STABLE</span>
-        <span className="opacity-30">/</span>
-        <span>SIGNAL // LOCKED</span>
-      </div>
     </div>
   );
 }

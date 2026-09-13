@@ -109,6 +109,38 @@ describe('SolarSystem Component — Unified Planetary Coordinate System', () => 
     expect(card).toBeInTheDocument();
   });
 
+  it('renders only clean planet names in planet labels without project titles or badges', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <SolarSystem />
+      </MemoryRouter>,
+    );
+
+    const planetLabels = container.querySelectorAll('.solar-planet-label');
+    expect(planetLabels.length).toBe(9); // 8 planets + Pluto
+
+    const expectedPlanetNames = [
+      'Mercury',
+      'Venus',
+      'Earth',
+      'Mars',
+      'Jupiter',
+      'Saturn',
+      'Uranus',
+      'Neptune',
+      'Pluto',
+    ];
+
+    planetLabels.forEach((label, idx) => {
+      expect(label.textContent.trim()).toBe(expectedPlanetNames[idx]);
+      expect(label.textContent).not.toContain('● Live');
+      expect(label.textContent).not.toContain('◆ Repo');
+      expect(label.textContent).not.toContain('★ Profile');
+      expect(label.textContent).not.toContain('Portfolio');
+      expect(label.textContent).not.toContain('ScatchProject');
+    });
+  });
+
   it('has no critical accessibility violations', async () => {
     jest.useRealTimers();
     const { container } = render(

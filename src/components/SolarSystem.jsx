@@ -148,7 +148,7 @@ const PLANETS = [
 
 const PLUTO = {
   id: 'pluto',
-  name: 'Pluto ★',
+  name: 'Pluto',
   project: 'GitHub Profile',
   url: 'https://github.com/Ywatch15',
   type: 'star',
@@ -889,9 +889,7 @@ export default function SolarSystem() {
                     : isIdle
                       ? 0.72
                       : 1,
-                animation: `orbitSpin ${planet.speed * (scanMode ? 2.8 : 1)}s linear infinite`,
-                animationDelay: `${delay}s`,
-                animationPlayState: 'running',
+                animation: `orbitSpin ${planet.speed * (scanMode ? 2.8 : 1)}s linear ${delay}s infinite`,
                 willChange: 'transform',
                 transition: isCollapsing
                   ? `width ${collapseDur}s ease-in, height ${collapseDur}s ease-in, margin-top ${collapseDur}s ease-in, margin-left ${collapseDur}s ease-in, opacity ${collapseDur - 0.3}s ease-in`
@@ -965,9 +963,7 @@ export default function SolarSystem() {
                   <div
                     className="solar-planet-visual solar-counter-rotate"
                     style={{
-                      animation: `orbitSpin ${planet.speed * (scanMode ? 2.8 : 1)}s linear infinite reverse`,
-                      animationDelay: `${delay}s`,
-                      animationPlayState: 'running',
+                      animation: `orbitSpin ${planet.speed * (scanMode ? 2.8 : 1)}s linear ${delay}s infinite reverse`,
                     }}
                   >
                     {/* Planet sphere */}
@@ -1096,9 +1092,7 @@ export default function SolarSystem() {
                   <div
                     className="solar-planet-label solar-counter-rotate"
                     style={{
-                      animation: `orbitSpin ${planet.speed * (scanMode ? 2.8 : 1)}s linear infinite reverse`,
-                      animationDelay: `${delay}s`,
-                      animationPlayState: 'running',
+                      animation: `orbitSpin ${planet.speed * (scanMode ? 2.8 : 1)}s linear ${delay}s infinite reverse`,
                     }}
                   >
                     <div
@@ -1110,42 +1104,6 @@ export default function SolarSystem() {
                     >
                       {planet.name}
                     </div>
-                    <div style={{ fontSize: Math.max(7, 8 * scale), color: '#94a3b8' }}>
-                      {planet.project}
-                    </div>
-                    {planet.type === 'deployed' && (
-                      <div
-                        style={{
-                          fontSize: Math.max(7, 8 * scale),
-                          color: '#4ade80',
-                          marginTop: 1,
-                        }}
-                      >
-                        ● Live
-                      </div>
-                    )}
-                    {planet.type === 'github' && planet.id !== 'pluto' && (
-                      <div
-                        style={{
-                          fontSize: Math.max(7, 8 * scale),
-                          color: '#a78bfa',
-                          marginTop: 1,
-                        }}
-                      >
-                        ◆ Repo
-                      </div>
-                    )}
-                    {planet.id === 'pluto' && (
-                      <div
-                        style={{
-                          fontSize: Math.max(7, 8 * scale),
-                          color: '#facc15',
-                          marginTop: 1,
-                        }}
-                      >
-                        ★ Profile
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

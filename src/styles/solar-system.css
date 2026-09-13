@@ -269,13 +269,15 @@
   opacity: 0.42;
   transform: translateY(0.3rem);
 }
-.solar-system-stage.is-transitioning .solar-orbit-ring,
-.solar-system-stage.is-project-view .solar-orbit-ring {
-  animation-play-state: paused;
+.solar-planet-label-position {
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
 }
-.solar-system-stage.is-transitioning .solar-counter-rotate,
-.solar-system-stage.is-project-view .solar-counter-rotate {
-  animation-play-state: paused !important;
+.solar-planet-label {
+  display: inline-block;
+  transform-origin: 50% 50%;
+  will-change: transform;
 }
 .solar-system-stage.is-transitioning .solar-orbit-ring.is-focused {
   filter: drop-shadow(0 0 10px color-mix(in srgb, var(--planet-color) 65%, transparent));
@@ -648,8 +650,7 @@
     right: 0;
   }
   .solar-planet-label-position {
-    max-width: 7.8rem;
-    white-space: normal;
+    white-space: nowrap;
   }
   .solar-planet-label {
     font-size: 0.92em;

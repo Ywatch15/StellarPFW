@@ -1,8 +1,8 @@
 // FILE: src/components/HeroScene.jsx
 // 3D hero scene with low-poly planet — lazy loaded via React.lazy
 // Adapts quality based on device capability; falls back on WebGL context loss
-import React, { useRef, useState, useCallback } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React, { useRef, useState, useCallback, useMemo } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Stars, Float } from '@react-three/drei';
 import * as THREE from 'three';
 import useDeviceCapability from '../hooks/useDeviceCapability';
@@ -126,6 +126,40 @@ function OrbitalParticles({ count = 80 }) {
   );
 }
 
+/** Responsive Planetary System root container */
+function PlanetarySystem({ showParticles }) {
+  const { size } = useThree();
+
+  const scale = useMemo(() => {
+    const w = size.width;
+    const h = size.height || 1;
+    const aspect = w / h;
+
+    if (w >= 1025) {
+      // Desktop: substantial, contained, ~65-75% hero width footprint
+      const baseDesktopScale = 0.60;
+      const heightFactor = Math.min(1.0, Math.max(0.75, h / 850));
+      return baseDesktopScale * heightFactor;
+    } else if (w > 640) {
+      // Tablet: smooth intermediate interpolation between mobile and desktop
+      const t = (w - 640) / (1024 - 640);
+      const tabletScale = 0.35 + (0.50 - 0.35) * t;
+      return Math.min(tabletScale, 0.45 * aspect);
+    } else {
+      // Mobile: compact, scaled down independently with comfortable breathing room
+      return Math.min(0.26, Math.max(0.20, aspect * 0.50));
+    }
+  }, [size.width, size.height]);
+
+  return (
+    <group scale={scale}>
+      <Planet />
+      <Moon />
+      {showParticles && <OrbitalParticles count={80} />}
+    </group>
+  );
+}
+
 // Quick WebGL support test that doesn't leave a lingering context
 function isWebGLAvailable() {
   try {
@@ -175,7 +209,7 @@ export default function HeroScene() {
       aria-label="3D space scene with a rotating planet"
     >
       <Canvas
-        camera={{ position: [0, 0, 7], fov: 50 }}
+        camera={{ position: [0, 0, 7.5], fov: 48 }}
         dpr={[1, 1.25]}
         gl={{
           antialias: false,
@@ -199,9 +233,7 @@ export default function HeroScene() {
           fade
           speed={prefersReducedMotion ? 0 : 0.8}
         />
-        <Planet />
-        <Moon />
-        {showParticles && <OrbitalParticles count={80} />}
+        <PlanetarySystem showParticles={showParticles} />
 
         <OrbitControls
           enableZoom={false}

@@ -149,20 +149,20 @@ const PLANETS = [
 const PLUTO = {
   id: 'pluto',
   name: 'Pluto',
-  project: 'GitHub Profile',
-  url: 'https://github.com/Ywatch15',
-  type: 'star',
+  project: 'This Site',
+  url: 'https://portfolio-frontend-iprx.onrender.com/',
+  type: 'deployed',
   orbit: 440,
   size: 9,
   speed: 72,
   gradient: 'radial-gradient(circle at 35% 30%, #f0e8d0, #d4c5a9 60%, #a89880)',
   color: '#d4c5a9',
-  signature: 'github',
+  signature: 'portfolio',
   description:
-    'The command center for my open-source work, experiments, repositories, and ongoing developer activity.',
-  tags: ['GitHub', 'Open Source', 'Repositories'],
+    'A space-themed portfolio that turns a developer profile into an explorable digital universe.',
+  tags: ['React', 'Three.js', 'Motion', 'Accessibility'],
   missionBrief:
-    'Explore my GitHub profile to inspect source code, follow project evolution, and see the experiments behind this portfolio.',
+    'Explore the interactive solar system, cinematic gateway, and full architectural depth of this portfolio.',
 };
 
 const SUN_SIZE = 70;
@@ -759,7 +759,7 @@ export default function SolarSystem() {
             onClick={handleSunClick}
             role="button"
             tabIndex={0}
-            aria-label="This Website — click for black-hole effect"
+            aria-label="GitHub Profile — click for black-hole effect"
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -833,7 +833,7 @@ export default function SolarSystem() {
             textShadow: '0 0 6px rgba(0,0,0,0.8)',
           }}
         >
-          ☀ This Site
+          ☀ GitHub Profile
         </div>
       </div>
 
@@ -1132,29 +1132,6 @@ export default function SolarSystem() {
           <span style={{ color: '#facc15' }}>★</span> Profile
         </span>
       </div>
-
-      {/* ── Persistent mission links ── */}
-      <nav
-        aria-label="Project mission links"
-        className="solar-mission-links absolute bottom-12 left-1/2 z-10 flex w-[min(94vw,54rem)] -translate-x-1/2 flex-wrap justify-center gap-2 px-2 sm:gap-3"
-      >
-        {allPlanets.map((planet) => (
-          <a
-            key={planet.id}
-            href={planet.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full border px-3 py-1.5 text-[0.68rem] font-medium transition-all hover:-translate-y-0.5 hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-aurora sm:px-4 sm:text-xs"
-            style={{
-              borderColor: `${planet.color}80`,
-              color: planet.color,
-              boxShadow: `0 0 14px ${planet.color}18`,
-            }}
-          >
-            {planet.project}
-          </a>
-        ))}
-      </nav>
 
       {/* ── Canvas overlay (plasma tentacles + black-hole vortex) ── */}
       <canvas

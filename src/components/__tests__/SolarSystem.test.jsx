@@ -52,7 +52,7 @@ describe('SolarSystem Component — Unified Planetary Coordinate System', () => 
     // Verify both Sun and Orbit rings share the same systemCenter parent
     const sun = systemCenter.querySelector('.solar-sun');
     expect(sun).toBeInTheDocument();
-    expect(sun).toHaveTextContent(/This Site/);
+    expect(sun).toHaveTextContent(/GitHub Profile/);
 
     const orbitalField = systemCenter.querySelector('.solar-orbital-field');
     expect(orbitalField).toBeInTheDocument();
@@ -66,6 +66,17 @@ describe('SolarSystem Component — Unified Planetary Coordinate System', () => 
 
     const asteroidBelt = systemCenter.querySelector('.solar-asteroid-belt');
     expect(asteroidBelt).toBeInTheDocument();
+
+    // Verify bottom mission links pills row is completely removed
+    const missionLinks = container.querySelector('.solar-mission-links');
+    expect(missionLinks).not.toBeInTheDocument();
+
+    // Verify status legend remains intact
+    const legend = container.querySelector('.solar-legend');
+    expect(legend).toBeInTheDocument();
+    expect(legend).toHaveTextContent(/Deployed/);
+    expect(legend).toHaveTextContent(/GitHub Repo/);
+    expect(legend).toHaveTextContent(/Profile/);
   });
 
   it('toggles scan mode on button click', () => {
@@ -106,6 +117,28 @@ describe('SolarSystem Component — Unified Planetary Coordinate System', () => 
     });
 
     const card = screen.getByRole('dialog', { name: /Project details: Portfolio/i });
+    expect(card).toBeInTheDocument();
+  });
+
+  it('opens This Site project card when Pluto is clicked', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <SolarSystem />
+      </MemoryRouter>,
+    );
+
+    const plutoPlanet = container.querySelector('[data-planet="pluto"]');
+    expect(plutoPlanet).toBeInTheDocument();
+
+    act(() => {
+      fireEvent.keyDown(plutoPlanet, { key: 'Enter' });
+    });
+
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
+
+    const card = screen.getByRole('dialog', { name: /Project details: This Site/i });
     expect(card).toBeInTheDocument();
   });
 

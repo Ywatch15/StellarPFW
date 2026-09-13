@@ -205,6 +205,7 @@ export default function SolarSystem() {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const animRef = useRef(null);
+  const sunRef = useRef(null);
 
   const [scale, setScale] = useState(1);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -312,7 +313,7 @@ export default function SolarSystem() {
   useEffect(() => {
     const calc = () => {
       const s = Math.min(window.innerWidth, window.innerHeight) / 1000;
-      setScale(Math.max(0.35, Math.min(s, 1.2)));
+      setScale(Math.max(0.30, Math.min(s, 1.2)));
     };
     calc();
     window.addEventListener('resize', calc);
@@ -351,8 +352,15 @@ export default function SolarSystem() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2;
+    const parentRect = canvas.getBoundingClientRect();
+    const sunEl = sunRef.current;
+    const sunRect = sunEl ? sunEl.getBoundingClientRect() : null;
+    const cx = sunRect
+      ? (sunRect.left + sunRect.width / 2 - parentRect.left) * dpr
+      : canvas.width / 2;
+    const cy = sunRect
+      ? (sunRect.top + sunRect.height / 2 - parentRect.top) * dpr
+      : canvas.height / 2;
     const maxR = Math.hypot(canvas.width, canvas.height) / 2;
 
     setIsCollapsing(true);
@@ -693,20 +701,8 @@ export default function SolarSystem() {
         aria-hidden="true"
       />
 
-      <div className="solar-energy-wave" aria-hidden="true" />
-      {scanMode && <div className="solar-scan-wave" aria-hidden="true" />}
       <StellarEvents event={stellarEvent} />
-      <div className="solar-asteroid-belt" aria-hidden="true">
-        {asteroids.map((asteroid) => (
-          <span
-            key={asteroid.angle}
-            style={{
-              '--asteroid-angle': `${asteroid.angle}deg`,
-              '--asteroid-size': `${asteroid.size}px`,
-            }}
-          />
-        ))}
-      </div>
+
       <button
         type="button"
         className={`solar-unknown-signal ${unknownSignal ? 'is-revealed' : ''}`}
@@ -734,35 +730,60 @@ export default function SolarSystem() {
         )}
       </div>
 
-      {/* ── SUN ── */}
-      <div
-        onClick={handleSunClick}
-        role="button"
-        tabIndex={0}
-        aria-label="This Website — click for black-hole effect"
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleSunClick();
-          }
-        }}
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          width: sunS,
-          height: sunS,
-          transform: 'translate(-50%, -50%)',
-          cursor: 'pointer',
-          zIndex: 10,
-          transition: isCollapsing
-            ? 'transform 2.5s ease-in, opacity 2s ease-in'
-            : 'none',
-          ...(isCollapsing
-            ? { transform: 'translate(-50%, -50%) scale(0)', opacity: 0 }
-            : {}),
-        }}
-      >
+      {/* ── PLANETARY SYSTEM (Unified single coordinate container & center anchor) ── */}
+      <div className="solar-planetary-system">
+        <div className="solar-system-center">
+          <div className="solar-energy-wave" aria-hidden="true" />
+          {scanMode && <div className="solar-scan-wave" aria-hidden="true" />}
+
+          {/* Asteroid belt orbiting around center */}
+          <div
+            className="solar-asteroid-belt"
+            aria-hidden="true"
+            style={{ '--asteroid-radius': `${220 * scale}px` }}
+          >
+            {asteroids.map((asteroid) => (
+              <span
+                key={asteroid.angle}
+                style={{
+                  '--asteroid-angle': `${asteroid.angle}deg`,
+                  '--asteroid-size': `${asteroid.size}px`,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* ── SUN (At exact geometric center) ── */}
+          <div
+            ref={sunRef}
+            onClick={handleSunClick}
+            role="button"
+            tabIndex={0}
+            aria-label="This Website — click for black-hole effect"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleSunClick();
+              }
+            }}
+            className="solar-sun"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              width: sunS,
+              height: sunS,
+              transform: 'translate(-50%, -50%)',
+              cursor: 'pointer',
+              zIndex: 10,
+              transition: isCollapsing
+                ? 'transform 2.5s ease-in, opacity 2s ease-in'
+                : 'none',
+              ...(isCollapsing
+                ? { transform: 'translate(-50%, -50%) scale(0)', opacity: 0 }
+                : {}),
+            }}
+          >
         {/* Aura glow */}
         <div
           className="solar-sun-aura"
@@ -1132,6 +1153,8 @@ export default function SolarSystem() {
           );
         })}
       </div>
+    </div>
+  </div>
 
       {/* ── Legend ── */}
       <div

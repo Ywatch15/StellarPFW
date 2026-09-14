@@ -1,6 +1,7 @@
 // Lightweight environmental events for the Works planetary system.
 // Events are intentionally sparse so atmosphere never competes with projects.
 import { useEffect, useState } from 'react';
+import usePageVisibility from '../hooks/usePageVisibility';
 
 const EVENT_WINDOWS = {
   meteor: { min: 18000, max: 34000, duration: 3200 },
@@ -14,9 +15,10 @@ function randomBetween(min, max) {
 
 export function useStellarEvents(enabled = true) {
   const [event, setEvent] = useState(null);
+  const isPageVisible = usePageVisibility();
 
   useEffect(() => {
-    if (!enabled || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
+    if (!enabled || !isPageVisible || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
       return undefined;
 
     let stopped = false;

@@ -18,7 +18,7 @@ function generateStars(count) {
 }
 
 export default function Starfield() {
-  const { isMobile, prefersReducedMotion } = useDeviceCapability();
+  const { isMobile, prefersReducedMotion, isTouchPrimary } = useDeviceCapability();
   const layers = useRef(
     STAR_LAYERS.map((layer) => ({
       ...layer,
@@ -32,7 +32,7 @@ export default function Starfield() {
   const pointerRef = useRef({ x: 0.5, y: 0.5 });
 
   useEffect(() => {
-    if (isMobile || prefersReducedMotion) return undefined;
+    if (isMobile || prefersReducedMotion || isTouchPrimary) return undefined;
 
     const update = () => {
       frameRef.current = 0;

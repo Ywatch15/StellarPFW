@@ -2,6 +2,7 @@
 // Pure CSS + SVG animated black hole with accretion disk, photon ring, and particle swirl
 // No WebGL — works on every device
 import React, { useEffect, useRef, useState } from 'react';
+import useVisibilityState from '../hooks/useVisibilityState';
 
 const PARTICLE_COUNT = 40;
 
@@ -21,10 +22,15 @@ function generateParticles(count) {
 
 export default function BlackHole({ children, interactive = true }) {
   const canvasRef = useRef(null);
+  const shellRef = useRef(null);
   const animRef = useRef(null);
   const particlesRef = useRef(generateParticles(PARTICLE_COUNT));
-  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  const { ref: containerRef, isActive } = useVisibilityState({
+    nearMargin: '300px 0px',
+    threshold: 0.05,
+  });
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -34,30 +40,38 @@ export default function BlackHole({ children, interactive = true }) {
     return () => media.removeEventListener?.('change', update);
   }, []);
 
-  // Particle animation loop on a 2D canvas
+  // Particle animation loop on a 2D canvas: only runs when ACTIVE in viewport and tab is visible
   useEffect(() => {
+    if (!isActive || prefersReducedMotion) {
+      if (animRef.current) {
+        cancelAnimationFrame(animRef.current);
+        animRef.current = null;
+      }
+      return undefined;
+    }
+
     const canvas = canvasRef.current;
-    if (prefersReducedMotion) return undefined;
-    if (!canvas) return;
+    if (!canvas) return undefined;
     const ctx = canvas.getContext('2d');
     let running = true;
 
     const resize = () => {
-      const rect = canvas.parentElement.getBoundingClientRect();
-      canvas.width = rect.width * Math.min(window.devicePixelRatio, 2);
-      canvas.height = rect.height * Math.min(window.devicePixelRatio, 2);
-      ctx.scale(
-        Math.min(window.devicePixelRatio, 2),
-        Math.min(window.devicePixelRatio, 2),
-      );
+      const parent = canvas.parentElement;
+      if (!parent) return;
+      const rect = parent.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener('resize', resize);
 
     const draw = () => {
       if (!running) return;
-      const w = canvas.width / Math.min(window.devicePixelRatio, 2);
-      const h = canvas.height / Math.min(window.devicePixelRatio, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = canvas.width / dpr;
+      const h = canvas.height / dpr;
       const cx = w / 2;
       const cy = h / 2;
 
@@ -103,24 +117,32 @@ export default function BlackHole({ children, interactive = true }) {
 
     return () => {
       running = false;
-      cancelAnimationFrame(animRef.current);
+      if (animRef.current) {
+        cancelAnimationFrame(animRef.current);
+        animRef.current = null;
+      }
       window.removeEventListener('resize', resize);
     };
-  }, [prefersReducedMotion]);
+  }, [isActive, prefersReducedMotion]);
 
-  // Interactive gravitational warp on mouse move
+  // Interactive gravitational warp on mouse move via direct DOM transform (no 60fps React state re-renders)
   const handleMouseMove = (e) => {
-    if (!interactive) return;
+    if (!interactive || !shellRef.current) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 15;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * 15;
-    setMouseOffset({ x, y });
+    shellRef.current.style.transform = `perspective(600px) rotateX(${y * 0.3}deg) rotateY(${x * 0.3}deg)`;
   };
 
-  const handleMouseLeave = () => setMouseOffset({ x: 0, y: 0 });
+  const handleMouseLeave = () => {
+    if (shellRef.current) {
+      shellRef.current.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg)';
+    }
+  };
 
   return (
     <div
+      ref={containerRef}
       className="relative flex items-center justify-center"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -135,9 +157,10 @@ export default function BlackHole({ children, interactive = true }) {
 
       {/* SVG black hole core */}
       <div
+        ref={shellRef}
         className="black-hole-shell relative z-10 flex items-center justify-center"
         style={{
-          transform: `perspective(600px) rotateX(${mouseOffset.y * 0.3}deg) rotateY(${mouseOffset.x * 0.3}deg)`,
+          transform: 'perspective(600px) rotateX(0deg) rotateY(0deg)',
           transition: 'transform 0.3s ease-out',
         }}
       >

@@ -103,41 +103,21 @@ export default function useStellarPreload({
       // Step D: Navigation & DOM layout readiness (15% -> 75%)
       realProgressRef.current = Math.max(realProgressRef.current, 75);
 
-      // Step E: Opportunistic route prefetch with race timeout (15% -> 90%)
-      const prefetchRoutes = async () => {
+      // Step E: UI layout & pipeline stabilization (15% -> 90%)
+      if (typeof window !== 'undefined') {
         try {
-          // Preload Works module with timeout
-          const worksPromise = Promise.race([
-            import('../pages/Works').catch(() => null),
-            timeoutPromise(1500),
-          ]);
-
-          // Non-blocking opportunistic prefetch of other routes
-          if (typeof window !== 'undefined') {
-            if (typeof window.requestIdleCallback === 'function') {
-              window.requestIdleCallback(
-                () => {
-                  import('../pages/About').catch(() => null);
-                  import('../pages/Beyond').catch(() => null);
-                  import('../pages/Contact').catch(() => null);
-                },
-                { timeout: 2000 },
-              );
-            } else {
-              setTimeout(() => {
-                import('../pages/About').catch(() => null);
-                import('../pages/Beyond').catch(() => null);
-                import('../pages/Contact').catch(() => null);
-              }, 150);
-            }
+          if (typeof window.requestIdleCallback === 'function') {
+            await Promise.race([
+              new Promise((res) => window.requestIdleCallback(res, { timeout: 800 })),
+              timeoutPromise(600),
+            ]);
+          } else {
+            await timeoutPromise(150);
           }
-          await worksPromise;
         } catch {
-          // Non-critical: failure must never block Home
+          // Safe fallback
         }
-      };
-
-      await prefetchRoutes();
+      }
       if (!isMounted) return;
       realProgressRef.current = Math.max(realProgressRef.current, 90);
 

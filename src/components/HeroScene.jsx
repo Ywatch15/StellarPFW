@@ -6,6 +6,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Stars, Float } from '@react-three/drei';
 import * as THREE from 'three';
 import useDeviceCapability from '../hooks/useDeviceCapability';
+import usePageVisibility from '../hooks/usePageVisibility';
 import FallbackHero from './FallbackHero';
 
 /** Low-poly icosahedron planet with breathing atmosphere glow */
@@ -185,6 +186,7 @@ function isWebGLAvailable() {
 
 export default function HeroScene() {
   const { tier, prefersReducedMotion } = useDeviceCapability();
+  const isPageVisible = usePageVisibility();
   const [contextLost, setContextLost] = useState(!isWebGLAvailable());
   const lossCountRef = useRef(0);
 
@@ -228,7 +230,7 @@ export default function HeroScene() {
           stencil: false,
           depth: true,
         }}
-        frameloop={prefersReducedMotion ? 'demand' : 'always'}
+        frameloop={!isPageVisible ? 'never' : prefersReducedMotion ? 'demand' : 'always'}
         onCreated={handleCreated}
       >
         <ambientLight intensity={0.4} />

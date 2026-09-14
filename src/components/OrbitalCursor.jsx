@@ -2,7 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import useDeviceCapability from '../hooks/useDeviceCapability';
 
 export default function OrbitalCursor() {
-  const { isMobile, prefersReducedMotion } = useDeviceCapability();
+  const { isMobile, prefersReducedMotion, isTouchPrimary } = useDeviceCapability();
+  const shouldDisable = isTouchPrimary || isMobile || prefersReducedMotion;
+
   const canvasRef = useRef(null);
   const stateRef = useRef({
     x: 0,
@@ -14,12 +16,13 @@ export default function OrbitalCursor() {
   });
 
   useEffect(() => {
-    if (isMobile || prefersReducedMotion) return undefined;
+    if (shouldDisable) return undefined;
 
     const canvas = canvasRef.current;
     if (!canvas) return undefined;
 
     const ctx = canvas.getContext('2d');
+    if (!ctx) return undefined;
     let rafId = 0;
 
     const resize = () => {
@@ -68,6 +71,11 @@ export default function OrbitalCursor() {
     };
 
     const draw = () => {
+      if (typeof document !== 'undefined' && document.hidden) {
+        rafId = 0;
+        return;
+      }
+
       const state = stateRef.current;
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
@@ -118,11 +126,23 @@ export default function OrbitalCursor() {
       rafId = window.requestAnimationFrame(draw);
     };
 
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (rafId) {
+          window.cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+      } else if (!rafId) {
+        rafId = window.requestAnimationFrame(draw);
+      }
+    };
+
     resize();
     window.addEventListener('resize', resize);
     window.addEventListener('mousemove', onMove);
     document.addEventListener('mouseleave', onLeave);
     window.addEventListener('stellar-cursor-mode', onCursorMode);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     document.body.style.cursor = 'none';
     rafId = window.requestAnimationFrame(draw);
 
@@ -132,11 +152,12 @@ export default function OrbitalCursor() {
       window.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseleave', onLeave);
       window.removeEventListener('stellar-cursor-mode', onCursorMode);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       document.body.style.cursor = '';
     };
-  }, [isMobile, prefersReducedMotion]);
+  }, [shouldDisable]);
 
-  if (isMobile || prefersReducedMotion) return null;
+  if (shouldDisable) return null;
 
   return (
     <canvas

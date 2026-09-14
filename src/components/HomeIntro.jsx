@@ -69,7 +69,7 @@ export default function HomeIntro() {
 
   return (
     <section
-      className="relative z-10 mx-auto max-w-3xl px-4 py-14 text-center sm:px-6 sm:py-20"
+      className="relative z-10 mx-auto max-w-3xl px-4 pt-[clamp(1.75rem,3.5vw,3rem)] pb-14 text-center sm:px-6 sm:pb-20"
       aria-label="Personal introduction"
     >
       {/* Decorative glow */}

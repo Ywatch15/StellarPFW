@@ -135,20 +135,28 @@ function PlanetarySystem({ showParticles }) {
     const h = size.height || 1;
     const aspect = w / h;
 
-    if (w >= 1025) {
-      // Desktop: substantial, contained, ~65-75% hero width footprint
-      const baseDesktopScale = 0.60;
-      const heightFactor = Math.min(1.0, Math.max(0.75, h / 850));
-      return baseDesktopScale * heightFactor;
-    } else if (w > 640) {
-      // Tablet: smooth intermediate interpolation between mobile and desktop
-      const t = (w - 640) / (1024 - 640);
-      const tabletScale = 0.35 + (0.50 - 0.35) * t;
-      return Math.min(tabletScale, 0.45 * aspect);
+    // The system envelope:
+    // Moon orbit max radius: ~4.45 (total width ~8.9 units)
+    // Vertical span (Planet radius 1.6 + ring tilt + moon Y 0.8 + float): ~4.4 units
+    // Camera fov is 48 deg, z is 7.5 -> visible height Hv = 6.68 units.
+    // Visible width Wv = 6.68 * aspect.
+    //
+    // Keep moon orbit safely inside ~82% of visible width and ~78% of visible height:
+    const maxScaleByWidth = w > 0 ? (aspect * 6.68 * 0.82) / 8.9 : 0.7;
+    const maxScaleByHeight = (6.68 * 0.78) / 4.4; // ~1.18
+
+    let target = 0.84;
+    if (w <= 480) {
+      target = 0.68;
+    } else if (w <= 768) {
+      target = 0.76;
+    } else if (w <= 1024) {
+      target = 0.82;
     } else {
-      // Mobile: compact, scaled down independently with comfortable breathing room
-      return Math.min(0.26, Math.max(0.20, aspect * 0.50));
+      target = 0.84;
     }
+
+    return Math.min(target, maxScaleByWidth, maxScaleByHeight);
   }, [size.width, size.height]);
 
   return (
@@ -203,7 +211,8 @@ export default function HeroScene() {
 
   return (
     <div
-      className="absolute inset-0 -z-10"
+      className="relative h-full w-full"
+      style={{ touchAction: 'pan-y' }}
       aria-hidden="true"
       role="img"
       aria-label="3D space scene with a rotating planet"

@@ -69,29 +69,21 @@ export default function Home({ onReady }) {
   }, [location.state, navTo]);
 
   return (
-    <section className="relative min-h-[90vh] overflow-x-hidden">
+    <section className="relative overflow-x-hidden">
       {/* Cinematic Entry Initialization & Warning Sequence (Change 01, 02, 07) */}
       {showIntro && <StellarGateIntro onEnterHome={handleEnterHome} />}
 
-      {/* 3D background or fallback — Only mounted when intro hands off (Change 02) */}
-      <NebulaBackdrop />
-      {webGL === null ? (
-        <Loader message="Detecting capabilities…" />
-      ) : webGL && !showIntro ? (
-        <Suspense fallback={<FallbackHero />}>
-          <HeroScene />
-        </Suspense>
-      ) : null}
+      {/* Hero section with dedicated 3D planetary stage and orbital navigation */}
+      <header className="relative flex flex-col items-center justify-center px-4 pt-[clamp(1.25rem,3vh,2.25rem)] pb-[clamp(1rem,2.5vh,2rem)] text-center sm:px-6">
+        {/* 3D background nebula and cosmic events */}
+        <NebulaBackdrop />
+        {!showIntro && <StellarOrnaments />}
 
-      {/* Environmental cosmic events (shooting stars, qualitative telemetry) — Change 16, 17 */}
-      {!showIntro && <StellarOrnaments />}
-
-      {/* Always render semantic content over the canvas */}
-      <div className="relative z-10 flex min-h-[90vh] flex-col items-center justify-center px-4 text-center sm:px-6">
+        {/* Semantic hero content */}
         {!webGL && webGL !== null ? (
           <FallbackHero />
         ) : (
-          <>
+          <div className="relative z-10 flex w-full flex-col items-center justify-center">
             {/* Staggered Title Reveal (Change 11) */}
             <motion.h1
               initial={isAwakening ? { opacity: 0, y: 22 } : { opacity: 1, y: 0 }}
@@ -114,6 +106,24 @@ export default function Home({ onReady }) {
               Explore my orbit to learn more.
             </motion.p>
 
+            {/* Dedicated 3D Planetary System Stage (Large, Cinematic Centerpiece) */}
+            {webGL === null ? (
+              <Loader message="Detecting capabilities…" />
+            ) : webGL && !showIntro ? (
+              <motion.div
+                initial={
+                  isAwakening ? { opacity: 0, scale: 0.92 } : { opacity: 1, scale: 1 }
+                }
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.9, delay: 0.25, ease: 'easeOut' }}
+                className="relative my-1.5 w-full max-w-2xl h-[clamp(200px,27vh,260px)] sm:my-2 sm:h-[clamp(220px,29vh,290px)] lg:h-[clamp(240px,30vh,310px)] flex items-center justify-center"
+              >
+                <Suspense fallback={<FallbackHero />}>
+                  <HeroScene />
+                </Suspense>
+              </motion.div>
+            ) : null}
+
             {/* Orbital navigation with celestial awakening */}
             <motion.div
               initial={
@@ -125,9 +135,9 @@ export default function Home({ onReady }) {
             >
               <OrbitShell />
             </motion.div>
-          </>
+          </div>
         )}
-      </div>
+      </header>
 
       {/* Personal intro section */}
       <HomeIntro />

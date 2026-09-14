@@ -193,6 +193,8 @@
 }
 .observatory-transmission--ai {
   border-color: rgba(56, 189, 248, 0.22);
+  padding-left: clamp(1.5rem, 4vw, 3rem);
+  padding-right: clamp(1.5rem, 4vw, 3rem);
 }
 .transmission-beam {
   position: absolute;
@@ -1194,7 +1196,8 @@
   }
   .beyond-hero,
   .beyond-observatory__chapters,
-  .observatory-map {
+  .observatory-map,
+  .observatory-transmission--ai {
     padding-left: 2.2rem;
     padding-right: 2.2rem;
   }
@@ -1216,7 +1219,8 @@
   }
   .beyond-hero,
   .beyond-observatory__chapters,
-  .observatory-map {
+  .observatory-map,
+  .observatory-transmission--ai {
     padding-left: 1.1rem;
     padding-right: 1.1rem;
   }
@@ -1455,7 +1459,8 @@
 @media (min-width: 641px) and (max-width: 1024px) {
   .beyond-hero,
   .beyond-observatory__chapters,
-  .observatory-map {
+  .observatory-map,
+  .observatory-transmission--ai {
     padding-left: clamp(2rem, 5vw, 3.5rem);
     padding-right: clamp(2rem, 5vw, 3.5rem);
   }
@@ -1480,12 +1485,13 @@
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .beyond-hero,
   .beyond-observatory__chapters,
-  .observatory-map {
-    padding-left: clamp(0.9rem, 4vw, 1.5rem);
-    padding-right: clamp(0.9rem, 4vw, 1.5rem);
+  .observatory-map,
+  .observatory-transmission--ai {
+    padding-left: clamp(1rem, 4vw, 1.5rem);
+    padding-right: clamp(1rem, 4vw, 1.5rem);
   }
   .beyond-hero {
     padding-top: 2rem;
@@ -1510,11 +1516,13 @@
   }
   .observatory-transmission {
     margin-top: 2.5rem;
-    padding: 1.25rem 0;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
   }
   .observatory-transmission--live {
     margin-top: 2rem;
-    padding: 1.35rem 0;
+    padding-top: 1.35rem;
+    padding-bottom: 1.35rem;
   }
   .transmission-status {
     font-size: 0.55rem;
@@ -1525,6 +1533,7 @@
     gap: 1.25rem;
     margin-top: 0.85rem;
   }
+  .transmission-main h2,
   .transmission-main h3 {
     font-size: clamp(1.35rem, 7vw, 2rem);
   }

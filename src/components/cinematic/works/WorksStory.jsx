@@ -1,20 +1,11 @@
 // FILE: src/components/cinematic/works/WorksStory.jsx
-// Spatial-Continuum Works Pilot: Section Entry -> TentDesk Deep Story -> Spatial Handoff -> CommandAtlas Deep Story
-// Translates real engineering information into animated storytelling beats without project cards or dashboard clutter.
+// Spatial-Continuum Works Pilot: Section Entry -> TentDesk -> Spatial Coexistence -> CommandAtlas
+// Viewport-scale physical typography, spatial depth, verified narrative facts, and zero project-card UI.
 import React, { useRef } from 'react';
 import { invalidate } from '@react-three/fiber';
 import WorksSpatialScene from './WorksSpatialScene';
 import useCinematicTimeline from '../useCinematicTimeline';
 import useVisibilityState from '../../../hooks/useVisibilityState';
-
-// Visual Storytelling Primitives
-import OperationalFlow from './primitives/OperationalFlow';
-import SystemArchitectureFlow from './primitives/SystemArchitectureFlow';
-import IncidentInvestigation from './primitives/IncidentInvestigation';
-import ResponsibilityBridge from './primitives/ResponsibilityBridge';
-import CommandAtlasPipeline from './primitives/CommandAtlasPipeline';
-import DecisionMatrix from './primitives/DecisionMatrix';
-
 import '../../../styles/cinematic-engine.css';
 import '../../../styles/works-cinematic.css';
 
@@ -27,19 +18,15 @@ export default function WorksStory() {
   // Story Elements
   const introRef = useRef(null);
 
-  // TentDesk Story Beats
   const tentdeskGroupRef = useRef(null);
-  const tentdeskIdentityRef = useRef(null);
-  const tentdeskOperationsRef = useRef(null);
-  const tentdeskArchitectureRef = useRef(null);
+  const tentdeskTitleRef = useRef(null);
+  const tentdeskMetaRef = useRef(null);
   const tentdeskIncidentRef = useRef(null);
-  const tentdeskResponsibilityRef = useRef(null);
 
-  // CommandAtlas Story Beats
   const commandatlasGroupRef = useRef(null);
-  const commandatlasIdentityRef = useRef(null);
-  const commandatlasPipelineRef = useRef(null);
-  const commandatlasDecisionRef = useRef(null);
+  const commandatlasTitleRef = useRef(null);
+  const commandatlasMetaRef = useRef(null);
+  const commandatlasArchRef = useRef(null);
 
   // Section-level visibility state (SUSPENDED -> PREPARE -> ACTIVE)
   const { ref: visibilityRef, state: visibilityState, isPageVisible } = useVisibilityState({
@@ -56,9 +43,9 @@ export default function WorksStory() {
         !stageRef.current ||
         !introRef.current ||
         !tentdeskGroupRef.current ||
-        !tentdeskIdentityRef.current ||
+        !tentdeskTitleRef.current ||
         !commandatlasGroupRef.current ||
-        !commandatlasIdentityRef.current
+        !commandatlasTitleRef.current
       ) {
         return;
       }
@@ -83,221 +70,129 @@ export default function WorksStory() {
         },
       });
 
-      // ── INITIAL OFFSCREEN & HIDDEN STATES ──
+      // ── INITIAL OFFSCREEN STATES ──
       gsap.set(introRef.current, { x: '0vw', opacity: 1 });
 
-      gsap.set(tentdeskIdentityRef.current, {
+      gsap.set(tentdeskTitleRef.current, {
         x: isMobile ? '60vw' : '85vw',
         opacity: 0,
       });
-      if (tentdeskOperationsRef.current) {
-        gsap.set(tentdeskOperationsRef.current, { opacity: 0, y: 30 });
-      }
-      if (tentdeskArchitectureRef.current) {
-        gsap.set(tentdeskArchitectureRef.current, { opacity: 0, y: 30 });
-      }
-      if (tentdeskIncidentRef.current) {
-        gsap.set(tentdeskIncidentRef.current, { opacity: 0, y: 30 });
-      }
-      if (tentdeskResponsibilityRef.current) {
-        gsap.set(tentdeskResponsibilityRef.current, { opacity: 0, y: 30 });
-      }
+      gsap.set(tentdeskMetaRef.current, { opacity: 0, y: 15 });
+      gsap.set(tentdeskIncidentRef.current, { opacity: 0, y: 20 });
 
-      gsap.set(commandatlasIdentityRef.current, {
+      gsap.set(commandatlasTitleRef.current, {
         x: isMobile ? '60vw' : '85vw',
         opacity: 0,
       });
-      if (commandatlasPipelineRef.current) {
-        gsap.set(commandatlasPipelineRef.current, { opacity: 0, y: 30 });
-      }
-      if (commandatlasDecisionRef.current) {
-        gsap.set(commandatlasDecisionRef.current, { opacity: 0, y: 30 });
-      }
+      gsap.set(commandatlasMetaRef.current, { opacity: 0, y: 15 });
+      gsap.set(commandatlasArchRef.current, { opacity: 0, y: 20 });
 
-      // ── BEAT 1: INTRO (0.00 -> 0.08) ──
+      // ── BEAT 1: INTRO (0.00 -> 0.14) ──
+      // Title sweeps out to the left
       tl.to(
         introRef.current,
         {
           x: isMobile ? '-60vw' : '-90vw',
           opacity: 0,
           ease: 'power1.in',
-          duration: 0.07,
+          duration: 0.12,
         },
-        0.02,
+        0.04,
       );
 
-      // ── BEAT 2: TENTDESK IDENTITY (0.08 -> 0.16) ──
+      // ── BEAT 2: TENTDESK ARRIVAL & IDENTITY (0.14 -> 0.35) ──
+      // Title sweeps into view from the right
       tl.to(
-        tentdeskIdentityRef.current,
+        tentdeskTitleRef.current,
         {
           x: '0vw',
           opacity: 1,
           ease: 'power2.out',
-          duration: 0.07,
+          duration: 0.14,
         },
-        0.08,
+        0.14,
       );
-      // (0.11 -> 0.16) Stillness window for identity
 
-      // ── BEAT 3: THE OPERATIONAL WORLD (0.17 -> 0.27) ──
+      // Role & domain metadata follows with delayed secondary parallax
       tl.to(
-        tentdeskIdentityRef.current,
+        tentdeskMetaRef.current,
         {
-          y: -15,
-          opacity: 0.85,
-          duration: 0.04,
+          opacity: 1,
+          y: 0,
+          ease: 'power1.out',
+          duration: 0.1,
         },
-        0.16,
+        0.20,
       );
-      if (tentdeskOperationsRef.current) {
-        tl.to(
-          tentdeskOperationsRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            ease: 'power1.out',
-            duration: 0.06,
-          },
-          0.17,
-        );
-        // (0.20 -> 0.25) Stillness window for operations workflow
-        tl.to(
-          tentdeskOperationsRef.current,
-          {
-            opacity: 0,
-            y: -25,
-            duration: 0.04,
-          },
-          0.26,
-        );
-      }
 
-      // ── BEAT 4: SYSTEM ARCHITECTURE & SSE (0.28 -> 0.39) ──
-      if (tentdeskArchitectureRef.current) {
-        tl.to(
-          tentdeskArchitectureRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            ease: 'power1.out',
-            duration: 0.06,
-          },
-          0.28,
-        );
-        // (0.31 -> 0.37) Stillness window for system architecture
-        tl.to(
-          tentdeskArchitectureRef.current,
-          {
-            opacity: 0,
-            y: -25,
-            duration: 0.04,
-          },
-          0.38,
-        );
-      }
+      // (0.28 -> 0.35) STILLNESS MOMENT: TentDesk dominant, viewer absorbs scale
 
-      // ── BEAT 5: PRODUCTION INCIDENTS (~25s & Mobile Auth) (0.40 -> 0.52) ──
-      if (tentdeskIncidentRef.current) {
-        tl.to(
-          tentdeskIncidentRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            ease: 'power1.out',
-            duration: 0.06,
-          },
-          0.40,
-        );
-        // (0.43 -> 0.50) Stillness window for diagnostic reading
-        tl.to(
-          tentdeskIncidentRef.current,
-          {
-            opacity: 0,
-            y: -25,
-            duration: 0.04,
-          },
-          0.51,
-        );
-      }
+      // ── BEAT 3: TENTDESK INCIDENT DISCLOSURE (0.35 -> 0.50) ──
+      tl.to(
+        tentdeskIncidentRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          ease: 'power1.out',
+          duration: 0.1,
+        },
+        0.35,
+      );
 
-      // ── BEAT 6: PRODUCTION RESPONSIBILITY BRIDGE (0.53 -> 0.62) ──
-      if (tentdeskResponsibilityRef.current) {
-        tl.to(
-          tentdeskResponsibilityRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            ease: 'power1.out',
-            duration: 0.05,
-          },
-          0.53,
-        );
-        // (0.55 -> 0.59) Stillness window for principle
-      }
+      // (0.44 -> 0.50) STILLNESS MOMENT: Incident text readable and stable
 
-      // ── BEAT 7: SPATIAL CONTINUUM HANDOFF (0.60 -> 0.70) ──
-      // TentDesk group sweeps out to the deep left
+      // ── BEAT 4: SPATIAL TRANSITION & COEXISTENCE (0.50 -> 0.74) ──
+      // TentDesk recedes and sweeps out to the left
       tl.to(
         tentdeskGroupRef.current,
         {
           x: isMobile ? '-70vw' : '-100vw',
           opacity: 0,
           ease: 'power1.inOut',
-          duration: 0.10,
+          duration: 0.18,
         },
-        0.60,
+        0.50,
       );
 
-      // AT THE SAME TIME: CommandAtlas Identity sweeps in from the right
+      // AT THE SAME TIME: CommandAtlas sweeps in from the right
       tl.to(
-        commandatlasIdentityRef.current,
+        commandatlasTitleRef.current,
         {
           x: '0vw',
           opacity: 1,
           ease: 'power2.out',
-          duration: 0.08,
+          duration: 0.18,
         },
-        0.64,
+        0.52,
       );
 
-      // ── BEAT 8: WHY OFFLINE-FIRST & CONTENT PIPELINE (0.70 -> 0.81) ──
-      if (commandatlasPipelineRef.current) {
-        tl.to(
-          commandatlasPipelineRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            ease: 'power1.out',
-            duration: 0.06,
-          },
-          0.70,
-        );
-        // (0.73 -> 0.79) Stillness window for pipeline diagram
-        tl.to(
-          commandatlasPipelineRef.current,
-          {
-            opacity: 0,
-            y: -25,
-            duration: 0.04,
-          },
-          0.80,
-        );
-      }
+      // Metadata follows
+      tl.to(
+        commandatlasMetaRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          ease: 'power1.out',
+          duration: 0.12,
+        },
+        0.58,
+      );
 
-      // ── BEAT 9: ADR-013, NO AI BY DESIGN & SCALE ANCHORS (0.81 -> 0.95) ──
-      if (commandatlasDecisionRef.current) {
-        tl.to(
-          commandatlasDecisionRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            ease: 'power1.out',
-            duration: 0.06,
-          },
-          0.81,
-        );
-        // (0.85 -> 0.94) Dominant stillness window: 366 commands & ADR-013 decision
-      }
+      // (0.55 -> 0.68) COEXISTENCE WINDOW: Both projects visible in motion
+
+      // ── BEAT 5: COMMANDATLAS DOMINANCE & ARCHITECTURE (0.74 -> 0.95) ──
+      tl.to(
+        commandatlasArchRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          ease: 'power1.out',
+          duration: 0.1,
+        },
+        0.74,
+      );
+
+      // (0.82 -> 0.95) STILLNESS MOMENT: CommandAtlas dominant and readable
     },
     containerRef,
     [],
@@ -313,7 +208,7 @@ export default function WorksStory() {
           visibilityRef.current = node;
         }}
         className="cinematic-scroll-space relative w-full"
-        style={{ height: isFallback ? 'auto' : '720vh' }}
+        style={{ height: isFallback ? 'auto' : '480vh' }}
         aria-label="Interactive Spatial Story Continuum"
       >
         <div
@@ -331,7 +226,7 @@ export default function WorksStory() {
             </div>
           )}
 
-          {/* Full-viewport Spatial Story Overlay (Zero Card Boxes) */}
+          {/* Full-viewport Spatial Typography Layers (Zero Card Boxes) */}
           <div className="works-spatial-layer">
             {/* ── BEAT 1: INTRO (WHAT I BUILT) ── */}
             <div
@@ -356,14 +251,13 @@ export default function WorksStory() {
               </div>
             </div>
 
-            {/* ── TENTDESK STORY CONTINUUM ── */}
+            {/* ── BEAT 2 & 3: TENTDESK SPATIAL COMPOSITION ── */}
             <div
               ref={tentdeskGroupRef}
               className="spatial-project-group spatial-project-group--tentdesk"
               aria-labelledby="tentdesk-heading"
             >
-              {/* Beat 2: Identity */}
-              <div ref={tentdeskIdentityRef} className="mb-4">
+              <div ref={tentdeskTitleRef}>
                 <div className="spatial-coordinate-eyebrow text-[#38bdf8]">
                   <span>ACTIVE SYSTEM · FOUNDER &amp; CTO · LIVE CUSTOMERS</span>
                 </div>
@@ -373,9 +267,12 @@ export default function WorksStory() {
                 >
                   TentDesk
                 </h3>
+              </div>
+
+              <div ref={tentdeskMetaRef} className="max-w-xl">
                 <p className="spatial-story-lead">
-                  Operational software built from the ground up for tent &amp; event-rental businesses:
-                  managing active inventory, orders, customer accounts, and real-time state synchronization.
+                  Multi-tenant operational platform engineered for tent and event-rental businesses:
+                  managing active inventory, order lifecycle, returns, customer accounts, and real-time state synchronization.
                 </p>
                 <div className="spatial-telemetry-row">
                   <span className="spatial-pill">Next.js</span>
@@ -385,29 +282,37 @@ export default function WorksStory() {
                   <span className="spatial-pill">PWA</span>
                   <span className="spatial-pill">SSE</span>
                 </div>
+                <p className="mt-2 text-xs font-mono text-cosmos-muted/80 tracking-wide">
+                  OPERATIONAL SCOPE: INVENTORY · RENTALS · RETURNS · CUSTOMERS · PAYMENTS · EVENTS · WAGES
+                </p>
               </div>
 
-              {/* Beat 3: The Operational World */}
-              <OperationalFlow containerRef={tentdeskOperationsRef} />
-
-              {/* Beat 4: System Architecture & SSE */}
-              <SystemArchitectureFlow containerRef={tentdeskArchitectureRef} />
-
-              {/* Beat 5: Production Incidents */}
-              <IncidentInvestigation containerRef={tentdeskIncidentRef} />
-
-              {/* Beat 6: Production Responsibility Bridge */}
-              <ResponsibilityBridge containerRef={tentdeskResponsibilityRef} />
+              {/* Deconstructed Incident Disclosures (Hairline Brackets) */}
+              <div
+                ref={tentdeskIncidentRef}
+                className="spatial-incident-node spatial-incident-node--cyan"
+              >
+                <p className="spatial-incident-label text-[#f43f5e]">
+                  PRODUCTION AUDIT · INITIAL ~25S FIRST-PAINT INVESTIGATION
+                </p>
+                <p className="spatial-incident-body">
+                  Resolved severe initial render latency on cold-start mobile connections by restructuring
+                  client hydration boundaries, pruning heavy runtime dependencies, and prioritizing critical-path inventory views.
+                </p>
+                <p className="spatial-incident-body mt-2">
+                  <strong className="text-stardust">Auth Resilience:</strong> Eliminated intermittent mobile session loss by migrating from
+                  volatile client-side token storage to browser-managed httpOnly cookie boundaries with strict CSRF protection.
+                </p>
+              </div>
             </div>
 
-            {/* ── COMMANDATLAS STORY CONTINUUM ── */}
+            {/* ── BEAT 4 & 5: COMMANDATLAS SPATIAL COMPOSITION ── */}
             <div
               ref={commandatlasGroupRef}
               className="spatial-project-group spatial-project-group--commandatlas"
               aria-labelledby="commandatlas-heading"
             >
-              {/* Beat 7: Identity */}
-              <div ref={commandatlasIdentityRef} className="mb-4">
+              <div ref={commandatlasTitleRef}>
                 <div className="spatial-coordinate-eyebrow text-[#a78bfa]">
                   <span>KNOWLEDGE CONSTELLATION · OFFLINE-FIRST ARCHITECTURE</span>
                 </div>
@@ -417,9 +322,12 @@ export default function WorksStory() {
                 >
                   CommandAtlas
                 </h3>
+              </div>
+
+              <div ref={commandatlasMetaRef} className="max-w-xl">
                 <p className="spatial-story-lead">
-                  A deterministic offline-first command reference where Markdown documentation compiles into validated static
-                  packs and a local search index. 366 commands across 21 canonical topics.
+                  An offline-first command reference where Markdown documentation compiles into validated static packs
+                  and a deterministic local search index. 366 commands across 21 canonical topics.
                 </p>
                 <div className="spatial-telemetry-row">
                   <span className="spatial-pill">Next.js</span>
@@ -429,13 +337,28 @@ export default function WorksStory() {
                   <span className="spatial-pill">Dexie IndexedDB</span>
                   <span className="spatial-pill">No AI by Design</span>
                 </div>
+                <p className="mt-2 text-xs font-mono text-cosmos-muted/80 tracking-wide">
+                  CONTENT PIPELINE: MARKDOWN SOURCE → BUILD-TIME VALIDATION → STATIC PACKS
+                </p>
               </div>
 
-              {/* Beat 8: The Content Compilation Pipeline */}
-              <CommandAtlasPipeline containerRef={commandatlasPipelineRef} />
-
-              {/* Beat 9: ADR-013, No AI by Design & Scale */}
-              <DecisionMatrix containerRef={commandatlasDecisionRef} />
+              {/* Architecture Notes & Design Decision */}
+              <div
+                ref={commandatlasArchRef}
+                className="spatial-incident-node spatial-incident-node--purple"
+              >
+                <p className="spatial-incident-label text-[#a78bfa]">
+                  ARCHITECTURE · ADR-013 LOCAL DETERMINISM
+                </p>
+                <p className="spatial-incident-body">
+                  Client-side Dexie IndexedDB cache enables offline search availability during unstable or disconnected
+                  server network states without cloud round-trips.
+                </p>
+                <p className="spatial-incident-body mt-2">
+                  <strong className="text-stardust">No AI by Design:</strong> Deliberate choice against probabilistic LLM inference
+                  when executing critical infrastructure commands. Documentation is validated at build time for strict, reproducible syntax matching.
+                </p>
+              </div>
             </div>
           </div>
         </div>

@@ -231,20 +231,20 @@ function SpatialContinuumController({
       camera.lookAt(lookX, lookY, 0);
 
       // ── 2. STRICT VISIBILITY THRESHOLDS (LOADED != VISIBLE) ──
-      // TentDesk: visible between [0.08, 0.68]
-      const showStation = clampedP >= 0.08 && clampedP <= 0.68;
+      // TentDesk: visible only between [0.12, 0.85]
+      const showStation = clampedP >= 0.12 && clampedP <= 0.85;
       if (stationRootRef.current) {
         stationRootRef.current.visible = showStation;
       }
 
-      // CommandAtlas: visible between [0.58, 0.98]
-      const showSatellite = clampedP >= 0.58 && clampedP <= 0.98;
+      // CommandAtlas: visible only between [0.45, 0.98]
+      const showSatellite = clampedP >= 0.45 && clampedP <= 0.98;
       if (satelliteRootRef.current) {
         satelliteRootRef.current.visible = showSatellite;
       }
 
-      // Asteroid: subordinate background element [0.08, 0.94]
-      const showAsteroid = clampedP >= 0.08 && clampedP <= 0.94;
+      // Asteroid: subordinate background element [0.10, 0.88]
+      const showAsteroid = clampedP >= 0.10 && clampedP <= 0.88;
       if (asteroidRootRef.current) {
         asteroidRootRef.current.visible = showAsteroid;
       }
@@ -256,22 +256,22 @@ function SpatialContinuumController({
         let tdZ = -8.5;
         let tdScale = 0.25;
 
-        if (clampedP < 0.10) {
+        if (clampedP < 0.15) {
           tdZ = -8.5;
           tdScale = 0.25;
-        } else if (clampedP <= 0.20) {
+        } else if (clampedP <= 0.35) {
           // Arrival from depth into right focal plane
-          const t = (clampedP - 0.10) / 0.10;
+          const t = (clampedP - 0.15) / 0.2;
           const ease = t * t * (3 - 2 * t);
           tdZ = -8.5 + (isMobile ? 8.0 : 8.7) * ease; // -> -0.5 / +0.2
           tdScale = 0.25 + (isMobile ? 0.35 : 0.7) * ease; // -> 0.6 / 0.95
-        } else if (clampedP <= 0.52) {
-          // Stillness & operational presentation
+        } else if (clampedP <= 0.5) {
+          // Stillness & architecture inspection
           tdZ = isMobile ? -0.5 : 0.2;
           tdScale = isMobile ? 0.6 : 0.95;
-        } else if (clampedP <= 0.68) {
+        } else if (clampedP <= 0.75) {
           // Recedes across to deep left during handoff (COEXISTENCE WINDOW)
-          const t = (clampedP - 0.52) / 0.16;
+          const t = (clampedP - 0.5) / 0.25;
           const ease = t * t * (3 - 2 * t);
           tdX = (isMobile ? 0 : 1.8) - (isMobile ? 2.5 : 7.2) * ease; // -> -5.4
           tdY = (isMobile ? 1.2 : 0) + 0.5 * ease;
@@ -296,13 +296,13 @@ function SpatialContinuumController({
         let caZ = -8.0;
         let caScale = 0.25;
 
-        if (clampedP < 0.58) {
+        if (clampedP < 0.45) {
           caX = isMobile ? 2.5 : 5.8;
           caZ = -8.0;
           caScale = 0.25;
-        } else if (clampedP <= 0.72) {
+        } else if (clampedP <= 0.75) {
           // Sweeps in from right & depth during handoff (COEXISTENCE WINDOW)
-          const t = (clampedP - 0.58) / 0.14;
+          const t = (clampedP - 0.45) / 0.3;
           const ease = t * t * (3 - 2 * t);
           caX = (isMobile ? 2.5 : 5.8) - (isMobile ? 2.5 : 4.0) * ease; // -> isMobile 0 : 1.8
           caZ = -8.0 + (isMobile ? 7.5 : 8.2) * ease; // -> -0.5 / +0.2

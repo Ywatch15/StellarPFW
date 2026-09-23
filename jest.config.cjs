@@ -10,7 +10,7 @@ module.exports = {
     '^.+\\.jsx?$': 'babel-jest',
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!(three|@react-three|motion|react-router|react-router-dom)/)',
+    '/node_modules/(?!(three|@react-three|motion|react-router|react-router-dom|gsap)/)',
   ],
   extensionsToTreatAsEsm: [],
 };

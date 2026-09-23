@@ -16,6 +16,9 @@ const pageVariants = {
       duration: 0.35,
       ease: [0.22, 1, 0.36, 1],
     },
+    transitionEnd: {
+      transform: 'none',
+    },
   },
   exit: {
     opacity: 0,
@@ -39,7 +42,6 @@ export default function PageTransition() {
         initial="initial"
         animate="enter"
         exit="exit"
-        style={{ willChange: 'opacity, transform' }}
       >
         {outlet}
       </motion.div>

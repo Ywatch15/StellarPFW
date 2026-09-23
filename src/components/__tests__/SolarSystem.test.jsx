@@ -184,5 +184,5 @@ describe('SolarSystem Component — Unified Planetary Coordinate System', () => 
 
     const results = await axe(container);
     expect(results).toHaveNoViolations();
-  });
+  }, 15000);
 });

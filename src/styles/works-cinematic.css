@@ -44,45 +44,66 @@
   overflow: hidden;
 }
 
-/* Beat 1: Intro Stage */
-.spatial-intro-stage {
+/* ── STRUCTURAL NAVIGATION SAFE BARRIER ── */
+/* Prevents any story elements or GSAP movement from visually colliding with top navbar */
+.spatial-nav-safe-barrier {
   position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 2rem 2rem 2rem 5vw;
-  max-width: 90rem;
-  margin: 0 auto;
-  will-change: transform, opacity;
-}
-
-/* Spatial Project Groups (Full-viewport spatial coordinates) */
-.spatial-project-group {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 6.5rem 2rem 3rem 6vw;
-  max-width: 48rem;
-  margin: 0 auto 0 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(5.25rem, 9.5vh, 6.5rem);
   pointer-events: none;
-  will-change: transform, opacity;
+  z-index: 50;
 }
 
-.spatial-project-group--tentdesk {
-  align-items: flex-start;
+/* Story Viewport: Physically constrained below navigation barrier */
+.spatial-story-viewport {
+  position: absolute;
+  top: clamp(5.25rem, 9.5vh, 6.5rem);
+  bottom: clamp(1.5rem, 4vh, 2.5rem);
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-.spatial-project-group--commandatlas {
-  align-items: flex-start;
+/* ── DYNAMIC COMPOSITION ZONES ── */
+/* Narrative zones that morph dynamically based on the current story beat */
+.spatial-composition-zone {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 2rem 2rem 5vw;
+  max-width: 44rem;
+  pointer-events: none;
+  will-change: transform, opacity, filter, clip-path;
 }
 
-/* Massive Architectural Hero Typography */
+.spatial-composition-zone--intro {
+  max-width: 80rem;
+}
+
+.spatial-composition-zone--tentdesk {
+  max-width: 44rem;
+}
+
+.spatial-composition-zone--commandatlas {
+  max-width: min(55rem, 58vw);
+}
+
+.spatial-composition-zone--handoff {
+  max-width: 100%;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 2rem;
+}
+
+/* ── MASSIVE ARCHITECTURAL HERO TYPOGRAPHY ── */
 .spatial-hero-title {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(3.75rem, 8vw, 8rem);
+  font-size: clamp(2.6rem, 5.8vw, 6.25rem);
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 0.92;
@@ -91,6 +112,7 @@
   pointer-events: auto;
   will-change: transform, opacity;
   text-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+  white-space: nowrap;
 }
 
 .spatial-hero-title--cyan {
@@ -109,12 +131,12 @@
 .spatial-coordinate-eyebrow {
   font-family: 'Space Grotesk', monospace;
   font-size: 0.725rem;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.65rem;
   pointer-events: auto;
   will-change: transform, opacity;
 }
@@ -132,18 +154,29 @@
 /* Editorial Story Lead */
 .spatial-story-lead {
   font-family: 'Inter', sans-serif;
-  font-size: 1.05rem;
+  font-size: 1.025rem;
   line-height: 1.65;
   color: #94a3b8;
   max-width: 36rem;
-  margin-top: 1rem;
+  margin-top: 0.85rem;
   pointer-events: auto;
   will-change: transform, opacity;
 }
 
+/* ── SPATIAL STORY BEAT (Semantic Non-Card Open Primitive) ── */
+.spatial-story-beat {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 42rem;
+  pointer-events: auto;
+  will-change: transform, opacity, filter, clip-path;
+}
+
 /* Deconstructed Technical Disclosure Node (Hairline bracket, zero card background) */
 .spatial-incident-node {
-  margin-top: 1.75rem;
+  margin-top: 1.25rem;
   max-width: 38rem;
   padding-left: 1.25rem;
   border-left: 2px solid;
@@ -159,10 +192,14 @@
   border-color: #a78bfa;
 }
 
+.spatial-incident-node--amber {
+  border-color: #f59e0b;
+}
+
 .spatial-incident-label {
   font-family: 'Space Grotesk', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   margin-bottom: 0.35rem;
   font-weight: 600;
@@ -175,12 +212,28 @@
   color: #cbd5e1;
 }
 
+/* Status Dot Indicator */
+.spatial-status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.spatial-status-dot--cyan {
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+.spatial-status-dot--amber {
+  background: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+}
+
 /* Telemetry Cluster */
 .spatial-telemetry-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 1.25rem;
+  margin-top: 1rem;
   pointer-events: auto;
   will-change: transform, opacity;
 }
@@ -192,38 +245,218 @@
   padding: 0.25rem 0.65rem;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(15, 23, 42, 0.5);
+  background: rgba(15, 23, 42, 0.45);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   color: #cbd5e1;
 }
 
-/* Responsive Overrides for Mobile */
+/* ── STATE FLOW DIAGRAM ── */
+.spatial-flow-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 38rem;
+}
+
+.spatial-flow-node {
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.spatial-flow-node--server {
+  border-color: rgba(167, 139, 250, 0.25);
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.spatial-node-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.25rem;
+}
+
+.spatial-node-badge {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+}
+
+.spatial-node-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #f1f5f9;
+}
+
+.spatial-node-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: #94a3b8;
+}
+
+.spatial-flow-connector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.15rem 0.5rem;
+}
+
+.spatial-flow-line {
+  position: relative;
+  width: 28px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+
+.spatial-flow-pulse {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  animation: spatialPulse 2s ease-in-out infinite;
+}
+
+.spatial-flow-pulse--cyan {
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+.spatial-flow-pulse--purple {
+  background: #a78bfa;
+  box-shadow: 0 0 6px #a78bfa;
+}
+
+@keyframes spatialPulse {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+.spatial-connector-label {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: #64748b;
+}
+
+/* ── PIPELINE STEPS ── */
+.spatial-pipeline-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 38rem;
+}
+
+.spatial-pipeline-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.65rem 0.85rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.15);
+  background: rgba(15, 23, 42, 0.35);
+  border-radius: 0 4px 4px 0;
+}
+
+.spatial-step-index {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding-top: 0.1rem;
+}
+
+.spatial-step-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #f1f5f9;
+}
+
+.spatial-step-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: #94a3b8;
+  margin-top: 0.15rem;
+}
+
+.spatial-step-divider {
+  padding-left: 1.25rem;
+  font-size: 0.7rem;
+  line-height: 0.8;
+}
+
+/* Floating Bridge Marker during Handoff */
+.spatial-handoff-bridge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.spatial-handoff-text {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+/* ── RESPONSIVE DESIGN (TABLET & MOBILE) ── */
 @media (max-width: 768px) {
-  .spatial-intro-stage,
-  .spatial-project-group {
-    padding: 5.5rem 1.25rem 3.5rem 2.75rem;
+  .spatial-story-viewport {
+    top: 5rem;
+    bottom: 2rem;
+  }
+
+  .spatial-composition-zone {
+    padding: 0.5rem 1rem 1rem 1.5rem;
+    max-width: 100%;
     justify-content: flex-end;
   }
 
   .spatial-hero-title {
-    font-size: clamp(2.5rem, 11vw, 4rem);
+    font-size: clamp(2.4rem, 10vw, 3.75rem);
     line-height: 0.95;
   }
 
   .spatial-story-lead {
-    font-size: 0.875rem;
-    line-height: 1.55;
+    font-size: 0.85rem;
+    line-height: 1.5;
     max-width: 100%;
   }
 
   .spatial-incident-node {
-    margin-top: 1rem;
+    margin-top: 0.75rem;
     padding-left: 0.75rem;
   }
 
   .spatial-incident-body {
-    font-size: 0.78rem;
+    font-size: 0.76rem;
+  }
+
+  .spatial-flow-diagram,
+  .spatial-pipeline-steps {
+    max-width: 100%;
+    gap: 0.35rem;
   }
 }
 

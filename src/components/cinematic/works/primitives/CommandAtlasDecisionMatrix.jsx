@@ -1,17 +1,28 @@
 // FILE: src/components/cinematic/works/primitives/CommandAtlasDecisionMatrix.jsx
 // ADR-013 Architecture decisions and local determinism principles.
-import React from 'react';
+import React, { forwardRef } from 'react';
 
-export default function CommandAtlasDecisionMatrix() {
+const CommandAtlasDecisionMatrix = forwardRef(function CommandAtlasDecisionMatrix(
+  { decisionRefs },
+  ref,
+) {
   return (
-    <div className="spatial-story-beat spatial-story-beat--decisions" aria-label="CommandAtlas ADR-013 Decisions">
+    <div
+      ref={ref}
+      className="spatial-story-beat spatial-story-beat--decisions"
+      aria-label="CommandAtlas ADR-013 Decisions"
+    >
       <div className="spatial-coordinate-eyebrow text-stardust">
         <span>ARCHITECTURE · ADR-013 LOCAL DETERMINISM</span>
       </div>
 
       <div className="spatial-decision-cluster mt-4 space-y-4">
         {/* Decision 1: Why Offline-First */}
-        <div className="spatial-incident-node spatial-incident-node--purple">
+        <div
+          ref={decisionRefs ? (el) => (decisionRefs.current[0] = el) : null}
+          className="spatial-incident-node spatial-incident-node--purple"
+          data-decision="1"
+        >
           <h4 className="spatial-incident-label text-stardust">
             DECISION 01 · OFFLINE-FIRST RETRIEVAL
           </h4>
@@ -23,7 +34,11 @@ export default function CommandAtlasDecisionMatrix() {
         </div>
 
         {/* Decision 2: No AI by Design */}
-        <div className="spatial-incident-node spatial-incident-node--cyan">
+        <div
+          ref={decisionRefs ? (el) => (decisionRefs.current[1] = el) : null}
+          className="spatial-incident-node spatial-incident-node--cyan"
+          data-decision="2"
+        >
           <h4 className="spatial-incident-label text-aurora">
             DECISION 02 · NO AI BY DESIGN
           </h4>
@@ -35,7 +50,11 @@ export default function CommandAtlasDecisionMatrix() {
         </div>
 
         {/* Decision 3: Local Dexie Cache */}
-        <div className="spatial-incident-node spatial-incident-node--purple">
+        <div
+          ref={decisionRefs ? (el) => (decisionRefs.current[2] = el) : null}
+          className="spatial-incident-node spatial-incident-node--purple"
+          data-decision="3"
+        >
           <h4 className="spatial-incident-label text-stardust">
             DECISION 03 · CLIENT-SIDE LOCAL RETRIEVAL
           </h4>
@@ -47,4 +66,6 @@ export default function CommandAtlasDecisionMatrix() {
       </div>
     </div>
   );
-}
+});
+
+export default CommandAtlasDecisionMatrix;

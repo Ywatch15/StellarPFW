@@ -38,6 +38,9 @@ export default function WorksStory() {
   const commandatlasOverviewRef = useRef(null);
   const commandatlasPipelineRef = useRef(null);
   const commandatlasDecisionRef = useRef(null);
+  const pipelineTrackRef = useRef(null);
+  const pipelineStepRefs = useRef([]);
+  const decisionRefs = useRef([]);
 
   // Section-level visibility state (SUSPENDED -> PREPARE -> ACTIVE)
   const { ref: visibilityRef, state: visibilityState, isPageVisible } = useVisibilityState({
@@ -143,6 +146,22 @@ export default function WorksStory() {
         opacity: 0,
         filter: 'blur(4px)',
       });
+
+      // Mobile initial states for progressive pipeline and decision reveals
+      if (isMobile) {
+        if (pipelineTrackRef.current) {
+          gsap.set(pipelineTrackRef.current, { y: 0 });
+        }
+        if (decisionRefs.current[0]) {
+          gsap.set(decisionRefs.current[0], { opacity: 1, y: 0 });
+        }
+        if (decisionRefs.current[1]) {
+          gsap.set(decisionRefs.current[1], { opacity: 0, y: 20 });
+        }
+        if (decisionRefs.current[2]) {
+          gsap.set(decisionRefs.current[2], { opacity: 0, y: 20 });
+        }
+      }
 
       // ── BEAT 1: INTRO (0.00 -> 0.12) ──
       // Title and thesis sweep out along a diagonal physical motion vector
@@ -366,12 +385,47 @@ export default function WorksStory() {
           opacity: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: 0.05,
+          duration: 0.04,
         },
         0.79,
       );
 
-      // (0.83 -> 0.87) STILLNESS WINDOW: Compilation pipeline settled and readable
+      if (isMobile) {
+        // Mobile progressive reveal: 01+02 -> 02+03 -> 03+04 -> 04+05
+        // (0.79 -> 0.815): Stage 1 (Steps 01 + 02) settled and readable
+        tl.to(
+          pipelineTrackRef.current,
+          {
+            y: () => -(pipelineStepRefs.current[1]?.offsetTop || 76),
+            ease: 'power1.inOut',
+            duration: 0.02,
+          },
+          0.815,
+        );
+        // (0.835 -> 0.845): Stage 2 (Steps 02 + 03) settled and readable
+        tl.to(
+          pipelineTrackRef.current,
+          {
+            y: () => -(pipelineStepRefs.current[2]?.offsetTop || 156),
+            ease: 'power1.inOut',
+            duration: 0.02,
+          },
+          0.845,
+        );
+        // (0.865 -> 0.87): Stage 3 (Steps 03 + 04) settled and readable
+        tl.to(
+          pipelineTrackRef.current,
+          {
+            y: () => -(pipelineStepRefs.current[3]?.offsetTop || 236),
+            ease: 'power1.inOut',
+            duration: 0.02,
+          },
+          0.87,
+        );
+        // (0.89 -> 0.90): Stage 4 (Steps 04 + 05) settled and readable
+      } else {
+        // (0.83 -> 0.87) STILLNESS WINDOW: Desktop compilation pipeline settled and readable
+      }
 
       // Pipeline exits completely before Beat 4C begins
       tl.to(
@@ -382,9 +436,9 @@ export default function WorksStory() {
           opacity: 0,
           filter: 'blur(3px)',
           ease: 'power1.in',
-          duration: 0.03,
+          duration: 0.02,
         },
-        0.88,
+        0.90,
       );
 
       // ── BEAT 4C: ADR-013 ARCHITECTURE & DECISION MATRIX (0.92 -> 1.00) ──
@@ -397,12 +451,63 @@ export default function WorksStory() {
           opacity: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: 0.05,
+          duration: 0.02,
         },
         0.92,
       );
 
-      // (0.95 -> 0.98) STILLNESS WINDOW: ADR-013 decisions settled and readable
+      if (isMobile) {
+        // Mobile sequential reveal: Decision 01 -> Decision 02 -> Decision 03
+        // (0.92 -> 0.94): Decision 01 settled and readable
+        tl.to(
+          decisionRefs.current[0],
+          {
+            y: -20,
+            opacity: 0,
+            filter: 'blur(2px)',
+            ease: 'power1.in',
+            duration: 0.015,
+          },
+          0.94,
+        );
+        tl.to(
+          decisionRefs.current[1],
+          {
+            y: 0,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power1.out',
+            duration: 0.015,
+          },
+          0.945,
+        );
+        // (0.945 -> 0.965): Decision 02 settled and readable
+        tl.to(
+          decisionRefs.current[1],
+          {
+            y: -20,
+            opacity: 0,
+            filter: 'blur(2px)',
+            ease: 'power1.in',
+            duration: 0.015,
+          },
+          0.965,
+        );
+        tl.to(
+          decisionRefs.current[2],
+          {
+            y: 0,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power1.out',
+            duration: 0.015,
+          },
+          0.97,
+        );
+        // (0.97 -> 0.985): Decision 03 settled and readable
+      } else {
+        // (0.95 -> 0.98) STILLNESS WINDOW: Desktop ADR-013 decisions settled and readable
+      }
 
       // Final unpin fade
       tl.to(
@@ -410,9 +515,9 @@ export default function WorksStory() {
         {
           opacity: 0.25,
           ease: 'power1.in',
-          duration: 0.02,
+          duration: 0.015,
         },
-        0.98,
+        0.985,
       );
     },
     containerRef,
@@ -587,12 +692,15 @@ export default function WorksStory() {
 
                   {/* Beat 4B: Deterministic Compilation Pipeline */}
                   <div ref={commandatlasPipelineRef} className="spatial-story-beat">
-                    <CommandAtlasPipelineFlow />
+                    <CommandAtlasPipelineFlow
+                      trackRef={pipelineTrackRef}
+                      stepRefs={pipelineStepRefs}
+                    />
                   </div>
 
                   {/* Beat 4C: ADR-013 & Decision Matrix */}
                   <div ref={commandatlasDecisionRef} className="spatial-story-beat">
-                    <CommandAtlasDecisionMatrix />
+                    <CommandAtlasDecisionMatrix decisionRefs={decisionRefs} />
                   </div>
                 </div>
               </div>

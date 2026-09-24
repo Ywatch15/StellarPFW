@@ -352,6 +352,19 @@
 }
 
 /* ── PIPELINE STEPS ── */
+.spatial-pipeline-viewport {
+  position: relative;
+  width: 100%;
+}
+
+.spatial-pipeline-track {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 38rem;
+  transform: none;
+}
+
 .spatial-pipeline-steps {
   display: flex;
   flex-direction: column;
@@ -420,6 +433,24 @@
   color: #94a3b8;
 }
 
+/* ── DESKTOP PRESERVATION RULES ── */
+@media (min-width: 769px) {
+  .spatial-pipeline-viewport {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .spatial-pipeline-track {
+    transform: none !important;
+  }
+
+  .spatial-decision-cluster .spatial-incident-node {
+    position: static !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* ── RESPONSIVE DESIGN (TABLET & MOBILE) ── */
 @media (max-width: 768px) {
   .spatial-story-viewport {
@@ -462,6 +493,37 @@
   .spatial-pipeline-steps {
     max-width: 100%;
     gap: 0.35rem;
+  }
+
+  .spatial-pipeline-viewport {
+    position: relative;
+    width: 100%;
+    height: clamp(185px, 28vh, 220px);
+    overflow: hidden;
+  }
+
+  .spatial-pipeline-track {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    will-change: transform;
+  }
+
+  .spatial-decision-cluster {
+    position: relative;
+    width: 100%;
+    min-height: clamp(160px, 25vh, 210px);
+  }
+
+  .spatial-decision-cluster .spatial-incident-node {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-top: 0;
+    will-change: transform, opacity;
   }
 }
 

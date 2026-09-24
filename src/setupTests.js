@@ -18,4 +18,24 @@ Object.defineProperty(window, 'matchMedia', {
 // Standard jsdom scrollTo mock
 if (typeof window !== 'undefined') {
   window.scrollTo = () => {};
+
+  if (!window.ResizeObserver) {
+    window.ResizeObserver = class {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    };
+  }
+
+  if (!window.IntersectionObserver) {
+    window.IntersectionObserver = class {
+      constructor(cb) {
+        this.cb = cb;
+      }
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    };
+  }
 }
+

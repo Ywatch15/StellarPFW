@@ -1,0 +1,598 @@
+/* FILE: src/styles/works-cinematic.css */
+/* Full-viewport Spatial Continuum Styling for Works Cinematic Experience */
+
+.cinematic-story,
+.works-cinematic-container {
+  position: relative;
+  width: 100%;
+  background-color: transparent;
+  color: #f1f5f9;
+}
+
+/* Explicit scroll space providing physical document scroll distance */
+.cinematic-scroll-space {
+  position: relative;
+  width: 100%;
+}
+
+/* Pinned Workspace Stage: Exactly full viewport, pinned during scroll space */
+.cinematic-stage,
+.works-pinned-viewport {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* Absolute 3D Canvas Backdrop within pinned viewport */
+.works-3d-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Full-viewport Spatial Story DOM Overlay */
+.works-spatial-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ── STRUCTURAL NAVIGATION SAFE BARRIER ── */
+/* Prevents any story elements or GSAP movement from visually colliding with top navbar */
+.spatial-nav-safe-barrier {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(5.25rem, 9.5vh, 6.5rem);
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Story Viewport: Physically constrained below navigation barrier */
+.spatial-story-viewport {
+  position: absolute;
+  top: clamp(5.25rem, 9.5vh, 6.5rem);
+  bottom: clamp(1.5rem, 4vh, 2.5rem);
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ── DYNAMIC COMPOSITION ZONES ── */
+/* Narrative zones that morph dynamically based on the current story beat */
+.spatial-composition-zone {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 2rem 2rem 5vw;
+  max-width: 44rem;
+  pointer-events: none;
+  will-change: transform, opacity, filter, clip-path;
+}
+
+.spatial-composition-zone--intro {
+  max-width: 80rem;
+}
+
+.spatial-composition-zone--tentdesk {
+  max-width: 44rem;
+}
+
+.spatial-composition-zone--commandatlas {
+  max-width: min(55rem, 58vw);
+}
+
+.spatial-composition-zone--handoff {
+  max-width: 100%;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 2rem;
+}
+
+/* ── MASSIVE ARCHITECTURAL HERO TYPOGRAPHY ── */
+.spatial-hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.6rem, 5.8vw, 6.25rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  text-transform: uppercase;
+  color: #f8fafc;
+  pointer-events: auto;
+  will-change: transform, opacity;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+  white-space: nowrap;
+}
+
+.spatial-hero-title--cyan {
+  background: linear-gradient(135deg, #f8fafc 40%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.spatial-hero-title--purple {
+  background: linear-gradient(135deg, #f8fafc 40%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Architectural Coordinates / Eyebrow */
+.spatial-coordinate-eyebrow {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.725rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.65rem;
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+
+.spatial-coordinate-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 10px currentColor;
+}
+
+/* Editorial Story Lead */
+.spatial-story-lead {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.025rem;
+  line-height: 1.65;
+  color: #94a3b8;
+  max-width: 36rem;
+  margin-top: 0.85rem;
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+
+/* ── SPATIAL STORY BEAT (Semantic Non-Card Open Primitive) ── */
+.spatial-story-beat {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 42rem;
+  pointer-events: auto;
+  will-change: transform, opacity, filter, clip-path;
+}
+
+/* Deconstructed Technical Disclosure Node (Hairline bracket, zero card background) */
+.spatial-incident-node {
+  margin-top: 1.25rem;
+  max-width: 38rem;
+  padding-left: 1.25rem;
+  border-left: 2px solid;
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+
+.spatial-incident-node--cyan {
+  border-color: #38bdf8;
+}
+
+.spatial-incident-node--purple {
+  border-color: #a78bfa;
+}
+
+.spatial-incident-node--amber {
+  border-color: #f59e0b;
+}
+
+.spatial-incident-label {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+.spatial-incident-body {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+/* Status Dot Indicator */
+.spatial-status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.spatial-status-dot--cyan {
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+.spatial-status-dot--amber {
+  background: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+/* Telemetry Cluster */
+.spatial-telemetry-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+
+.spatial-pill {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #cbd5e1;
+}
+
+/* ── STATE FLOW DIAGRAM ── */
+.spatial-flow-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 38rem;
+}
+
+.spatial-flow-node {
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.spatial-flow-node--server {
+  border-color: rgba(167, 139, 250, 0.25);
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.spatial-node-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.25rem;
+}
+
+.spatial-node-badge {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+}
+
+.spatial-node-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #f1f5f9;
+}
+
+.spatial-node-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: #94a3b8;
+}
+
+.spatial-flow-connector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.15rem 0.5rem;
+}
+
+.spatial-flow-line {
+  position: relative;
+  width: 28px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+
+.spatial-flow-pulse {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  animation: spatialPulse 2s ease-in-out infinite;
+}
+
+.spatial-flow-pulse--cyan {
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+.spatial-flow-pulse--purple {
+  background: #a78bfa;
+  box-shadow: 0 0 6px #a78bfa;
+}
+
+@keyframes spatialPulse {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+.spatial-connector-label {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: #64748b;
+}
+
+/* ── PIPELINE STEPS ── */
+.spatial-pipeline-viewport {
+  position: relative;
+  width: 100%;
+}
+
+.spatial-pipeline-track {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 38rem;
+  transform: none;
+}
+
+.spatial-pipeline-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 38rem;
+}
+
+.spatial-pipeline-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.65rem 0.85rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.15);
+  background: rgba(15, 23, 42, 0.35);
+  border-radius: 0 4px 4px 0;
+}
+
+.spatial-step-index {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding-top: 0.1rem;
+}
+
+.spatial-step-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #f1f5f9;
+}
+
+.spatial-step-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: #94a3b8;
+  margin-top: 0.15rem;
+}
+
+.spatial-step-divider {
+  padding-left: 1.25rem;
+  font-size: 0.7rem;
+  line-height: 0.8;
+}
+
+/* Floating Bridge Marker during Handoff */
+.spatial-handoff-bridge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.spatial-handoff-text {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+/* ── DESKTOP PRESERVATION RULES ── */
+@media (min-width: 769px) {
+  .spatial-pipeline-viewport {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .spatial-pipeline-track {
+    transform: none !important;
+  }
+
+  .spatial-decision-cluster .spatial-incident-node {
+    position: static !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ── RESPONSIVE DESIGN (TABLET & MOBILE) ── */
+@media (max-width: 768px) {
+  .spatial-story-viewport {
+    top: 5rem;
+    bottom: 2rem;
+  }
+
+  .spatial-composition-zone {
+    padding: 0.5rem 1rem 1rem 1.5rem;
+    max-width: 100%;
+    justify-content: flex-end;
+  }
+
+  .spatial-composition-zone--intro {
+    justify-content: flex-start;
+    padding-top: clamp(1.5rem, 5vh, 2.5rem);
+  }
+
+  /* Reserved Mobile Reading Zone for CommandAtlas (Below 3D Satellite Focal Region) */
+  .spatial-composition-zone--commandatlas {
+    top: clamp(34vh, 37%, 40vh);
+    bottom: 1rem;
+    justify-content: flex-start;
+    padding: 0.25rem 1.25rem 1rem 1.25rem;
+    max-width: 100%;
+  }
+
+  .spatial-narrative-container {
+    min-height: 10rem;
+  }
+
+  .spatial-hero-title {
+    font-size: clamp(2.4rem, 10vw, 3.75rem);
+    line-height: 0.95;
+  }
+
+  .spatial-story-lead {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    max-width: 100%;
+  }
+
+  .spatial-incident-node {
+    margin-top: 0.75rem;
+    padding-left: 0.75rem;
+  }
+
+  .spatial-incident-body {
+    font-size: 0.76rem;
+  }
+
+  .spatial-flow-diagram,
+  .spatial-pipeline-steps {
+    max-width: 100%;
+    gap: 0.35rem;
+  }
+
+  /* ── MOBILE SEQUENTIAL STORY PRIMITIVES (ZERO OVERFLOW CLIPPING) ── */
+  .spatial-pipeline-mobile-container {
+    position: relative;
+    width: 100%;
+    min-height: 110px;
+  }
+
+  .spatial-pipeline-mobile-step {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 0.95rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(15, 23, 42, 0.55);
+    border-radius: 0 6px 6px 0;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    will-change: transform, opacity, visibility;
+  }
+
+  .spatial-pipeline-mobile-step[data-mobile-step="4"] {
+    border-left-color: rgba(56, 189, 248, 0.6);
+    background: rgba(15, 23, 42, 0.65);
+  }
+
+  .spatial-pipeline-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+  }
+
+  .spatial-step-counter {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  /* Mobile Decision Sequential Container (Zero Overlap) */
+  .spatial-decision-mobile-container {
+    position: relative;
+    width: 100%;
+    min-height: 130px;
+  }
+
+  .spatial-decision-mobile-node {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0.85rem 1rem;
+    border-left: 2px solid rgba(167, 139, 250, 0.4);
+    background: rgba(15, 23, 42, 0.55);
+    border-radius: 0 6px 6px 0;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    will-change: transform, opacity, visibility;
+  }
+
+  .spatial-decision-mobile-node.spatial-incident-node--cyan {
+    border-left-color: rgba(56, 189, 248, 0.5);
+  }
+
+  .spatial-decision-mobile-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .spatial-decision-counter {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+}
+

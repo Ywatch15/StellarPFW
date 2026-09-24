@@ -28,7 +28,7 @@ describe('Works Page — Planetary Hero + Cinematic Stories', () => {
     expect(screen.getByText(/TENTDESK · PRODUCTION SAAS/i)).toBeInTheDocument();
   });
 
-  it('renders story cards for TentDesk and CommandAtlas with verified technical details', () => {
+  it('renders story cards for TentDesk, CommandAtlas, and Bank Transaction System with verified technical details', () => {
     render(
       <MemoryRouter>
         <Works />
@@ -37,7 +37,10 @@ describe('Works Page — Planetary Hero + Cinematic Stories', () => {
 
     expect(screen.getByRole('heading', { level: 3, name: /TentDesk/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: /CommandAtlas/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: /Bank Transaction System/i })).toBeInTheDocument();
     expect(screen.getByText(/366 commands across 21 canonical topics/i)).toBeInTheDocument();
+    expect(screen.getByText(/atomic double-entry bookkeeping/i)).toBeInTheDocument();
+    expect(screen.getByText(/GRAVITATIONAL TRANSITION · SINGULARITY CORRIDOR → FINANCIAL DETERMINISM/i)).toBeInTheDocument();
   });
 
   it('does not render redundant CommandAtlas deep dive section at the bottom', () => {

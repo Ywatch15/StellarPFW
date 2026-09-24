@@ -7,6 +7,7 @@ import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import useDeviceCapability from '../../../hooks/useDeviceCapability';
 import usePageVisibility from '../../../hooks/usePageVisibility';
+import BlackHoleSingularity from './BlackHoleSingularity';
 
 // Local Draco decoder directory for compressed models (Station & Satellite)
 const DRACO_DECODER_PATH = '/draco/gltf/';
@@ -110,6 +111,37 @@ function SatelliteHero({ isActive, isPageVisible, prefersReducedMotion, ambientG
 }
 
 /**
+ * Bank Transaction System Hero Object: Saturn V Launch Vehicle
+ * Metaphor: High-integrity multi-stage propulsion, rigorous payload delivery, ACID guarantees.
+ * Standard glTF loader, no Draco required.
+ */
+function RocketHero({ isActive, isPageVisible, prefersReducedMotion, ambientGroupRef }) {
+  const { scene } = useGLTF('/models/cinematic/rocket-saturn-v.glb');
+
+  const pivot = useMemo(() => {
+    return createNormalizedPivot(scene, 2.5);
+  }, [scene]);
+
+  // Decoupled continuous ambient attitude drift: independent of scroll scrub
+  useFrame((state, delta) => {
+    if (!isActive || !isPageVisible || prefersReducedMotion) return;
+    if (ambientGroupRef.current) {
+      ambientGroupRef.current.rotation.y += delta * 0.04; // Slow attitude yaw
+      ambientGroupRef.current.rotation.x = THREE.MathUtils.degToRad(-15) + Math.sin(state.clock.elapsedTime * 0.3) * 0.03;
+      ambientGroupRef.current.rotation.z = Math.cos(state.clock.elapsedTime * 0.25) * 0.02;
+    }
+  });
+
+  return (
+    <group>
+      <primitive object={pivot} />
+      {/* Warm Amber Propulsion / Double-Entry Ledger Glow */}
+      <pointLight position={[0, -0.8, 0.5]} intensity={0.9} color="#f59e0b" distance={5} />
+    </group>
+  );
+}
+
+/**
  * Supporting Deep Space Object: Asteroid Bennu (1999 RQ36)
  * Visually subordinate background anchor providing spatial depth and cosmic scale.
  * Placed deep in background; muted lighting, no Draco required.
@@ -180,16 +212,21 @@ function SpatialContinuumController({
   // Root Groups (Strict Visibility Gating)
   const stationRootRef = useRef();
   const satelliteRootRef = useRef();
+  const blackHoleRootRef = useRef();
+  const rocketRootRef = useRef();
   const asteroidRootRef = useRef();
 
   // Scroll Transform Groups (GSAP Spatial Position & Scale)
   const stationScrollGroupRef = useRef();
   const satelliteScrollGroupRef = useRef();
+  const blackHoleScrollGroupRef = useRef();
+  const rocketScrollGroupRef = useRef();
   const asteroidScrollGroupRef = useRef();
 
-  // Ambient Motion Groups (Continuous useFrame Rotation & Mechanical Clips)
+  // Ambient Motion Groups (Continuous useFrame Rotation & Attitude Drift)
   const stationAmbientGroupRef = useRef();
   const satelliteAmbientGroupRef = useRef();
+  const rocketAmbientGroupRef = useRef();
   const asteroidAmbientGroupRef = useRef();
 
   const isMobile = size.width <= 768;
@@ -206,24 +243,47 @@ function SpatialContinuumController({
       let lookX = 0;
       let lookY = 0;
 
-      if (clampedP <= 0.15) {
-        const t = clampedP / 0.15;
+      if (clampedP <= 0.10) {
+        const t = clampedP / 0.10;
         camZ = 7.5 - 1.3 * t; // 7.5 -> 6.2
-      } else if (clampedP <= 0.5) {
-        const t = (clampedP - 0.15) / 0.35;
+      } else if (clampedP <= 0.36) {
+        // TentDesk focal plane
+        const t = (clampedP - 0.10) / 0.26;
         const ease = t * t * (3 - 2 * t);
         camX = isMobile ? 0 : -0.3 * ease;
         camZ = 6.2 - 0.9 * ease; // 6.2 -> 5.3
         lookX = isMobile ? 0 : -0.4 * ease;
-      } else if (clampedP <= 0.75) {
-        const t = (clampedP - 0.5) / 0.25;
+      } else if (clampedP <= 0.44) {
+        // Continuum handoff bridge
+        const t = (clampedP - 0.36) / 0.08;
         const ease = t * t * (3 - 2 * t);
         camX = isMobile ? 0 : -0.3 + 0.6 * ease; // -0.3 -> +0.3
         camZ = 5.3 + Math.sin(t * Math.PI) * 0.7; // slight pull-back during handoff
         lookX = isMobile ? 0 : -0.4 + 0.8 * ease; // -0.4 -> +0.4
-      } else {
+      } else if (clampedP <= 0.73) {
+        // CommandAtlas focal plane
         camX = isMobile ? 0 : 0.3;
         camZ = 5.3;
+        lookX = isMobile ? 0 : 0.4;
+      } else if (clampedP <= 0.84) {
+        // Black Hole Singularity approach and pass-through
+        if (clampedP <= 0.78) {
+          const t = (clampedP - 0.73) / 0.05;
+          const ease = t * t * (3 - 2 * t);
+          camX = (isMobile ? 0 : 0.3) * (1 - ease);
+          camZ = 5.3 - 0.9 * ease; // 5.3 -> 4.4
+          lookX = (isMobile ? 0 : 0.4) * (1 - ease);
+        } else {
+          const t = (clampedP - 0.78) / 0.06;
+          const ease = t * t * (3 - 2 * t);
+          camX = (isMobile ? 0 : 0.3) * ease;
+          camZ = 4.4 + 1.0 * ease; // 4.4 -> 5.4
+          lookX = (isMobile ? 0 : 0.4) * ease;
+        }
+      } else {
+        // Bank Transaction System focal plane
+        camX = isMobile ? 0 : 0.3;
+        camZ = 5.4;
         lookX = isMobile ? 0 : 0.4;
       }
 
@@ -231,20 +291,32 @@ function SpatialContinuumController({
       camera.lookAt(lookX, lookY, 0);
 
       // ── 2. STRICT VISIBILITY THRESHOLDS (LOADED != VISIBLE) ──
-      // TentDesk: visible only between [0.12, 0.85]
-      const showStation = clampedP >= 0.12 && clampedP <= 0.85;
+      // TentDesk: visible only between [0.08, 0.46]
+      const showStation = clampedP >= 0.08 && clampedP <= 0.46;
       if (stationRootRef.current) {
         stationRootRef.current.visible = showStation;
       }
 
-      // CommandAtlas: visible only between [0.45, 0.98]
-      const showSatellite = clampedP >= 0.45 && clampedP <= 0.98;
+      // CommandAtlas: visible only between [0.38, 0.74]
+      const showSatellite = clampedP >= 0.38 && clampedP <= 0.74;
       if (satelliteRootRef.current) {
         satelliteRootRef.current.visible = showSatellite;
       }
 
-      // Asteroid: subordinate background element [0.10, 0.88]
-      const showAsteroid = clampedP >= 0.10 && clampedP <= 0.88;
+      // Black Hole Transition: visible only between [0.72, 0.84]
+      const showBlackHole = clampedP >= 0.72 && clampedP <= 0.84;
+      if (blackHoleRootRef.current) {
+        blackHoleRootRef.current.visible = showBlackHole;
+      }
+
+      // BankSys (Saturn V Rocket): visible only between [0.82, 1.00]
+      const showRocket = clampedP >= 0.82 && clampedP <= 1.00;
+      if (rocketRootRef.current) {
+        rocketRootRef.current.visible = showRocket;
+      }
+
+      // Asteroid: subordinate background element [0.08, 0.95]
+      const showAsteroid = clampedP >= 0.08 && clampedP <= 0.95;
       if (asteroidRootRef.current) {
         asteroidRootRef.current.visible = showAsteroid;
       }
@@ -256,22 +328,22 @@ function SpatialContinuumController({
         let tdZ = -8.5;
         let tdScale = 0.25;
 
-        if (clampedP < 0.15) {
+        if (clampedP < 0.10) {
           tdZ = -8.5;
           tdScale = 0.25;
-        } else if (clampedP <= 0.35) {
+        } else if (clampedP <= 0.24) {
           // Arrival from depth into right focal plane
-          const t = (clampedP - 0.15) / 0.2;
+          const t = (clampedP - 0.10) / 0.14;
           const ease = t * t * (3 - 2 * t);
           tdZ = -8.5 + (isMobile ? 8.0 : 8.7) * ease; // -> -0.5 / +0.2
           tdScale = 0.25 + (isMobile ? 0.35 : 0.7) * ease; // -> 0.6 / 0.95
-        } else if (clampedP <= 0.5) {
+        } else if (clampedP <= 0.36) {
           // Stillness & architecture inspection
           tdZ = isMobile ? -0.5 : 0.2;
           tdScale = isMobile ? 0.6 : 0.95;
-        } else if (clampedP <= 0.75) {
+        } else if (clampedP <= 0.46) {
           // Recedes across to deep left during handoff (COEXISTENCE WINDOW)
-          const t = (clampedP - 0.5) / 0.25;
+          const t = (clampedP - 0.36) / 0.10;
           const ease = t * t * (3 - 2 * t);
           tdX = (isMobile ? 0 : 1.8) - (isMobile ? 2.5 : 7.2) * ease; // -> -5.4
           tdY = (isMobile ? 1.2 : 0) + 0.5 * ease;
@@ -296,32 +368,81 @@ function SpatialContinuumController({
         let caZ = -8.0;
         let caScale = 0.25;
 
-        if (clampedP < 0.45) {
+        if (clampedP < 0.40) {
           caX = isMobile ? 2.5 : 5.8;
           caZ = -8.0;
           caScale = 0.25;
-        } else if (clampedP <= 0.75) {
+        } else if (clampedP <= 0.52) {
           // Sweeps in from right & depth during handoff (COEXISTENCE WINDOW)
-          const t = (clampedP - 0.45) / 0.3;
+          const t = (clampedP - 0.40) / 0.12;
           const ease = t * t * (3 - 2 * t);
           caX = (isMobile ? 2.5 : 5.8) - (isMobile ? 2.5 : 4.0) * ease; // -> isMobile 0 : 1.8
           caZ = -8.0 + (isMobile ? 7.5 : 8.2) * ease; // -> -0.5 / +0.2
           caScale = 0.25 + (isMobile ? 0.35 : 0.7) * ease; // -> 0.6 / 0.95
-        } else {
+        } else if (clampedP <= 0.70) {
           // Focal dominance & stillness
           caX = isMobile ? 0 : 1.8;
           caY = isMobile ? 1.2 : 0;
           caZ = isMobile ? -0.5 : 0.2;
           caScale = isMobile ? 0.6 : 0.95;
+        } else {
+          // Recedes left as Black Hole singularity takes over
+          const t = (clampedP - 0.70) / 0.04;
+          const ease = t * t * (3 - 2 * t);
+          caX = (isMobile ? 0 : 1.8) - (isMobile ? 2.0 : 6.0) * ease;
+          caZ = (isMobile ? -0.5 : 0.2) - 6.0 * ease;
+          caScale = (isMobile ? 0.6 : 0.95) - 0.6 * ease;
         }
 
         satelliteScrollGroupRef.current.position.set(caX, caY, caZ);
         satelliteScrollGroupRef.current.scale.set(caScale, caScale, caScale);
       }
 
-      // ── 5. ASTEROID TRAJECTORY (SUBORDINATE DEEP BACKGROUND) ──
+      // ── 5. BLACK HOLE SINGULARITY TRAJECTORY ──
+      if (blackHoleScrollGroupRef.current && showBlackHole) {
+        let bhZ = -5.0;
+        let bhScale = 0.6;
+        if (clampedP <= 0.78) {
+          const t = (clampedP - 0.72) / 0.06;
+          bhZ = -5.0 + 3.5 * t; // -5.0 -> -1.5
+          bhScale = 0.6 + 0.4 * t; // 0.6 -> 1.0
+        } else {
+          const t = (clampedP - 0.78) / 0.06;
+          bhZ = -1.5 + 2.0 * t; // -1.5 -> 0.5
+          bhScale = 1.0 + 0.3 * t; // 1.0 -> 1.3
+        }
+        blackHoleScrollGroupRef.current.position.set(0, 0, bhZ);
+        blackHoleScrollGroupRef.current.scale.set(bhScale, bhScale, bhScale);
+      }
+
+      // ── 6. BANK TRANSACTION SYSTEM (SATURN V ROCKET) TRAJECTORY ──
+      if (rocketScrollGroupRef.current && showRocket) {
+        let rkX = isMobile ? 2.5 : 5.8;
+        let rkY = isMobile ? 1.2 : 0;
+        let rkZ = -8.0;
+        let rkScale = 0.25;
+
+        if (clampedP <= 0.88) {
+          // Enters from right & depth as black hole transition concludes
+          const t = (clampedP - 0.82) / 0.06;
+          const ease = t * t * (3 - 2 * t);
+          rkX = (isMobile ? 2.5 : 5.8) - (isMobile ? 2.5 : 4.0) * ease; // -> isMobile 0 : 1.8
+          rkZ = -8.0 + (isMobile ? 7.5 : 8.2) * ease; // -> -0.5 / +0.2
+          rkScale = 0.25 + (isMobile ? 0.35 : 0.7) * ease; // -> 0.6 / 0.95
+        } else {
+          // Focal dominance & stillness throughout transaction narrative
+          rkX = isMobile ? 0 : 1.8;
+          rkY = isMobile ? 1.2 : 0;
+          rkZ = isMobile ? -0.5 : 0.2;
+          rkScale = isMobile ? 0.6 : 0.95;
+        }
+
+        rocketScrollGroupRef.current.position.set(rkX, rkY, rkZ);
+        rocketScrollGroupRef.current.scale.set(rkScale, rkScale, rkScale);
+      }
+
+      // ── 7. ASTEROID TRAJECTORY (SUBORDINATE DEEP BACKGROUND) ──
       if (asteroidScrollGroupRef.current && showAsteroid) {
-        // Slow subtle lateral drift across deep background z=-14.0
         const driftX = (clampedP - 0.5) * -3.0 - 2.0;
         asteroidScrollGroupRef.current.position.set(driftX, -1.8, -14.0);
         asteroidScrollGroupRef.current.scale.set(0.9, 0.9, 0.9);
@@ -375,6 +496,35 @@ function SpatialContinuumController({
                 isPageVisible={isPageVisible}
                 prefersReducedMotion={prefersReducedMotion}
                 ambientGroupRef={satelliteAmbientGroupRef}
+              />
+            </Suspense>
+          </group>
+        </group>
+      </group>
+
+      {/* ── BLACK HOLE SINGULARITY (TRANSITION CORRIDOR) ── */}
+      <group ref={blackHoleRootRef} visible={false}>
+        <group ref={blackHoleScrollGroupRef}>
+          <Suspense fallback={null}>
+            <BlackHoleSingularity
+              isActive={isActive}
+              isPageVisible={isPageVisible}
+              prefersReducedMotion={prefersReducedMotion}
+            />
+          </Suspense>
+        </group>
+      </group>
+
+      {/* ── BANK TRANSACTION SYSTEM (SATURN V ROCKET) ── */}
+      <group ref={rocketRootRef} visible={false}>
+        <group ref={rocketScrollGroupRef}>
+          <group ref={rocketAmbientGroupRef}>
+            <Suspense fallback={null}>
+              <RocketHero
+                isActive={isActive}
+                isPageVisible={isPageVisible}
+                prefersReducedMotion={prefersReducedMotion}
+                ambientGroupRef={rocketAmbientGroupRef}
               />
             </Suspense>
           </group>

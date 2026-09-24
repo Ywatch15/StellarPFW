@@ -10,6 +10,7 @@ import TentDeskStateFlow from './primitives/TentDeskStateFlow';
 import TentDeskIncidentAudit from './primitives/TentDeskIncidentAudit';
 import CommandAtlasPipelineFlow from './primitives/CommandAtlasPipelineFlow';
 import CommandAtlasDecisionMatrix from './primitives/CommandAtlasDecisionMatrix';
+import BankTransactionFlow from './primitives/BankTransactionFlow';
 import '../../../styles/cinematic-engine.css';
 import '../../../styles/works-cinematic.css';
 
@@ -43,6 +44,15 @@ export default function WorksStory() {
   const mobilePipelineStepRefs = useRef([]);
   const decisionRefs = useRef([]);
   const mobileDecisionRefs = useRef([]);
+
+  // Black Hole Singularity Transition Bridge
+  const blackholeBridgeRef = useRef(null);
+
+  // Bank Transaction System Dynamic Zone
+  const banksysZoneRef = useRef(null);
+  const banksysTitleRef = useRef(null);
+  const banksysOverviewRef = useRef(null);
+  const banksysFlowRef = useRef(null);
 
   // Responsive device breakpoint state
   const [isMobileScreen, setIsMobileScreen] = useState(() => {
@@ -82,7 +92,12 @@ export default function WorksStory() {
         !commandatlasTitleRef.current ||
         !commandatlasOverviewRef.current ||
         !commandatlasPipelineRef.current ||
-        !commandatlasDecisionRef.current
+        !commandatlasDecisionRef.current ||
+        !blackholeBridgeRef.current ||
+        !banksysZoneRef.current ||
+        !banksysTitleRef.current ||
+        !banksysOverviewRef.current ||
+        !banksysFlowRef.current
       ) {
         return;
       }
@@ -163,6 +178,28 @@ export default function WorksStory() {
         filter: 'blur(4px)',
       });
 
+      // Black Hole Singularity bridge
+      gsap.set(blackholeBridgeRef.current, { scale: 0.85, opacity: 0 });
+
+      // Bank Transaction System initial offscreen states
+      gsap.set(banksysTitleRef.current, {
+        x: isMobile ? '50vw' : '70vw',
+        scale: 0.92,
+        opacity: 0,
+        filter: 'blur(4px)',
+      });
+      gsap.set(banksysOverviewRef.current, {
+        y: 25,
+        opacity: 0,
+        filter: 'blur(3px)',
+      });
+      gsap.set(banksysFlowRef.current, {
+        x: 40,
+        scale: 0.94,
+        opacity: 0,
+        filter: 'blur(4px)',
+      });
+
       // Mobile initial states: Step 0 & Decision 0 visible initially, subsequent items hidden
       if (isMobile) {
         mobilePipelineStepRefs.current.forEach((el, idx) => {
@@ -185,7 +222,7 @@ export default function WorksStory() {
         });
       }
 
-      // ── BEAT 1: INTRO (0.00 -> 0.12) ──
+      // ── BEAT 1: INTRO (0.00 -> 0.08) ──
       // Title and thesis sweep out along a diagonal physical motion vector
       tl.to(
         introRef.current,
@@ -196,12 +233,12 @@ export default function WorksStory() {
           filter: 'blur(5px)',
           opacity: 0,
           ease: 'power2.in',
-          duration: 0.08,
+          duration: 0.05,
         },
-        0.04,
+        0.03,
       );
 
-      // ── BEAT 2A: TENTDESK ARRIVAL & IDENTITY (0.13 -> 0.26) ──
+      // ── BEAT 2A: TENTDESK ARRIVAL & IDENTITY (0.09 -> 0.18) ──
       // Title sweeps into left focal plane with spatial depth
       tl.to(
         tentdeskTitleRef.current,
@@ -211,9 +248,9 @@ export default function WorksStory() {
           opacity: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: 0.06,
+          duration: 0.04,
         },
-        0.13,
+        0.09,
       );
 
       // Scope and metadata follow
@@ -224,12 +261,12 @@ export default function WorksStory() {
           opacity: 1,
           filter: 'blur(0px)',
           ease: 'power1.out',
-          duration: 0.05,
+          duration: 0.04,
         },
-        0.15,
+        0.10,
       );
 
-      // (0.18 -> 0.22) STILLNESS WINDOW: Identity dominant, Station in ambient life
+      // (0.14 -> 0.16) STILLNESS WINDOW: Identity dominant, Station in ambient life
 
       // Overview exits completely before Beat 2B begins
       tl.to(
@@ -240,9 +277,9 @@ export default function WorksStory() {
           opacity: 0,
           filter: 'blur(3px)',
           ease: 'power1.in',
-          duration: 0.03,
+          duration: 0.02,
         },
-        0.23,
+        0.165,
       );
 
       tl.to(
@@ -251,12 +288,12 @@ export default function WorksStory() {
           scale: isMobile ? 0.78 : 0.7,
           transformOrigin: 'left top',
           ease: 'power1.inOut',
-          duration: 0.03,
+          duration: 0.02,
         },
-        0.23,
+        0.165,
       );
 
-      // ── BEAT 2B: ARCHITECTURE & REAL-TIME STATE FLOW (0.27 -> 0.41) ──
+      // ── BEAT 2B: ARCHITECTURE & REAL-TIME STATE FLOW (0.19 -> 0.28) ──
       // Diagram becomes primary with depth aperture (starts after overview is 100% gone)
       tl.to(
         tentdeskFlowRef.current,
@@ -266,12 +303,12 @@ export default function WorksStory() {
           opacity: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: 0.05,
+          duration: 0.035,
         },
-        0.27,
+        0.19,
       );
 
-      // (0.32 -> 0.37) STILLNESS WINDOW: Data flow diagram settled and readable
+      // (0.225 -> 0.255) STILLNESS WINDOW: Data flow diagram settled and readable
 
       // State flow exits completely before Beat 2C begins
       tl.to(
@@ -282,12 +319,12 @@ export default function WorksStory() {
           opacity: 0,
           filter: 'blur(3px)',
           ease: 'power1.in',
-          duration: 0.03,
+          duration: 0.02,
         },
-        0.38,
+        0.26,
       );
 
-      // ── BEAT 2C: PRODUCTION AUDIT & INCIDENTS (0.42 -> 0.52) ──
+      // ── BEAT 2C: PRODUCTION AUDIT & INCIDENTS (0.285 -> 0.36) ──
       // Diagnostics become primary (starts after flow is 100% gone)
       tl.to(
         tentdeskIncidentRef.current,
@@ -297,12 +334,12 @@ export default function WorksStory() {
           opacity: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: 0.05,
+          duration: 0.035,
         },
-        0.42,
+        0.285,
       );
 
-      // (0.46 -> 0.49) STILLNESS WINDOW: Incident disclosures settled and readable
+      // (0.32 -> 0.345) STILLNESS WINDOW: Incident disclosures settled and readable
 
       // TentDesk exits completely as handoff approaches
       tl.to(
@@ -313,12 +350,12 @@ export default function WorksStory() {
           opacity: 0,
           filter: 'blur(5px)',
           ease: 'power2.in',
-          duration: 0.04,
+          duration: 0.025,
         },
-        0.49,
+        0.345,
       );
 
-      // ── BEAT 3: SPATIAL CONTINUUM HANDOFF (0.53 -> 0.64) ──
+      // ── BEAT 3: SPATIAL CONTINUUM HANDOFF (0.37 -> 0.44) ──
       // Full-viewport spatial freedom: Station recedes left/depth, Satellite enters right/depth
       tl.to(
         handoffBridgeRef.current,
@@ -326,9 +363,9 @@ export default function WorksStory() {
           scale: 1,
           opacity: 1,
           ease: 'power1.out',
-          duration: 0.04,
+          duration: 0.03,
         },
-        0.53,
+        0.37,
       );
 
       tl.to(
@@ -337,12 +374,12 @@ export default function WorksStory() {
           scale: 1.08,
           opacity: 0,
           ease: 'power1.in',
-          duration: 0.04,
+          duration: 0.03,
         },
-        0.60,
+        0.41,
       );
 
-      // ── BEAT 4A: COMMANDATLAS IDENTITY & KNOWLEDGE CONSTELLATION (0.65 -> 0.78) ──
+      // ── BEAT 4A: COMMANDATLAS IDENTITY & KNOWLEDGE CONSTELLATION (0.45 -> 0.54) ──
       // Title sweeps into left focal plane with spatial depth
       tl.to(
         commandatlasTitleRef.current,
@@ -352,9 +389,9 @@ export default function WorksStory() {
           opacity: 1,
           filter: 'blur(0px)',
           ease: 'power2.out',
-          duration: 0.05,
+          duration: 0.035,
         },
-        0.65,
+        0.45,
       );
 
       // Overview follows
@@ -365,12 +402,12 @@ export default function WorksStory() {
           opacity: 1,
           filter: 'blur(0px)',
           ease: 'power1.out',
-          duration: 0.04,
+          duration: 0.03,
         },
-        0.67,
+        0.465,
       );
 
-      // (0.71 -> 0.74) STILLNESS WINDOW: Identity dominant, 366 commands readable
+      // (0.495 -> 0.52) STILLNESS WINDOW: Identity dominant, 366 commands readable
 
       // Overview exits completely before Beat 4B begins
       tl.to(
@@ -381,9 +418,9 @@ export default function WorksStory() {
           opacity: 0,
           filter: 'blur(3px)',
           ease: 'power1.in',
-          duration: 0.03,
+          duration: 0.02,
         },
-        0.75,
+        0.525,
       );
 
       tl.to(
@@ -392,18 +429,17 @@ export default function WorksStory() {
           scale: isMobile ? 0.78 : 0.7,
           transformOrigin: 'left top',
           ease: 'power1.inOut',
-          duration: 0.03,
+          duration: 0.02,
         },
-        0.75,
+        0.525,
       );
 
       if (isMobile) {
         // Hide overview when exited completely
-        tl.set(commandatlasOverviewRef.current, { visibility: 'hidden' }, 0.77);
+        tl.set(commandatlasOverviewRef.current, { visibility: 'hidden' }, 0.545);
 
-        // ── BEAT 4B (MOBILE): SEQUENTIAL DISCRETE PIPELINE (0.77 -> 0.92) ──
-        // Pipeline container enters
-        tl.set(commandatlasPipelineRef.current, { visibility: 'visible' }, 0.77);
+        // ── BEAT 4B (MOBILE): SEQUENTIAL DISCRETE PIPELINE (0.545 -> 0.716) ──
+        tl.set(commandatlasPipelineRef.current, { visibility: 'visible' }, 0.545);
         tl.to(
           commandatlasPipelineRef.current,
           {
@@ -412,14 +448,14 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.02,
+            duration: 0.015,
           },
-          0.77,
+          0.545,
         );
 
         const steps = mobilePipelineStepRefs.current;
 
-        // Stage 1 (01 MARKDOWN REPOSITORY): Settled and readable from 0.77 to 0.802
+        // Stage 1 (01 MARKDOWN REPOSITORY): Settled and readable from 0.545 to 0.570
         if (steps[0]) {
           tl.to(
             steps[0],
@@ -429,14 +465,14 @@ export default function WorksStory() {
               ease: 'power1.in',
               duration: 0.008,
             },
-            0.802,
+            0.570,
           );
-          tl.set(steps[0], { visibility: 'hidden' }, 0.810);
+          tl.set(steps[0], { visibility: 'hidden' }, 0.578);
         }
 
-        // Stage 2 (02 BUILD-TIME VALIDATION): Enters at 0.812, readable until 0.830
+        // Stage 2 (02 BUILD-TIME VALIDATION): Enters at 0.580, readable until 0.602
         if (steps[1]) {
-          tl.set(steps[1], { visibility: 'visible' }, 0.812);
+          tl.set(steps[1], { visibility: 'visible' }, 0.580);
           tl.to(
             steps[1],
             {
@@ -445,7 +481,7 @@ export default function WorksStory() {
               ease: 'power1.out',
               duration: 0.008,
             },
-            0.812,
+            0.580,
           );
           tl.to(
             steps[1],
@@ -455,14 +491,14 @@ export default function WorksStory() {
               ease: 'power1.in',
               duration: 0.008,
             },
-            0.830,
+            0.602,
           );
-          tl.set(steps[1], { visibility: 'hidden' }, 0.838);
+          tl.set(steps[1], { visibility: 'hidden' }, 0.610);
         }
 
-        // Stage 3 (03 STATIC PACKS): Enters at 0.840, readable until 0.858
+        // Stage 3 (03 STATIC PACKS): Enters at 0.612, readable until 0.634
         if (steps[2]) {
-          tl.set(steps[2], { visibility: 'visible' }, 0.840);
+          tl.set(steps[2], { visibility: 'visible' }, 0.612);
           tl.to(
             steps[2],
             {
@@ -471,7 +507,7 @@ export default function WorksStory() {
               ease: 'power1.out',
               duration: 0.008,
             },
-            0.840,
+            0.612,
           );
           tl.to(
             steps[2],
@@ -481,14 +517,14 @@ export default function WorksStory() {
               ease: 'power1.in',
               duration: 0.008,
             },
-            0.858,
+            0.634,
           );
-          tl.set(steps[2], { visibility: 'hidden' }, 0.866);
+          tl.set(steps[2], { visibility: 'hidden' }, 0.642);
         }
 
-        // Stage 4 (04 DEXIE INDEXEDDB CLIENT-SIDE): Enters at 0.868, readable until 0.886 - NEVER CLIPPED
+        // Stage 4 (04 DEXIE INDEXEDDB CLIENT-SIDE): Enters at 0.644, readable until 0.666
         if (steps[3]) {
-          tl.set(steps[3], { visibility: 'visible' }, 0.868);
+          tl.set(steps[3], { visibility: 'visible' }, 0.644);
           tl.to(
             steps[3],
             {
@@ -497,7 +533,7 @@ export default function WorksStory() {
               ease: 'power1.out',
               duration: 0.008,
             },
-            0.868,
+            0.644,
           );
           tl.to(
             steps[3],
@@ -507,14 +543,14 @@ export default function WorksStory() {
               ease: 'power1.in',
               duration: 0.008,
             },
-            0.886,
+            0.666,
           );
-          tl.set(steps[3], { visibility: 'hidden' }, 0.894);
+          tl.set(steps[3], { visibility: 'hidden' }, 0.674);
         }
 
-        // Stage 5 (05 LOCAL SEARCH INDEX): Enters at 0.896, readable until 0.912
+        // Stage 5 (05 LOCAL SEARCH INDEX): Enters at 0.676, readable until 0.698
         if (steps[4]) {
-          tl.set(steps[4], { visibility: 'visible' }, 0.896);
+          tl.set(steps[4], { visibility: 'visible' }, 0.676);
           tl.to(
             steps[4],
             {
@@ -523,7 +559,7 @@ export default function WorksStory() {
               ease: 'power1.out',
               duration: 0.008,
             },
-            0.896,
+            0.676,
           );
           tl.to(
             steps[4],
@@ -533,9 +569,9 @@ export default function WorksStory() {
               ease: 'power1.in',
               duration: 0.008,
             },
-            0.912,
+            0.698,
           );
-          tl.set(steps[4], { visibility: 'hidden' }, 0.920);
+          tl.set(steps[4], { visibility: 'hidden' }, 0.706);
         }
 
         // Pipeline container exits completely before Beat 4C begins
@@ -549,13 +585,12 @@ export default function WorksStory() {
             ease: 'power1.in',
             duration: 0.008,
           },
-          0.916,
+          0.708,
         );
-        tl.set(commandatlasPipelineRef.current, { visibility: 'hidden' }, 0.924);
+        tl.set(commandatlasPipelineRef.current, { visibility: 'hidden' }, 0.716);
 
-        // ── BEAT 4C (MOBILE): SEQUENTIAL DISCRETE DECISIONS (0.926 -> 0.998) ──
-        // Decision container enters after pipeline is 100% gone
-        tl.set(commandatlasDecisionRef.current, { visibility: 'visible' }, 0.926);
+        // ── BEAT 4C (MOBILE): SEQUENTIAL DISCRETE DECISIONS (0.718 -> 0.765) ──
+        tl.set(commandatlasDecisionRef.current, { visibility: 'visible' }, 0.718);
         tl.to(
           commandatlasDecisionRef.current,
           {
@@ -564,14 +599,14 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.015,
+            duration: 0.01,
           },
-          0.926,
+          0.718,
         );
 
         const decs = mobileDecisionRefs.current;
 
-        // Decision 01 (OFFLINE-FIRST RETRIEVAL): Settled and readable from 0.926 to 0.948
+        // Decision 01 (OFFLINE-FIRST RETRIEVAL): Settled and readable from 0.718 to 0.728
         if (decs[0]) {
           tl.to(
             decs[0],
@@ -579,25 +614,25 @@ export default function WorksStory() {
               y: -15,
               opacity: 0,
               ease: 'power1.in',
-              duration: 0.007,
+              duration: 0.006,
             },
-            0.948,
+            0.728,
           );
-          tl.set(decs[0], { visibility: 'hidden' }, 0.955);
+          tl.set(decs[0], { visibility: 'hidden' }, 0.734);
         }
 
-        // Decision 02 (NO AI BY DESIGN): Enters at 0.957, readable until 0.976
+        // Decision 02 (NO AI BY DESIGN): Enters at 0.735, readable until 0.745
         if (decs[1]) {
-          tl.set(decs[1], { visibility: 'visible' }, 0.957);
+          tl.set(decs[1], { visibility: 'visible' }, 0.735);
           tl.to(
             decs[1],
             {
               y: 0,
               opacity: 1,
               ease: 'power1.out',
-              duration: 0.007,
+              duration: 0.006,
             },
-            0.957,
+            0.735,
           );
           tl.to(
             decs[1],
@@ -605,40 +640,44 @@ export default function WorksStory() {
               y: -15,
               opacity: 0,
               ease: 'power1.in',
-              duration: 0.007,
+              duration: 0.006,
             },
-            0.976,
+            0.745,
           );
-          tl.set(decs[1], { visibility: 'hidden' }, 0.983);
+          tl.set(decs[1], { visibility: 'hidden' }, 0.751);
         }
 
-        // Decision 03 (CLIENT-SIDE LOCAL RETRIEVAL): Enters at 0.985, readable until 0.996
+        // Decision 03 (CLIENT-SIDE LOCAL RETRIEVAL): Enters at 0.752, readable until 0.759
         if (decs[2]) {
-          tl.set(decs[2], { visibility: 'visible' }, 0.985);
+          tl.set(decs[2], { visibility: 'visible' }, 0.752);
           tl.to(
             decs[2],
             {
               y: 0,
               opacity: 1,
               ease: 'power1.out',
-              duration: 0.006,
+              duration: 0.005,
             },
-            0.985,
+            0.752,
           );
         }
 
-        // Final unpin fade
+        // CommandAtlas exits completely
         tl.to(
           [commandatlasDecisionRef.current, commandatlasTitleRef.current],
           {
-            opacity: 0.25,
-            ease: 'power1.in',
-            duration: 0.003,
+            x: isMobile ? '-60vw' : '-80vw',
+            scale: 0.9,
+            opacity: 0,
+            filter: 'blur(5px)',
+            ease: 'power2.in',
+            duration: 0.008,
           },
-          0.997,
+          0.760,
         );
+        tl.set(commandatlasDecisionRef.current, { visibility: 'hidden' }, 0.768);
       } else {
-        // ── DESKTOP BEAT 4B: DETERMINISTIC COMPILATION PIPELINE (0.79 -> 0.91) ──
+        // ── DESKTOP BEAT 4B: DETERMINISTIC COMPILATION PIPELINE (0.545 -> 0.64) ──
         tl.to(
           commandatlasPipelineRef.current,
           {
@@ -647,12 +686,12 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.04,
+            duration: 0.03,
           },
-          0.79,
+          0.545,
         );
 
-        // (0.83 -> 0.87) STILLNESS WINDOW: Desktop compilation pipeline settled and readable
+        // (0.575 -> 0.62) STILLNESS WINDOW: Desktop compilation pipeline settled and readable
 
         // Pipeline exits completely before Beat 4C begins
         tl.to(
@@ -665,10 +704,10 @@ export default function WorksStory() {
             ease: 'power1.in',
             duration: 0.02,
           },
-          0.90,
+          0.625,
         );
 
-        // ── DESKTOP BEAT 4C: ADR-013 ARCHITECTURE & DECISION MATRIX (0.92 -> 1.00) ──
+        // ── DESKTOP BEAT 4C: ADR-013 ARCHITECTURE & DECISION MATRIX (0.645 -> 0.75) ──
         tl.to(
           commandatlasDecisionRef.current,
           {
@@ -677,24 +716,130 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.02,
+            duration: 0.03,
           },
-          0.92,
+          0.645,
         );
 
-        // (0.95 -> 0.98) STILLNESS WINDOW: Desktop ADR-013 decisions settled and readable
+        // (0.675 -> 0.72) STILLNESS WINDOW: Desktop ADR-013 decisions settled and readable
 
-        // Final unpin fade
+        // CommandAtlas exits completely before Black Hole Singularity
         tl.to(
           [commandatlasDecisionRef.current, commandatlasTitleRef.current],
           {
-            opacity: 0.25,
-            ease: 'power1.in',
-            duration: 0.015,
+            x: '-80vw',
+            scale: 0.9,
+            opacity: 0,
+            filter: 'blur(5px)',
+            ease: 'power2.in',
+            duration: 0.02,
           },
-          0.985,
+          0.73,
         );
       }
+
+      // ── BEAT 5: BLACK HOLE SINGULARITY TRANSITION BRIDGE (0.76 -> 0.84) ──
+      tl.to(
+        blackholeBridgeRef.current,
+        {
+          scale: 1,
+          opacity: 1,
+          ease: 'power1.out',
+          duration: 0.03,
+        },
+        0.76,
+      );
+
+      tl.to(
+        blackholeBridgeRef.current,
+        {
+          scale: 1.08,
+          opacity: 0,
+          ease: 'power1.in',
+          duration: 0.03,
+        },
+        0.81,
+      );
+
+      // ── BEAT 6A: BANK TRANSACTION SYSTEM IDENTITY & OVERVIEW (0.85 -> 0.92) ──
+      tl.to(
+        banksysTitleRef.current,
+        {
+          x: 0,
+          scale: 1,
+          opacity: 1,
+          filter: 'blur(0px)',
+          ease: 'power2.out',
+          duration: 0.035,
+        },
+        0.85,
+      );
+
+      tl.to(
+        banksysOverviewRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          filter: 'blur(0px)',
+          ease: 'power1.out',
+          duration: 0.03,
+        },
+        0.865,
+      );
+
+      // (0.895 -> 0.915) STILLNESS WINDOW: Overview and tech stack settled and readable
+
+      // Overview exits completely before Beat 6B begins
+      tl.to(
+        banksysOverviewRef.current,
+        {
+          x: -35,
+          scale: 0.95,
+          opacity: 0,
+          filter: 'blur(3px)',
+          ease: 'power1.in',
+          duration: 0.02,
+        },
+        0.92,
+      );
+
+      tl.to(
+        banksysTitleRef.current,
+        {
+          scale: isMobile ? 0.78 : 0.7,
+          transformOrigin: 'left top',
+          ease: 'power1.inOut',
+          duration: 0.02,
+        },
+        0.92,
+      );
+
+      // ── BEAT 6B: BANK TRANSACTION SYSTEM ATOMIC FLOW (0.93 -> 1.00) ──
+      tl.to(
+        banksysFlowRef.current,
+        {
+          x: 0,
+          scale: 1,
+          opacity: 1,
+          filter: 'blur(0px)',
+          ease: 'power2.out',
+          duration: 0.025,
+        },
+        0.93,
+      );
+
+      // (0.955 -> 0.99) STILLNESS WINDOW: Transaction diagram and ledger audit readable
+
+      // Final unpin fade
+      tl.to(
+        [banksysFlowRef.current, banksysTitleRef.current],
+        {
+          opacity: 0.25,
+          ease: 'power1.in',
+          duration: 0.005,
+        },
+        0.995,
+      );
     },
     containerRef,
     [],
@@ -710,7 +855,7 @@ export default function WorksStory() {
           visibilityRef.current = node;
         }}
         className="cinematic-scroll-space relative w-full"
-        style={{ height: isFallback ? 'auto' : (isMobileScreen ? '850vh' : '680vh') }}
+        style={{ height: isFallback ? 'auto' : (isMobileScreen ? '1300vh' : '1050vh') }}
         aria-label="Interactive Spatial Story Continuum"
       >
         <div
@@ -884,11 +1029,73 @@ export default function WorksStory() {
                   </div>
                 </div>
               </div>
+
+              {/* ── BEAT 5: BLACK HOLE SINGULARITY TRANSITION BRIDGE ── */}
+              <div
+                ref={blackholeBridgeRef}
+                className="spatial-composition-zone spatial-composition-zone--singularity"
+                aria-hidden="true"
+              >
+                <div className="spatial-handoff-bridge">
+                  <span className="spatial-status-dot spatial-status-dot--amber" />
+                  <span className="spatial-handoff-text">
+                    GRAVITATIONAL TRANSITION · SINGULARITY CORRIDOR → FINANCIAL DETERMINISM
+                  </span>
+                  <span className="spatial-status-dot spatial-status-dot--amber" />
+                </div>
+              </div>
+
+              {/* ── BEAT 6: BANK TRANSACTION SYSTEM DYNAMIC COMPOSITION ZONE ── */}
+              <div
+                ref={banksysZoneRef}
+                className="spatial-composition-zone spatial-composition-zone--banksys"
+                aria-labelledby="banksys-heading"
+              >
+                {/* Title & Coordinate Eyebrow */}
+                <div ref={banksysTitleRef}>
+                  <div className="spatial-coordinate-eyebrow text-[#f59e0b]">
+                    <span>MISSION ARCHITECTURE · HIGH-INTEGRITY TRANSACTION SYSTEM</span>
+                  </div>
+                  <h3
+                    id="banksys-heading"
+                    className="spatial-hero-title spatial-hero-title--amber"
+                  >
+                    Bank Transaction System
+                  </h3>
+                </div>
+
+                {/* Narrative Container: Sequential Semantic Beats */}
+                <div className="spatial-narrative-container relative w-full mt-2 min-h-[22rem]">
+                  {/* Beat 6A: Overview & Technical Architecture */}
+                  <div ref={banksysOverviewRef} className="spatial-story-beat">
+                    <p className="spatial-story-lead">
+                      High-integrity multi-account transaction system engineered with atomic double-entry bookkeeping,
+                      strict ACID guarantees, and automated verification dispatch.
+                    </p>
+                    <div className="spatial-telemetry-row">
+                      <span className="spatial-pill">React.js</span>
+                      <span className="spatial-pill">Node.js</span>
+                      <span className="spatial-pill">Express</span>
+                      <span className="spatial-pill">MongoDB</span>
+                      <span className="spatial-pill">Tailwind</span>
+                      <span className="spatial-pill">Nodemailer</span>
+                      <span className="spatial-pill">Render</span>
+                    </div>
+                    <p className="mt-3 text-xs font-mono text-cosmos-muted/80 tracking-wide">
+                      TRANSACTION DISPATCH: ACCOUNT DEBIT ↔ ACCOUNT CREDIT · DOUBLE-ENTRY ATOMICITY
+                    </p>
+                  </div>
+
+                  {/* Beat 6B: Spatial Atomic Flow */}
+                  <div ref={banksysFlowRef} className="spatial-story-beat">
+                    <BankTransactionFlow />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
 
       {/* ── SCENE 4: PILOT STATUS / GATEWAY ── */}
       <footer className="border-t border-white/5 py-12 text-center text-xs text-cosmos-muted">
@@ -896,7 +1103,7 @@ export default function WorksStory() {
           WORKS PILOT · SPATIAL CONTINUUM ACTIVE
         </p>
         <p className="mt-2 text-cosmos-muted">
-          TentDesk &amp; CommandAtlas spatial continuum active.
+          TentDesk, CommandAtlas, &amp; Bank Transaction System spatial continuum active.
         </p>
       </footer>
     </div>

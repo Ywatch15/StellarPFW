@@ -93,7 +93,12 @@
   max-width: min(55rem, 58vw);
 }
 
-.spatial-composition-zone--handoff {
+.spatial-composition-zone--banksys {
+  max-width: min(55rem, 58vw);
+}
+
+.spatial-composition-zone--handoff,
+.spatial-composition-zone--singularity {
   max-width: 100%;
   align-items: center;
   text-align: center;
@@ -123,6 +128,12 @@
 
 .spatial-hero-title--purple {
   background: linear-gradient(135deg, #f8fafc 40%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.spatial-hero-title--amber {
+  background: linear-gradient(135deg, #f8fafc 40%, #f59e0b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -335,6 +346,11 @@
   box-shadow: 0 0 6px #a78bfa;
 }
 
+.spatial-flow-pulse--amber {
+  background: #f59e0b;
+  box-shadow: 0 0 6px #f59e0b;
+}
+
 @keyframes spatialPulse {
   0% {
     transform: translateX(-100%);
@@ -476,6 +492,33 @@
     justify-content: flex-start;
     padding: 0.25rem 1.25rem 1rem 1.25rem;
     max-width: 100%;
+  }
+
+  /* Reserved Mobile Reading Zone for BankSys (Below 3D Saturn V Focal Region) */
+  .spatial-composition-zone--banksys {
+    top: clamp(34vh, 37%, 40vh);
+    bottom: 1rem;
+    justify-content: flex-start;
+    padding: 0.25rem 1.25rem 1rem 1.25rem;
+    max-width: 100%;
+  }
+
+  .spatial-banksys-mobile-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .spatial-banksys-mobile-step {
+    padding: 0.75rem 0.95rem;
+    border-left: 2px solid rgba(245, 158, 11, 0.4);
+    background: rgba(15, 23, 42, 0.55);
+    border-radius: 0 6px 6px 0;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .spatial-banksys-mobile-step--core {
+    border-left-color: rgba(56, 189, 248, 0.5);
   }
 
   .spatial-narrative-container {

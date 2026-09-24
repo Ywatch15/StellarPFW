@@ -126,9 +126,11 @@ function RocketHero({ isActive, isPageVisible, prefersReducedMotion, ambientGrou
   useFrame((state, delta) => {
     if (!isActive || !isPageVisible || prefersReducedMotion) return;
     if (ambientGroupRef.current) {
-      ambientGroupRef.current.rotation.y += delta * 0.04; // Slow attitude yaw
-      ambientGroupRef.current.rotation.x = THREE.MathUtils.degToRad(-15) + Math.sin(state.clock.elapsedTime * 0.3) * 0.03;
-      ambientGroupRef.current.rotation.z = Math.cos(state.clock.elapsedTime * 0.25) * 0.02;
+      const t = state.clock.elapsedTime;
+      // Conical precession & continuous attitude yaw: clearly visible 3D spatial motion
+      ambientGroupRef.current.rotation.y += delta * 0.14; // Visible continuous yaw
+      ambientGroupRef.current.rotation.x = THREE.MathUtils.degToRad(-18) + Math.sin(t * 0.6) * 0.08;
+      ambientGroupRef.current.rotation.z = THREE.MathUtils.degToRad(16) + Math.cos(t * 0.5) * 0.07;
     }
   });
 
@@ -136,7 +138,9 @@ function RocketHero({ isActive, isPageVisible, prefersReducedMotion, ambientGrou
     <group>
       <primitive object={pivot} />
       {/* Warm Amber Propulsion / Double-Entry Ledger Glow */}
-      <pointLight position={[0, -0.8, 0.5]} intensity={0.9} color="#f59e0b" distance={5} />
+      <pointLight position={[0, -0.8, 0.5]} intensity={1.2} color="#f59e0b" distance={6} />
+      {/* Subtle Cyan Thruster Exhaust Highlight */}
+      <pointLight position={[0, -1.2, -0.3]} intensity={0.7} color="#38bdf8" distance={4} />
     </group>
   );
 }
@@ -291,32 +295,37 @@ function SpatialContinuumController({
       camera.lookAt(lookX, lookY, 0);
 
       // ── 2. STRICT VISIBILITY THRESHOLDS (LOADED != VISIBLE) ──
-      // TentDesk: visible only between [0.08, 0.46]
-      const showStation = clampedP >= 0.08 && clampedP <= 0.46;
+      const showStation = isMobile
+        ? clampedP >= 0.05 && clampedP <= 0.40
+        : clampedP >= 0.06 && clampedP <= 0.44;
       if (stationRootRef.current) {
         stationRootRef.current.visible = showStation;
       }
 
-      // CommandAtlas: visible only between [0.38, 0.74]
-      const showSatellite = clampedP >= 0.38 && clampedP <= 0.74;
+      const showSatellite = isMobile
+        ? clampedP >= 0.36 && clampedP <= 0.78
+        : clampedP >= 0.36 && clampedP <= 0.78;
       if (satelliteRootRef.current) {
         satelliteRootRef.current.visible = showSatellite;
       }
 
-      // Black Hole Transition: visible only between [0.72, 0.84]
-      const showBlackHole = clampedP >= 0.72 && clampedP <= 0.84;
+      const showBlackHole = isMobile
+        ? clampedP >= 0.70 && clampedP <= 0.82
+        : clampedP >= 0.72 && clampedP <= 0.84;
       if (blackHoleRootRef.current) {
         blackHoleRootRef.current.visible = showBlackHole;
       }
 
-      // BankSys (Saturn V Rocket): visible only between [0.82, 1.00]
-      const showRocket = clampedP >= 0.82 && clampedP <= 1.00;
+      const showRocket = isMobile
+        ? clampedP >= 0.76 && clampedP <= 1.00
+        : clampedP >= 0.80 && clampedP <= 1.00;
       if (rocketRootRef.current) {
         rocketRootRef.current.visible = showRocket;
       }
 
-      // Asteroid: subordinate background element [0.08, 0.95]
-      const showAsteroid = clampedP >= 0.08 && clampedP <= 0.95;
+      const showAsteroid = isMobile
+        ? clampedP >= 0.05 && clampedP <= 0.98
+        : clampedP >= 0.08 && clampedP <= 0.95;
       if (asteroidRootRef.current) {
         asteroidRootRef.current.visible = showAsteroid;
       }
@@ -422,19 +431,21 @@ function SpatialContinuumController({
         let rkZ = -8.0;
         let rkScale = 0.25;
 
-        if (clampedP <= 0.88) {
+        if (clampedP <= (isMobile ? 0.88 : 0.88)) {
           // Enters from right & depth as black hole transition concludes
-          const t = (clampedP - 0.82) / 0.06;
+          const enterStart = isMobile ? 0.83 : 0.82;
+          const enterDuration = isMobile ? 0.05 : 0.06;
+          const t = Math.max(0, Math.min(1, (clampedP - enterStart) / enterDuration));
           const ease = t * t * (3 - 2 * t);
           rkX = (isMobile ? 2.5 : 5.8) - (isMobile ? 2.5 : 4.0) * ease; // -> isMobile 0 : 1.8
-          rkZ = -8.0 + (isMobile ? 7.5 : 8.2) * ease; // -> -0.5 / +0.2
-          rkScale = 0.25 + (isMobile ? 0.35 : 0.7) * ease; // -> 0.6 / 0.95
+          rkZ = -8.0 + (isMobile ? 7.6 : 8.2) * ease; // -> -0.4 / +0.2
+          rkScale = 0.25 + (isMobile ? 0.30 : 0.70) * ease; // -> 0.55 / 0.95
         } else {
           // Focal dominance & stillness throughout transaction narrative
           rkX = isMobile ? 0 : 1.8;
-          rkY = isMobile ? 1.2 : 0;
-          rkZ = isMobile ? -0.5 : 0.2;
-          rkScale = isMobile ? 0.6 : 0.95;
+          rkY = isMobile ? 1.35 : 0;
+          rkZ = isMobile ? -0.4 : 0.2;
+          rkScale = isMobile ? 0.55 : 0.95;
         }
 
         rocketScrollGroupRef.current.position.set(rkX, rkY, rkZ);

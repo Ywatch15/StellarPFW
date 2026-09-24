@@ -94,7 +94,7 @@
 }
 
 .spatial-composition-zone--banksys {
-  max-width: min(55rem, 58vw);
+  max-width: min(63rem, 58vw);
 }
 
 .spatial-composition-zone--handoff,
@@ -422,10 +422,77 @@
   margin-top: 0.15rem;
 }
 
-.spatial-step-divider {
-  padding-left: 1.25rem;
+/* ── UNIFIED CONNECTED PIPELINE STREAM (4-Node Stream) ── */
+.spatial-pipeline-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 38rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .spatial-pipeline-stream {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+}
+
+.spatial-pipeline-node {
+  display: flex;
+  flex-direction: column;
+  padding: 0.6rem 0.8rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 0 6px 6px 0;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.spatial-pipeline-node--terminal {
+  border-left-color: rgba(167, 139, 250, 0.6);
+}
+
+.spatial-pipeline-node-badge {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #94a3b8;
+  margin-bottom: 0.2rem;
+}
+
+.spatial-pipeline-node-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #f1f5f9;
+}
+
+.spatial-pipeline-node-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: #94a3b8;
+  margin-top: 0.15rem;
+}
+
+.spatial-pipeline-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', monospace;
   font-size: 0.7rem;
-  line-height: 0.8;
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .spatial-pipeline-arrow {
+    display: none;
+  }
 }
 
 /* Floating Bridge Marker during Handoff */
@@ -470,14 +537,14 @@
 /* ── RESPONSIVE DESIGN (TABLET & MOBILE) ── */
 @media (max-width: 768px) {
   .spatial-story-viewport {
-    top: 5rem;
-    bottom: 2rem;
+    top: 4.5rem;
+    bottom: 0.5rem;
   }
 
   .spatial-composition-zone {
-    padding: 0.5rem 1rem 1rem 1.5rem;
+    padding: 0.5rem 1rem 1rem 1.25rem;
     max-width: 100%;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   .spatial-composition-zone--intro {
@@ -485,44 +552,102 @@
     padding-top: clamp(1.5rem, 5vh, 2.5rem);
   }
 
-  /* Reserved Mobile Reading Zone for CommandAtlas (Below 3D Satellite Focal Region) */
-  .spatial-composition-zone--commandatlas {
-    top: clamp(34vh, 37%, 40vh);
-    bottom: 1rem;
-    justify-content: flex-start;
-    padding: 0.25rem 1.25rem 1rem 1.25rem;
-    max-width: 100%;
-  }
-
-  /* Reserved Mobile Reading Zone for BankSys (Below 3D Saturn V Focal Region) */
+  /* Reserved Lower Reading Zone (Below Upper 3D Focal Region) */
+  .spatial-composition-zone--tentdesk,
+  .spatial-composition-zone--commandatlas,
   .spatial-composition-zone--banksys {
-    top: clamp(34vh, 37%, 40vh);
-    bottom: 1rem;
-    justify-content: flex-start;
-    padding: 0.25rem 1.25rem 1rem 1.25rem;
-    max-width: 100%;
-  }
-
-  .spatial-banksys-mobile-container {
-    position: relative;
+    top: clamp(36vh, 40%, 44vh);
+    bottom: 0.5rem;
+    left: 0;
+    right: 0;
     width: 100%;
-  }
-
-  .spatial-banksys-mobile-step {
-    padding: 0.75rem 0.95rem;
-    border-left: 2px solid rgba(245, 158, 11, 0.4);
-    background: rgba(15, 23, 42, 0.55);
-    border-radius: 0 6px 6px 0;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
-
-  .spatial-banksys-mobile-step--core {
-    border-left-color: rgba(56, 189, 248, 0.5);
+    justify-content: flex-start;
+    padding: 0 1.25rem;
   }
 
   .spatial-narrative-container {
-    min-height: 10rem;
+    position: relative;
+    width: 100%;
+    min-height: 180px;
+  }
+
+  /* Mobile Sequential Sub-State: Single active state with zero overflow */
+  .spatial-mobile-substate {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 1rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(15, 23, 42, 0.65);
+    border-radius: 0 6px 6px 0;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    pointer-events: auto;
+    will-change: transform, opacity;
+  }
+
+  .spatial-mobile-substate--cyan {
+    border-left-color: rgba(56, 189, 248, 0.6);
+  }
+
+  .spatial-mobile-substate--purple {
+    border-left-color: rgba(167, 139, 250, 0.6);
+  }
+
+  .spatial-mobile-substate--amber {
+    border-left-color: rgba(245, 158, 11, 0.6);
+  }
+
+  .spatial-mobile-substate--emerald {
+    border-left-color: rgba(16, 185, 129, 0.6);
+  }
+
+  .spatial-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.3rem;
+  }
+
+  .spatial-mobile-badge {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .spatial-mobile-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: #f1f5f9;
+  }
+
+  .spatial-mobile-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: #94a3b8;
+    margin-top: 0.25rem;
+  }
+
+  .spatial-mobile-tag {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    margin-top: 0.45rem;
+    width: fit-content;
   }
 
   .spatial-hero-title {
@@ -574,7 +699,7 @@
     will-change: transform, opacity, visibility;
   }
 
-  .spatial-pipeline-mobile-step[data-mobile-step="4"] {
+  .spatial-pipeline-mobile-step[data-mobile-step='4'] {
     border-left-color: rgba(56, 189, 248, 0.6);
     background: rgba(15, 23, 42, 0.65);
   }
@@ -638,4 +763,3 @@
     white-space: nowrap;
   }
 }
-

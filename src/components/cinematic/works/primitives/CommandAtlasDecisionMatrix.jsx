@@ -1,127 +1,48 @@
 // FILE: src/components/cinematic/works/primitives/CommandAtlasDecisionMatrix.jsx
-// ADR-013 Architecture decisions and local determinism principles.
+// ADR-013: No AI by Design & Local Scale Anchor.
 import React, { forwardRef } from 'react';
 
 const CommandAtlasDecisionMatrix = forwardRef(function CommandAtlasDecisionMatrix(
-  { decisionRefs, mobileDecisionRefs },
+  _props,
   ref,
 ) {
   return (
     <div
       ref={ref}
       className="spatial-story-beat spatial-story-beat--decisions"
-      aria-label="CommandAtlas ADR-013 Decisions"
+      aria-label="CommandAtlas Architectural Decision"
     >
       <div className="spatial-coordinate-eyebrow text-stardust">
-        <span>ARCHITECTURE · ADR-013 LOCAL DETERMINISM</span>
+        <span>ARCHITECTURAL DECISION · ADR-013</span>
       </div>
 
-      {/* Desktop Layout: Multi-decision cluster with spatial depth */}
-      <div className="hidden md:block spatial-decision-cluster mt-4 space-y-4">
-        {/* Decision 1: Why Offline-First */}
-        <div
-          ref={decisionRefs ? (el) => (decisionRefs.current[0] = el) : null}
-          className="spatial-incident-node spatial-incident-node--purple"
-          data-decision="1"
-        >
-          <h4 className="spatial-incident-label text-stardust">
-            DECISION 01 · OFFLINE-FIRST RETRIEVAL
-          </h4>
-          <p className="spatial-incident-body">
-            Terminal operators frequently work across air-gapped workstations, unstable remote tunnels,
-            or constrained field environments. Local client caching ensures documentation remains accessible
-            regardless of network health.
-          </p>
-        </div>
-
-        {/* Decision 2: No AI by Design */}
-        <div
-          ref={decisionRefs ? (el) => (decisionRefs.current[1] = el) : null}
-          className="spatial-incident-node spatial-incident-node--cyan"
-          data-decision="2"
-        >
-          <h4 className="spatial-incident-label text-aurora">
-            DECISION 02 · NO AI BY DESIGN
-          </h4>
-          <p className="spatial-incident-body">
-            Deliberate architectural decision against probabilistic LLM inference when querying infrastructure
-            commands. System administration syntax demands deterministic, verifiable documentation rather than
-            hallucinated parameters.
-          </p>
-        </div>
-
-        {/* Decision 3: Local Dexie Cache */}
-        <div
-          ref={decisionRefs ? (el) => (decisionRefs.current[2] = el) : null}
-          className="spatial-incident-node spatial-incident-node--purple"
-          data-decision="3"
-        >
-          <h4 className="spatial-incident-label text-stardust">
-            DECISION 03 · CLIENT-SIDE LOCAL RETRIEVAL
-          </h4>
-          <p className="spatial-incident-body">
-            Precompiled static indexes are loaded into browser-managed Dexie IndexedDB storage, enabling local
-            keyword and topic lookups with zero runtime cloud dependencies.
-          </p>
-        </div>
-      </div>
-
-      {/* Mobile Layout: Discrete Sequential Single-Decision Reading Surface (Zero Overlap) */}
-      <div className="block md:hidden spatial-decision-mobile-container mt-3">
-        {/* Mobile Decision 1 */}
-        <div
-          ref={mobileDecisionRefs ? (el) => (mobileDecisionRefs.current[0] = el) : null}
-          className="spatial-decision-mobile-node spatial-incident-node--purple"
-          data-mobile-decision="1"
-        >
-          <div className="spatial-decision-mobile-header">
-            <h4 className="spatial-incident-label text-stardust">
-              DECISION 01 · OFFLINE-FIRST RETRIEVAL
-            </h4>
-            <span className="spatial-decision-counter text-cosmos-muted/70">ADR-013 · 1 / 3</span>
-          </div>
-          <p className="spatial-incident-body">
-            Terminal operators frequently work across air-gapped workstations, unstable remote tunnels,
-            or constrained field environments. Local client caching ensures documentation remains accessible
-            regardless of network health.
-          </p>
-        </div>
-
-        {/* Mobile Decision 2 */}
-        <div
-          ref={mobileDecisionRefs ? (el) => (mobileDecisionRefs.current[1] = el) : null}
-          className="spatial-decision-mobile-node spatial-incident-node--cyan"
-          data-mobile-decision="2"
-        >
-          <div className="spatial-decision-mobile-header">
+      <div className="spatial-decision-cluster mt-3 space-y-3">
+        {/* Core Decision: No AI by Design */}
+        <div className="spatial-incident-node spatial-incident-node--cyan">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="spatial-status-dot spatial-status-dot--cyan" aria-hidden="true" />
             <h4 className="spatial-incident-label text-aurora">
-              DECISION 02 · NO AI BY DESIGN
+              ADR-013 · NO AI BY DESIGN
             </h4>
-            <span className="spatial-decision-counter text-aurora/80">ADR-013 · 2 / 3</span>
           </div>
           <p className="spatial-incident-body">
-            Deliberate architectural decision against probabilistic LLM inference when querying infrastructure
-            commands. System administration syntax demands deterministic, verifiable documentation rather than
-            hallucinated parameters.
+            For infrastructure command reference, deterministic validated data was preferred
+            over runtime probabilistic generation. System administration syntax demands
+            verifiable documentation rather than hallucinated parameters.
           </p>
         </div>
 
-        {/* Mobile Decision 3 */}
-        <div
-          ref={mobileDecisionRefs ? (el) => (mobileDecisionRefs.current[2] = el) : null}
-          className="spatial-decision-mobile-node spatial-incident-node--purple"
-          data-mobile-decision="3"
-        >
-          <div className="spatial-decision-mobile-header">
-            <h4 className="spatial-incident-label text-stardust">
-              DECISION 03 · CLIENT-SIDE LOCAL RETRIEVAL
-            </h4>
-            <span className="spatial-decision-counter text-cosmos-muted/70">ADR-013 · 3 / 3</span>
+        {/* Scale Anchor */}
+        <div className="flex items-center gap-3 pt-1">
+          <div className="px-3 py-1.5 rounded bg-white/[0.04] border border-white/10 font-mono text-xs text-stardust">
+            <span className="font-bold text-white text-sm">366</span> COMMANDS
           </div>
-          <p className="spatial-incident-body">
-            Precompiled static indexes are loaded into browser-managed Dexie IndexedDB storage, enabling local
-            keyword and topic lookups with zero runtime cloud dependencies.
-          </p>
+          <div className="px-3 py-1.5 rounded bg-white/[0.04] border border-white/10 font-mono text-xs text-stardust">
+            <span className="font-bold text-white text-sm">21</span> TOPICS
+          </div>
+          <div className="px-3 py-1.5 rounded bg-white/[0.04] border border-white/10 font-mono text-xs text-aurora">
+            ZERO RUNTIME DEPENDENCIES
+          </div>
         </div>
       </div>
     </div>

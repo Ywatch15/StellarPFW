@@ -38,3 +38,13 @@ This project incorporates selected 3D models for educational and technical portf
 * **Contributing Center:** NASA GSFC / OSIRIS-REx Science Team
 * **License & Rights:** Public Domain (United States Government work under 17 U.S.C. § 105; free for public use without copyright restriction).
 * **Technical Details:** Static surface topology model scaled and rendered in the deep background (`z = -14.0`) to establish spatial scale without competing with primary project objects.
+
+---
+
+### 4. Deep Space Archive Hero Object — Bank Transaction System: Saturn V Multi-Stage Rocket
+* **Filename:** `rocket-saturn-v.glb` (927 KB / 927,212 bytes)
+* **Model Identifier:** Saturn V Apollo Launch Vehicle (Complete Assembly)
+* **Source:** [NASA 3D Resources — Saturn V](https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Saturn%20V)
+* **Contributing Center:** NASA Marshall Space Flight Center (MSFC)
+* **License & Rights:** Public Domain (United States Government work under 17 U.S.C. § 105; free for public informational, educational, and creative use without copyright restriction, subject to standard non-endorsement terms).
+* **Technical Details:** Full 3-stage rocket assembly with S-IC first stage, F-1 engine bells, interstages, S-IVB third stage, and Apollo spacecraft launch escape system. Employed as an engineering metaphor for transaction trajectory, forward progression, and high-integrity execution.

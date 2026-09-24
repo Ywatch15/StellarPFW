@@ -28,7 +28,7 @@ describe('Works Page — Planetary Hero + Cinematic Stories', () => {
     expect(screen.getByText(/TENTDESK · PRODUCTION SAAS/i)).toBeInTheDocument();
   });
 
-  it('renders story cards for TentDesk and CommandAtlas with verified technical details', () => {
+  it('renders story cards for TentDesk, CommandAtlas, and BankSys with verified technical details', () => {
     render(
       <MemoryRouter>
         <Works />
@@ -37,7 +37,10 @@ describe('Works Page — Planetary Hero + Cinematic Stories', () => {
 
     expect(screen.getByRole('heading', { level: 3, name: /TentDesk/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: /CommandAtlas/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: /^BankSys$/i })).toBeInTheDocument();
     expect(screen.getByText(/366 commands across 21 canonical topics/i)).toBeInTheDocument();
+    expect(screen.getByText(/atomic double-entry bookkeeping/i)).toBeInTheDocument();
+    expect(screen.getByText(/GRAVITATIONAL TRANSITION · SINGULARITY CORRIDOR → FINANCIAL DETERMINISM/i)).toBeInTheDocument();
   });
 
   it('does not render redundant CommandAtlas deep dive section at the bottom', () => {
@@ -49,5 +52,32 @@ describe('Works Page — Planetary Hero + Cinematic Stories', () => {
 
     expect(screen.queryByText(/Why Offline-First Command Retrieval\?/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Deterministic Scope/i)).not.toBeInTheDocument();
+  });
+
+  it('renders all dedicated mobile sequential sub-states for TentDesk, CommandAtlas, and BankSys', () => {
+    render(
+      <MemoryRouter>
+        <Works />
+      </MemoryRouter>,
+    );
+
+    // TentDesk mobile sequential sub-states
+    expect(screen.getByText(/OPERATIONAL RENTAL PLATFORM/i)).toBeInTheDocument();
+    expect(screen.getByText(/PWA CLIENT MUTATIONS/i)).toBeInTheDocument();
+    expect(screen.getByText(/NEXT\.JS & PRISMA ENGINE/i)).toBeInTheDocument();
+    expect(screen.getByText(/REAL-TIME SSE EVENT STREAM/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/DEPLOYED ≠ USABLE/i).length).toBeGreaterThan(0);
+
+    // CommandAtlas mobile sequential sub-states
+    expect(screen.getAllByText(/OFFLINE-FIRST COMMAND REFERENCE/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/STATIC COMPACT PACKS/i)).toBeInTheDocument();
+    expect(screen.getByText(/DEXIE INDEXEDDB \(CLIENT-SIDE\)/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/NO AI BY DESIGN/i).length).toBeGreaterThan(0);
+
+    // BankSys mobile sequential sub-states
+    expect(screen.getAllByText(/SECURE BANKING APPLICATION/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/ACCOUNT A → ACID TRANSACTION/i)).toBeInTheDocument();
+    expect(screen.getByText(/DOUBLE-ENTRY LEDGER → ACCOUNT B/i)).toBeInTheDocument();
+    expect(screen.getByText(/AUTHENTICATION & EXPORT/i)).toBeInTheDocument();
   });
 });

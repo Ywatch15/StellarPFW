@@ -1,7 +1,7 @@
 // FILE: src/components/cinematic/works/WorksStory.jsx
 // Spatial-Continuum Works Experience: Dynamic Composition Zones, Non-Card Semantic Beats,
 // Structural Navigation Safe Area, and Physical Spatial Motion.
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { invalidate } from '@react-three/fiber';
 import WorksSpatialScene from './WorksSpatialScene';
 import useCinematicTimeline from '../useCinematicTimeline';
@@ -40,7 +40,23 @@ export default function WorksStory() {
   const commandatlasDecisionRef = useRef(null);
   const pipelineTrackRef = useRef(null);
   const pipelineStepRefs = useRef([]);
+  const mobilePipelineStepRefs = useRef([]);
   const decisionRefs = useRef([]);
+  const mobileDecisionRefs = useRef([]);
+
+  // Responsive device breakpoint state
+  const [isMobileScreen, setIsMobileScreen] = useState(() => {
+    return typeof window !== 'undefined' && window.innerWidth <= 768;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobileScreen((prev) => (prev !== mobile ? mobile : prev));
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Section-level visibility state (SUSPENDED -> PREPARE -> ACTIVE)
   const { ref: visibilityRef, state: visibilityState, isPageVisible } = useVisibilityState({
@@ -147,20 +163,26 @@ export default function WorksStory() {
         filter: 'blur(4px)',
       });
 
-      // Mobile initial states for progressive pipeline and decision reveals
+      // Mobile initial states: Step 0 & Decision 0 visible initially, subsequent items hidden
       if (isMobile) {
-        if (pipelineTrackRef.current) {
-          gsap.set(pipelineTrackRef.current, { y: 0 });
-        }
-        if (decisionRefs.current[0]) {
-          gsap.set(decisionRefs.current[0], { opacity: 1, y: 0 });
-        }
-        if (decisionRefs.current[1]) {
-          gsap.set(decisionRefs.current[1], { opacity: 0, y: 20 });
-        }
-        if (decisionRefs.current[2]) {
-          gsap.set(decisionRefs.current[2], { opacity: 0, y: 20 });
-        }
+        mobilePipelineStepRefs.current.forEach((el, idx) => {
+          if (el) {
+            gsap.set(el, {
+              opacity: idx === 0 ? 1 : 0,
+              y: idx === 0 ? 0 : 15,
+              visibility: idx === 0 ? 'visible' : 'hidden',
+            });
+          }
+        });
+        mobileDecisionRefs.current.forEach((el, idx) => {
+          if (el) {
+            gsap.set(el, {
+              opacity: idx === 0 ? 1 : 0,
+              y: idx === 0 ? 0 : 15,
+              visibility: idx === 0 ? 'visible' : 'hidden',
+            });
+          }
+        });
       }
 
       // ── BEAT 1: INTRO (0.00 -> 0.12) ──
@@ -375,150 +397,304 @@ export default function WorksStory() {
         0.75,
       );
 
-      // ── BEAT 4B: DETERMINISTIC COMPILATION PIPELINE (0.79 -> 0.91) ──
-      // Pipeline flow expands into primary focus (starts after overview is 100% gone)
-      tl.to(
-        commandatlasPipelineRef.current,
-        {
-          x: 0,
-          scale: 1,
-          opacity: 1,
-          filter: 'blur(0px)',
-          ease: 'power2.out',
-          duration: 0.04,
-        },
-        0.79,
-      );
-
       if (isMobile) {
-        // Mobile progressive reveal: 01+02 -> 02+03 -> 03+04 -> 04+05
-        // (0.79 -> 0.815): Stage 1 (Steps 01 + 02) settled and readable
+        // Hide overview when exited completely
+        tl.set(commandatlasOverviewRef.current, { visibility: 'hidden' }, 0.77);
+
+        // ── BEAT 4B (MOBILE): SEQUENTIAL DISCRETE PIPELINE (0.77 -> 0.92) ──
+        // Pipeline container enters
+        tl.set(commandatlasPipelineRef.current, { visibility: 'visible' }, 0.77);
         tl.to(
-          pipelineTrackRef.current,
+          commandatlasPipelineRef.current,
           {
-            y: () => -(pipelineStepRefs.current[1]?.offsetTop || 76),
-            ease: 'power1.inOut',
+            x: 0,
+            scale: 1,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power2.out',
             duration: 0.02,
           },
-          0.815,
+          0.77,
         );
-        // (0.835 -> 0.845): Stage 2 (Steps 02 + 03) settled and readable
+
+        const steps = mobilePipelineStepRefs.current;
+
+        // Stage 1 (01 MARKDOWN REPOSITORY): Settled and readable from 0.77 to 0.802
+        if (steps[0]) {
+          tl.to(
+            steps[0],
+            {
+              y: -15,
+              opacity: 0,
+              ease: 'power1.in',
+              duration: 0.008,
+            },
+            0.802,
+          );
+          tl.set(steps[0], { visibility: 'hidden' }, 0.810);
+        }
+
+        // Stage 2 (02 BUILD-TIME VALIDATION): Enters at 0.812, readable until 0.830
+        if (steps[1]) {
+          tl.set(steps[1], { visibility: 'visible' }, 0.812);
+          tl.to(
+            steps[1],
+            {
+              y: 0,
+              opacity: 1,
+              ease: 'power1.out',
+              duration: 0.008,
+            },
+            0.812,
+          );
+          tl.to(
+            steps[1],
+            {
+              y: -15,
+              opacity: 0,
+              ease: 'power1.in',
+              duration: 0.008,
+            },
+            0.830,
+          );
+          tl.set(steps[1], { visibility: 'hidden' }, 0.838);
+        }
+
+        // Stage 3 (03 STATIC PACKS): Enters at 0.840, readable until 0.858
+        if (steps[2]) {
+          tl.set(steps[2], { visibility: 'visible' }, 0.840);
+          tl.to(
+            steps[2],
+            {
+              y: 0,
+              opacity: 1,
+              ease: 'power1.out',
+              duration: 0.008,
+            },
+            0.840,
+          );
+          tl.to(
+            steps[2],
+            {
+              y: -15,
+              opacity: 0,
+              ease: 'power1.in',
+              duration: 0.008,
+            },
+            0.858,
+          );
+          tl.set(steps[2], { visibility: 'hidden' }, 0.866);
+        }
+
+        // Stage 4 (04 DEXIE INDEXEDDB CLIENT-SIDE): Enters at 0.868, readable until 0.886 - NEVER CLIPPED
+        if (steps[3]) {
+          tl.set(steps[3], { visibility: 'visible' }, 0.868);
+          tl.to(
+            steps[3],
+            {
+              y: 0,
+              opacity: 1,
+              ease: 'power1.out',
+              duration: 0.008,
+            },
+            0.868,
+          );
+          tl.to(
+            steps[3],
+            {
+              y: -15,
+              opacity: 0,
+              ease: 'power1.in',
+              duration: 0.008,
+            },
+            0.886,
+          );
+          tl.set(steps[3], { visibility: 'hidden' }, 0.894);
+        }
+
+        // Stage 5 (05 LOCAL SEARCH INDEX): Enters at 0.896, readable until 0.912
+        if (steps[4]) {
+          tl.set(steps[4], { visibility: 'visible' }, 0.896);
+          tl.to(
+            steps[4],
+            {
+              y: 0,
+              opacity: 1,
+              ease: 'power1.out',
+              duration: 0.008,
+            },
+            0.896,
+          );
+          tl.to(
+            steps[4],
+            {
+              y: -15,
+              opacity: 0,
+              ease: 'power1.in',
+              duration: 0.008,
+            },
+            0.912,
+          );
+          tl.set(steps[4], { visibility: 'hidden' }, 0.920);
+        }
+
+        // Pipeline container exits completely before Beat 4C begins
         tl.to(
-          pipelineTrackRef.current,
+          commandatlasPipelineRef.current,
           {
-            y: () => -(pipelineStepRefs.current[2]?.offsetTop || 156),
-            ease: 'power1.inOut',
-            duration: 0.02,
+            x: -35,
+            scale: 0.95,
+            opacity: 0,
+            filter: 'blur(3px)',
+            ease: 'power1.in',
+            duration: 0.008,
           },
-          0.845,
+          0.916,
         );
-        // (0.865 -> 0.87): Stage 3 (Steps 03 + 04) settled and readable
+        tl.set(commandatlasPipelineRef.current, { visibility: 'hidden' }, 0.924);
+
+        // ── BEAT 4C (MOBILE): SEQUENTIAL DISCRETE DECISIONS (0.926 -> 0.998) ──
+        // Decision container enters after pipeline is 100% gone
+        tl.set(commandatlasDecisionRef.current, { visibility: 'visible' }, 0.926);
         tl.to(
-          pipelineTrackRef.current,
+          commandatlasDecisionRef.current,
           {
-            y: () => -(pipelineStepRefs.current[3]?.offsetTop || 236),
-            ease: 'power1.inOut',
-            duration: 0.02,
+            x: 0,
+            scale: 1,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power2.out',
+            duration: 0.015,
           },
-          0.87,
+          0.926,
         );
-        // (0.89 -> 0.90): Stage 4 (Steps 04 + 05) settled and readable
+
+        const decs = mobileDecisionRefs.current;
+
+        // Decision 01 (OFFLINE-FIRST RETRIEVAL): Settled and readable from 0.926 to 0.948
+        if (decs[0]) {
+          tl.to(
+            decs[0],
+            {
+              y: -15,
+              opacity: 0,
+              ease: 'power1.in',
+              duration: 0.007,
+            },
+            0.948,
+          );
+          tl.set(decs[0], { visibility: 'hidden' }, 0.955);
+        }
+
+        // Decision 02 (NO AI BY DESIGN): Enters at 0.957, readable until 0.976
+        if (decs[1]) {
+          tl.set(decs[1], { visibility: 'visible' }, 0.957);
+          tl.to(
+            decs[1],
+            {
+              y: 0,
+              opacity: 1,
+              ease: 'power1.out',
+              duration: 0.007,
+            },
+            0.957,
+          );
+          tl.to(
+            decs[1],
+            {
+              y: -15,
+              opacity: 0,
+              ease: 'power1.in',
+              duration: 0.007,
+            },
+            0.976,
+          );
+          tl.set(decs[1], { visibility: 'hidden' }, 0.983);
+        }
+
+        // Decision 03 (CLIENT-SIDE LOCAL RETRIEVAL): Enters at 0.985, readable until 0.996
+        if (decs[2]) {
+          tl.set(decs[2], { visibility: 'visible' }, 0.985);
+          tl.to(
+            decs[2],
+            {
+              y: 0,
+              opacity: 1,
+              ease: 'power1.out',
+              duration: 0.006,
+            },
+            0.985,
+          );
+        }
+
+        // Final unpin fade
+        tl.to(
+          [commandatlasDecisionRef.current, commandatlasTitleRef.current],
+          {
+            opacity: 0.25,
+            ease: 'power1.in',
+            duration: 0.003,
+          },
+          0.997,
+        );
       } else {
+        // ── DESKTOP BEAT 4B: DETERMINISTIC COMPILATION PIPELINE (0.79 -> 0.91) ──
+        tl.to(
+          commandatlasPipelineRef.current,
+          {
+            x: 0,
+            scale: 1,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power2.out',
+            duration: 0.04,
+          },
+          0.79,
+        );
+
         // (0.83 -> 0.87) STILLNESS WINDOW: Desktop compilation pipeline settled and readable
-      }
 
-      // Pipeline exits completely before Beat 4C begins
-      tl.to(
-        commandatlasPipelineRef.current,
-        {
-          x: -35,
-          scale: 0.95,
-          opacity: 0,
-          filter: 'blur(3px)',
-          ease: 'power1.in',
-          duration: 0.02,
-        },
-        0.90,
-      );
-
-      // ── BEAT 4C: ADR-013 ARCHITECTURE & DECISION MATRIX (0.92 -> 1.00) ──
-      // Architecture decisions become primary (starts after pipeline is 100% gone)
-      tl.to(
-        commandatlasDecisionRef.current,
-        {
-          x: 0,
-          scale: 1,
-          opacity: 1,
-          filter: 'blur(0px)',
-          ease: 'power2.out',
-          duration: 0.02,
-        },
-        0.92,
-      );
-
-      if (isMobile) {
-        // Mobile sequential reveal: Decision 01 -> Decision 02 -> Decision 03
-        // (0.92 -> 0.94): Decision 01 settled and readable
+        // Pipeline exits completely before Beat 4C begins
         tl.to(
-          decisionRefs.current[0],
+          commandatlasPipelineRef.current,
           {
-            y: -20,
+            x: -35,
+            scale: 0.95,
             opacity: 0,
-            filter: 'blur(2px)',
+            filter: 'blur(3px)',
             ease: 'power1.in',
-            duration: 0.015,
+            duration: 0.02,
           },
-          0.94,
+          0.90,
         );
+
+        // ── DESKTOP BEAT 4C: ADR-013 ARCHITECTURE & DECISION MATRIX (0.92 -> 1.00) ──
         tl.to(
-          decisionRefs.current[1],
+          commandatlasDecisionRef.current,
           {
-            y: 0,
+            x: 0,
+            scale: 1,
             opacity: 1,
             filter: 'blur(0px)',
-            ease: 'power1.out',
-            duration: 0.015,
+            ease: 'power2.out',
+            duration: 0.02,
           },
-          0.945,
+          0.92,
         );
-        // (0.945 -> 0.965): Decision 02 settled and readable
-        tl.to(
-          decisionRefs.current[1],
-          {
-            y: -20,
-            opacity: 0,
-            filter: 'blur(2px)',
-            ease: 'power1.in',
-            duration: 0.015,
-          },
-          0.965,
-        );
-        tl.to(
-          decisionRefs.current[2],
-          {
-            y: 0,
-            opacity: 1,
-            filter: 'blur(0px)',
-            ease: 'power1.out',
-            duration: 0.015,
-          },
-          0.97,
-        );
-        // (0.97 -> 0.985): Decision 03 settled and readable
-      } else {
+
         // (0.95 -> 0.98) STILLNESS WINDOW: Desktop ADR-013 decisions settled and readable
-      }
 
-      // Final unpin fade
-      tl.to(
-        [commandatlasDecisionRef.current, commandatlasTitleRef.current],
-        {
-          opacity: 0.25,
-          ease: 'power1.in',
-          duration: 0.015,
-        },
-        0.985,
-      );
+        // Final unpin fade
+        tl.to(
+          [commandatlasDecisionRef.current, commandatlasTitleRef.current],
+          {
+            opacity: 0.25,
+            ease: 'power1.in',
+            duration: 0.015,
+          },
+          0.985,
+        );
+      }
     },
     containerRef,
     [],
@@ -534,7 +710,7 @@ export default function WorksStory() {
           visibilityRef.current = node;
         }}
         className="cinematic-scroll-space relative w-full"
-        style={{ height: isFallback ? 'auto' : '680vh' }}
+        style={{ height: isFallback ? 'auto' : (isMobileScreen ? '850vh' : '680vh') }}
         aria-label="Interactive Spatial Story Continuum"
       >
         <div
@@ -669,7 +845,7 @@ export default function WorksStory() {
                 </div>
 
                 {/* Narrative Container: Sequential Semantic Beats */}
-                <div className="relative w-full mt-2 min-h-[22rem]">
+                <div className="spatial-narrative-container relative w-full mt-2 min-h-[22rem]">
                   {/* Beat 4A: Overview & Scope */}
                   <div ref={commandatlasOverviewRef} className="spatial-story-beat">
                     <p className="spatial-story-lead">
@@ -695,12 +871,16 @@ export default function WorksStory() {
                     <CommandAtlasPipelineFlow
                       trackRef={pipelineTrackRef}
                       stepRefs={pipelineStepRefs}
+                      mobileStepRefs={mobilePipelineStepRefs}
                     />
                   </div>
 
                   {/* Beat 4C: ADR-013 & Decision Matrix */}
                   <div ref={commandatlasDecisionRef} className="spatial-story-beat">
-                    <CommandAtlasDecisionMatrix decisionRefs={decisionRefs} />
+                    <CommandAtlasDecisionMatrix
+                      decisionRefs={decisionRefs}
+                      mobileDecisionRefs={mobileDecisionRefs}
+                    />
                   </div>
                 </div>
               </div>

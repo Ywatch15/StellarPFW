@@ -33,10 +33,10 @@ export default function Works() {
       {!isLegacy && (
         <>
           <div
-            className="relative flex flex-col items-center justify-center py-20"
+            className="relative flex flex-col items-center justify-center py-8 md:py-20"
             aria-hidden="true"
           >
-            <div className="h-16 w-[1px] bg-gradient-to-b from-transparent via-aurora/40 to-transparent" />
+            <div className="h-8 md:h-16 w-[1px] bg-gradient-to-b from-transparent via-aurora/40 to-transparent" />
             <p className="mt-4 font-mono text-[0.65rem] uppercase tracking-[0.28em] text-cosmos-muted/80">
               SYSTEM ORBIT CONVERGENCE · DEEP ARCHITECTURES
             </p>

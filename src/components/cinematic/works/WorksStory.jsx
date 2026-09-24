@@ -601,54 +601,6 @@ export default function WorksStory() {
         </div>
       </div>
 
-      {/* ── SECTION C: COMMANDATLAS DEEP DIVE / ARCHIVE (NORMAL DOCUMENT FLOW) ── */}
-      <section className="works-deepdive-grid" aria-label="CommandAtlas Architecture Notes">
-        <aside className="works-sticky-panel">
-          <div className="rounded-2xl border border-white/8 bg-nebula/60 p-6 backdrop-blur-md">
-            <p className="font-mono text-[0.68rem] tracking-[0.2em] text-[#a78bfa]">
-              INDEX STRUCTURE
-            </p>
-            <h3 className="mt-2 font-heading text-xl font-bold text-stardust">
-              Deterministic Scope
-            </h3>
-            <div className="mt-4 space-y-3 font-mono text-xs text-cosmos-muted">
-              <div className="flex justify-between border-b border-white/5 pb-2">
-                <span>Commands</span>
-                <span className="text-stardust font-semibold">366</span>
-              </div>
-              <div className="flex justify-between border-b border-white/5 pb-2">
-                <span>Canonical Topics</span>
-                <span className="text-stardust font-semibold">21</span>
-              </div>
-              <div className="flex justify-between border-b border-white/5 pb-2">
-                <span>Storage Layer</span>
-                <span className="text-stardust font-semibold">IndexedDB (Dexie)</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Sync Protocol</span>
-                <span className="text-stardust font-semibold">Static Packs</span>
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        <div className="space-y-6">
-          <article className="rounded-2xl border border-white/8 bg-nebula/40 p-6 backdrop-blur-sm sm:p-8">
-            <h3 className="font-heading text-2xl font-semibold text-stardust">
-              Why Offline-First Command Retrieval?
-            </h3>
-            <p className="mt-3 text-cosmos-muted leading-relaxed">
-              When operating remote server terminals, managing network dropouts, or configuring local infrastructure,
-              web documentation frequently becomes inaccessible. CommandAtlas ensures essential engineering syntax
-              remains available locally through browser storage without external network dependencies.
-            </p>
-            <p className="mt-3 text-cosmos-muted leading-relaxed">
-              Markdown packs undergo build-time validation and linting, ensuring command flags, examples, and options
-              match verified upstream documentation without runtime unpredictability.
-            </p>
-          </article>
-        </div>
-      </section>
 
       {/* ── SCENE 4: PILOT STATUS / GATEWAY ── */}
       <footer className="border-t border-white/5 py-12 text-center text-xs text-cosmos-muted">

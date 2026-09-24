@@ -40,14 +40,14 @@ describe('Works Page — Planetary Hero + Cinematic Stories', () => {
     expect(screen.getByText(/366 commands across 21 canonical topics/i)).toBeInTheDocument();
   });
 
-  it('renders CommandAtlas deep dive section with ADR-013 architecture notes', () => {
+  it('does not render redundant CommandAtlas deep dive section at the bottom', () => {
     render(
       <MemoryRouter>
         <Works />
       </MemoryRouter>,
     );
 
-    expect(screen.getByText(/Why Offline-First Command Retrieval\?/i)).toBeInTheDocument();
-    expect(screen.getByText(/Deterministic Scope/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Why Offline-First Command Retrieval\?/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Deterministic Scope/i)).not.toBeInTheDocument();
   });
 });

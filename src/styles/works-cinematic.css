@@ -433,6 +433,11 @@
     justify-content: flex-end;
   }
 
+  .spatial-composition-zone--intro {
+    justify-content: flex-start;
+    padding-top: clamp(1.5rem, 5vh, 2.5rem);
+  }
+
   .spatial-hero-title {
     font-size: clamp(2.4rem, 10vw, 3.75rem);
     line-height: 0.95;
@@ -460,25 +465,3 @@
   }
 }
 
-/* Section C: Deep Dive Split Section (Normal document flow) */
-.works-deepdive-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 6rem 1.5rem 4rem;
-}
-
-@media (min-width: 1024px) {
-  .works-deepdive-grid {
-    grid-template-columns: 22rem 1fr;
-  }
-}
-
-.works-sticky-panel {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 6rem;
-  height: fit-content;
-}

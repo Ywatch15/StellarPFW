@@ -97,8 +97,13 @@
   max-width: min(63rem, 58vw);
 }
 
+.spatial-composition-zone--algovista {
+  max-width: min(62rem, 58vw);
+}
+
 .spatial-composition-zone--handoff,
-.spatial-composition-zone--singularity {
+.spatial-composition-zone--singularity,
+.spatial-composition-zone--deepspace {
   max-width: 100%;
   align-items: center;
   text-align: center;
@@ -134,6 +139,12 @@
 
 .spatial-hero-title--amber {
   background: linear-gradient(135deg, #f8fafc 40%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.spatial-hero-title--emerald {
+  background: linear-gradient(135deg, #f8fafc 40%, #34d399 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -237,6 +248,10 @@
 .spatial-status-dot--amber {
   background: #f59e0b;
   box-shadow: 0 0 8px #f59e0b;
+}
+.spatial-status-dot--emerald {
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
 }
 
 /* Telemetry Cluster */
@@ -555,7 +570,8 @@
   /* Reserved Lower Reading Zone (Below Upper 3D Focal Region) */
   .spatial-composition-zone--tentdesk,
   .spatial-composition-zone--commandatlas,
-  .spatial-composition-zone--banksys {
+  .spatial-composition-zone--banksys,
+  .spatial-composition-zone--algovista {
     top: clamp(36vh, 40%, 44vh);
     bottom: 0.5rem;
     left: 0;
@@ -762,4 +778,274 @@
     text-transform: uppercase;
     white-space: nowrap;
   }
+}
+
+/* ── ALGOVISTA CINEMATIC VISUALIZER ── */
+.algovista-viz {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.95rem 1.15rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  max-width: 38rem;
+  will-change: transform, opacity;
+}
+
+.algovista-viz--sorting {
+  border-left: 2px solid #38bdf8;
+}
+
+.algovista-viz--graph {
+  border-left: 2px solid #a78bfa;
+}
+
+.algovista-viz--search {
+  border-left: 2px solid #34d399;
+}
+
+.algovista-viz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.algovista-viz-badge {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.algovista-viz-status {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.algovista-sorting-stage {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  height: 80px;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+}
+
+.algovista-bar {
+  flex: 1;
+  height: var(--height);
+  background: rgba(56, 189, 248, 0.35);
+  border: 1px solid rgba(56, 189, 248, 0.6);
+  border-radius: 2px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 2px;
+  transition: height 0.6s ease, background 0.3s ease;
+  animation: sortingBarOscillate 3s ease-in-out infinite alternate;
+}
+
+.algovista-bar--active {
+  background: rgba(245, 158, 11, 0.45);
+  border-color: #f59e0b;
+}
+
+.algovista-bar-val {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.55rem;
+  color: #f1f5f9;
+}
+
+@keyframes sortingBarOscillate {
+  0% {
+    height: var(--height);
+  }
+  100% {
+    height: var(--order-height);
+  }
+}
+
+.algovista-graph-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.35rem 0.5rem;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+}
+
+.algovista-graph-svg {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+}
+
+.algovista-pulse-line {
+  animation: graphPulse 2s linear infinite;
+}
+
+.algovista-pulse-line-delay {
+  animation: graphPulse 2s linear infinite 0.6s;
+}
+
+.algovista-pulse-line-final {
+  animation: graphPulse 2s linear infinite 1.2s;
+}
+
+@keyframes graphPulse {
+  0% {
+    stroke-dashoffset: 50;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.algovista-search-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+}
+
+.algovista-search-query {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+}
+
+.algovista-query-label {
+  color: #94a3b8;
+}
+
+.algovista-query-val {
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 2px;
+}
+
+.algovista-search-array {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.algovista-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.algovista-cell--scanned {
+  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.algovista-cell--match {
+  border-color: #34d399;
+  background: rgba(52, 211, 153, 0.2);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
+  position: relative;
+}
+
+.algovista-match-indicator {
+  position: absolute;
+  top: -14px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.48rem;
+  font-weight: 700;
+  color: #34d399;
+  letter-spacing: 0.1em;
+}
+
+.algovista-cell-idx {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.5rem;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+
+.algovista-cell-val {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.72rem;
+  color: #f1f5f9;
+}
+
+.algovista-viz-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+}
+
+.algovista-viz-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  color: #cbd5e1;
+}
+
+.algovista-legend-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.algovista-legend-dot--cyan {
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+.algovista-legend-dot--amber {
+  background: #f59e0b;
+  box-shadow: 0 0 6px #f59e0b;
+}
+
+.algovista-legend-dot--purple {
+  background: #a78bfa;
+  box-shadow: 0 0 6px #a78bfa;
+}
+
+.algovista-legend-dot--emerald {
+  background: #34d399;
+  box-shadow: 0 0 6px #34d399;
+}
+
+.algovista-viz--compact {
+  padding: 0.55rem 0.75rem;
+  max-width: 100%;
+}
+
+.algovista-viz--compact .algovista-sorting-stage {
+  height: 55px;
+  padding: 0.35rem 0.5rem;
+}
+
+.algovista-viz--compact .algovista-graph-svg {
+  max-width: 220px;
 }

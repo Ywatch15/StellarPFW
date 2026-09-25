@@ -28,7 +28,7 @@ describe('Works Page — Planetary Hero + Cinematic Stories', () => {
     expect(screen.getByText(/TENTDESK · PRODUCTION SAAS/i)).toBeInTheDocument();
   });
 
-  it('renders story cards for TentDesk, CommandAtlas, and BankSys with verified technical details', () => {
+  it('renders story cards for TentDesk, CommandAtlas, BankSys, and AlgoVista with verified technical details', () => {
     render(
       <MemoryRouter>
         <Works />
@@ -38,9 +38,13 @@ describe('Works Page — Planetary Hero + Cinematic Stories', () => {
     expect(screen.getByRole('heading', { level: 3, name: /TentDesk/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: /CommandAtlas/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: /^BankSys$/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: /^AlgoVista$/i })).toBeInTheDocument();
     expect(screen.getByText(/366 commands across 21 canonical topics/i)).toBeInTheDocument();
     expect(screen.getByText(/atomic double-entry bookkeeping/i)).toBeInTheDocument();
     expect(screen.getByText(/GRAVITATIONAL TRANSITION · SINGULARITY CORRIDOR → FINANCIAL DETERMINISM/i)).toBeInTheDocument();
+    expect(screen.getByText(/DEEP SPACE CORRIDOR · AUTONOMOUS EXPLORATION → ALGORITHM SIMULATION/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/200\+ ALGORITHMS/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/4 CLIENT ROUTES · ZERO BACKEND/i).length).toBeGreaterThan(0);
   });
 
   it('does not render redundant CommandAtlas deep dive section at the bottom', () => {
@@ -54,7 +58,7 @@ describe('Works Page — Planetary Hero + Cinematic Stories', () => {
     expect(screen.queryByText(/Deterministic Scope/i)).not.toBeInTheDocument();
   });
 
-  it('renders all dedicated mobile sequential sub-states for TentDesk, CommandAtlas, and BankSys', () => {
+  it('renders all dedicated mobile sequential sub-states for TentDesk, CommandAtlas, BankSys, and AlgoVista', () => {
     render(
       <MemoryRouter>
         <Works />
@@ -79,5 +83,12 @@ describe('Works Page — Planetary Hero + Cinematic Stories', () => {
     expect(screen.getByText(/ACCOUNT A → ACID TRANSACTION/i)).toBeInTheDocument();
     expect(screen.getByText(/DOUBLE-ENTRY LEDGER → ACCOUNT B/i)).toBeInTheDocument();
     expect(screen.getByText(/AUTHENTICATION & EXPORT/i)).toBeInTheDocument();
+
+    // AlgoVista mobile sequential sub-states
+    expect(screen.getAllByText(/ALGORITHM LEARNING PLATFORM/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/CONTROLLABLE PROCESSES/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/SORTING DYNAMICS/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/GRAPH EXPLORATION/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/QUERY RESOLUTION/i).length).toBeGreaterThan(0);
   });
 });

@@ -48,3 +48,14 @@ This project incorporates selected 3D models for educational and technical portf
 * **Contributing Center:** NASA Marshall Space Flight Center (MSFC)
 * **License & Rights:** Public Domain (United States Government work under 17 U.S.C. § 105; free for public informational, educational, and creative use without copyright restriction, subject to standard non-endorsement terms).
 * **Technical Details:** Full 3-stage rocket assembly with S-IC first stage, F-1 engine bells, interstages, S-IVB third stage, and Apollo spacecraft launch escape system. Employed as an engineering metaphor for transaction trajectory, forward progression, and high-integrity execution.
+
+---
+
+### 5. Deep Space Archive Hero Object — AlgoVista: Deep Space 1 Spacecraft
+* **Filename:** `deep-space-1.glb` (934 KB / 934,676 bytes)
+* **Model Identifier:** Deep Space 1 (DS1) Technology Demonstration Spacecraft
+* **Source:** [NASA Science 3D Resources — Deep Space 1](https://science.nasa.gov/3d-resources/deep-space-1/)
+* **Contributing Center:** NASA Jet Propulsion Laboratory (JPL-Caltech) / 3D Modeling by Brian E. Kumanchik & Christian A. Lopez
+* **License & Rights:** Public Domain (United States Government work under 17 U.S.C. § 105; free for public informational, educational, and creative use without copyright restriction, subject to standard non-endorsement terms).
+* **Technical Details:** Spacecraft featuring solar concentrator arrays (SCARLET), xenon ion propulsion engine, high-gain antenna, and autonomous navigation sensors. Employed as a visual metaphor for exploration, algorithm simulation, and visual experimentation.
+

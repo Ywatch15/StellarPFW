@@ -69,7 +69,7 @@ const fragmentShader = `
   }
 `;
 
-export default function BlackHoleSingularity({ isActive, transitionProgress = 0, isPageVisible }) {
+export default function BlackHoleSingularity({ isActive, transitionProgress = 1.0, isPageVisible }) {
   const meshRef = useRef();
   const materialRef = useRef();
 
@@ -85,7 +85,7 @@ export default function BlackHoleSingularity({ isActive, transitionProgress = 0,
   useFrame((_, delta) => {
     if (!isActive || !isPageVisible || !materialRef.current) return;
     materialRef.current.uniforms.uTime.value += delta * 0.8;
-    materialRef.current.uniforms.uIntensity.value = Math.min(1.0, transitionProgress * 1.5);
+    materialRef.current.uniforms.uIntensity.value = Math.min(1.0, Math.max(0.3, transitionProgress * 1.5));
   });
 
   return (

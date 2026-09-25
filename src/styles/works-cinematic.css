@@ -101,9 +101,14 @@
   max-width: min(62rem, 58vw);
 }
 
+.spatial-composition-zone--devgraph {
+  max-width: min(62rem, 58vw);
+}
+
 .spatial-composition-zone--handoff,
 .spatial-composition-zone--singularity,
-.spatial-composition-zone--deepspace {
+.spatial-composition-zone--deepspace,
+.spatial-composition-zone--constellation {
   max-width: 100%;
   align-items: center;
   text-align: center;
@@ -145,6 +150,12 @@
 
 .spatial-hero-title--emerald {
   background: linear-gradient(135deg, #f8fafc 40%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.spatial-hero-title--indigo {
+  background: linear-gradient(135deg, #f8fafc 40%, #818cf8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -1049,3 +1060,253 @@
 .algovista-viz--compact .algovista-graph-svg {
   max-width: 220px;
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   DEVGRAPH LIVING CONSTELLATION & HYBRID SEARCH STYLES
+   ══════════════════════════════════════════════════════════════════ */
+
+.spatial-status-dot--indigo {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #818cf8;
+  box-shadow: 0 0 10px #818cf8;
+}
+
+.spatial-mobile-substate--devgraph {
+  border-left: 2px solid rgba(129, 140, 248, 0.4);
+}
+
+/* DevGraph Category Constellation Grouping (Beat 1) */
+.devgraph-constellation-grouping {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 1rem;
+}
+
+.devgraph-category-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: #cbd5e1;
+  text-transform: uppercase;
+}
+
+.devgraph-category-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+/* DevGraph Hybrid Search Flow (Beat 3) */
+.devgraph-search-flow {
+  width: 100%;
+  max-width: 32rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.devgraph-search-node {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 0.6rem 0.85rem;
+  backdrop-filter: blur(8px);
+}
+
+.devgraph-search-node--input {
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.devgraph-search-node--result {
+  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.06);
+}
+
+.devgraph-search-node-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.devgraph-search-badge {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.devgraph-search-meta {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.58rem;
+  color: #64748b;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.devgraph-search-input-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(2, 6, 23, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 0.35rem 0.6rem;
+}
+
+.devgraph-search-icon {
+  font-size: 0.85rem;
+  color: #38bdf8;
+}
+
+.devgraph-search-query-text {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.72rem;
+  color: #f1f5f9;
+}
+
+.devgraph-search-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 1.1rem;
+}
+
+.devgraph-connector-line {
+  width: 1px;
+  height: 0.4rem;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.devgraph-connector-arrow {
+  font-family: monospace;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1;
+}
+
+.devgraph-search-layers {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+}
+
+.devgraph-layers-header {
+  margin-bottom: 0.45rem;
+}
+
+.devgraph-layers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.devgraph-layer-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0.45rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(2, 6, 23, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.devgraph-layer-card--flex {
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.devgraph-layer-card--pg {
+  border-color: rgba(167, 139, 250, 0.25);
+}
+
+.devgraph-layer-card--fallback {
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.devgraph-layer-pill {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.1rem 0.3rem;
+  border: 1px solid;
+  border-radius: 3px;
+  width: fit-content;
+  margin-bottom: 0.25rem;
+}
+
+.devgraph-layer-title {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.15rem;
+}
+
+.devgraph-layer-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.58rem;
+  color: #94a3b8;
+  line-height: 1.25;
+}
+
+.devgraph-result-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 4px;
+  padding: 0.35rem 0.6rem;
+}
+
+.devgraph-result-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.devgraph-result-tag {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.56rem;
+  color: #38bdf8;
+  letter-spacing: 0.08em;
+}
+
+/* Compact Mobile Mode for DevGraph Search Flow */
+.devgraph-search-flow--compact {
+  max-width: 100%;
+}
+
+.devgraph-search-flow--compact .devgraph-layers-grid {
+  grid-template-columns: 1fr;
+  gap: 0.3rem;
+}
+
+.devgraph-search-flow--compact .devgraph-layer-card {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.3rem 0.45rem;
+}
+
+.devgraph-search-flow--compact .devgraph-layer-desc {
+  display: none;
+}
+

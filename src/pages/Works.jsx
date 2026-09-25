@@ -33,14 +33,14 @@ export default function Works() {
       {!isLegacy && (
         <>
           <div
-            className="relative flex flex-col items-center justify-center py-8 md:py-20"
+            className="relative flex flex-col items-start md:items-center justify-center py-8 md:py-20 px-5 md:px-0 text-left md:text-center"
             aria-hidden="true"
           >
-            <div className="h-8 md:h-16 w-[1px] bg-gradient-to-b from-transparent via-aurora/40 to-transparent" />
-            <p className="mt-4 font-mono text-[0.65rem] uppercase tracking-[0.28em] text-cosmos-muted/80">
+            <div className="h-8 md:h-16 w-[1px] bg-gradient-to-b from-transparent via-aurora/40 to-transparent ml-1 md:ml-0" />
+            <p className="mt-4 font-mono text-[0.62rem] sm:text-[0.65rem] uppercase tracking-[0.16em] sm:tracking-[0.22em] md:tracking-[0.28em] text-cosmos-muted/80 max-w-full">
               SYSTEM ORBIT CONVERGENCE · DEEP ARCHITECTURES
             </p>
-            <span className="mt-2 font-mono text-xs text-aurora/70">↓</span>
+            <span className="mt-2 font-mono text-xs text-aurora/70 ml-0.5 md:ml-0">↓</span>
           </div>
 
           {/* ── SECTION B: CINEMATIC PROJECT STORY & SECTION C: CONTENT ARCHIVE ── */}

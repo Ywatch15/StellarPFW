@@ -146,6 +146,43 @@ function RocketHero({ isActive, isPageVisible, prefersReducedMotion, ambientGrou
 }
 
 /**
+ * AlgoVista Hero Object: NASA Deep Space 1 Technology Demonstration Spacecraft
+ * Metaphor: Autonomous exploration, algorithm simulation, and visual experimentation.
+ * Loaded via Draco decoder.
+ */
+function ProbeHero({ isActive, isPageVisible, prefersReducedMotion, ambientGroupRef }) {
+  const { scene } = useGLTF('/models/cinematic/deep-space-1.glb', DRACO_DECODER_PATH);
+
+  const pivot = useMemo(() => {
+    return createNormalizedPivot(scene, 2.3);
+  }, [scene]);
+
+  // Decoupled continuous ambient attitude drift & exploration scan
+  useFrame((state, delta) => {
+    if (!isActive || !isPageVisible || prefersReducedMotion) return;
+    if (ambientGroupRef.current) {
+      const t = state.clock.elapsedTime;
+      // Continuous yaw & gentle attitude oscillation
+      ambientGroupRef.current.rotation.y += delta * 0.08;
+      ambientGroupRef.current.rotation.x = THREE.MathUtils.degToRad(-12) + Math.sin(t * 0.45) * 0.06;
+      ambientGroupRef.current.rotation.z = THREE.MathUtils.degToRad(8) + Math.cos(t * 0.35) * 0.05;
+    }
+  });
+
+  return (
+    <group>
+      <primitive object={pivot} />
+      {/* Ion Propulsion Cyan Thruster Beam Glow */}
+      <pointLight position={[0, -0.6, -1.2]} intensity={1.2} color="#06b6d4" distance={5} />
+      {/* Solar Concentrator Array Specular Accent */}
+      <pointLight position={[1.2, 0.4, 0.6]} intensity={0.6} color="#38bdf8" distance={4} />
+      {/* Sensor Head / Autonomous Navigation Telemetry Light */}
+      <pointLight position={[-0.8, 0.3, 0.8]} intensity={0.4} color="#a78bfa" distance={3} />
+    </group>
+  );
+}
+
+/**
  * Supporting Deep Space Object: Asteroid Bennu (1999 RQ36)
  * Visually subordinate background anchor providing spatial depth and cosmic scale.
  * Placed deep in background; muted lighting, no Draco required.
@@ -218,6 +255,7 @@ function SpatialContinuumController({
   const satelliteRootRef = useRef();
   const blackHoleRootRef = useRef();
   const rocketRootRef = useRef();
+  const probeRootRef = useRef();
   const asteroidRootRef = useRef();
 
   // Scroll Transform Groups (GSAP Spatial Position & Scale)
@@ -225,12 +263,14 @@ function SpatialContinuumController({
   const satelliteScrollGroupRef = useRef();
   const blackHoleScrollGroupRef = useRef();
   const rocketScrollGroupRef = useRef();
+  const probeScrollGroupRef = useRef();
   const asteroidScrollGroupRef = useRef();
 
   // Ambient Motion Groups (Continuous useFrame Rotation & Attitude Drift)
   const stationAmbientGroupRef = useRef();
   const satelliteAmbientGroupRef = useRef();
   const rocketAmbientGroupRef = useRef();
+  const probeAmbientGroupRef = useRef();
   const asteroidAmbientGroupRef = useRef();
 
   const isMobile = size.width <= 768;
@@ -247,45 +287,56 @@ function SpatialContinuumController({
       let lookX = 0;
       let lookY = 0;
 
-      if (clampedP <= 0.10) {
-        const t = clampedP / 0.10;
+      if (clampedP <= 0.06) {
+        const t = clampedP / 0.06;
         camZ = 7.5 - 1.3 * t; // 7.5 -> 6.2
-      } else if (clampedP <= 0.36) {
+      } else if (clampedP <= 0.26) {
         // TentDesk focal plane
-        const t = (clampedP - 0.10) / 0.26;
+        const t = (clampedP - 0.06) / 0.20;
         const ease = t * t * (3 - 2 * t);
         camX = isMobile ? 0 : -0.3 * ease;
         camZ = 6.2 - 0.9 * ease; // 6.2 -> 5.3
         lookX = isMobile ? 0 : -0.4 * ease;
-      } else if (clampedP <= 0.44) {
-        // Continuum handoff bridge
-        const t = (clampedP - 0.36) / 0.08;
+      } else if (clampedP <= 0.30) {
+        // Continuum handoff bridge 1
+        const t = (clampedP - 0.26) / 0.04;
         const ease = t * t * (3 - 2 * t);
         camX = isMobile ? 0 : -0.3 + 0.6 * ease; // -0.3 -> +0.3
-        camZ = 5.3 + Math.sin(t * Math.PI) * 0.7; // slight pull-back during handoff
+        camZ = 5.3 + Math.sin(t * Math.PI) * 0.6; // slight pull-back during handoff
         lookX = isMobile ? 0 : -0.4 + 0.8 * ease; // -0.4 -> +0.4
-      } else if (clampedP <= 0.73) {
+      } else if (clampedP <= 0.50) {
         // CommandAtlas focal plane
         camX = isMobile ? 0 : 0.3;
         camZ = 5.3;
         lookX = isMobile ? 0 : 0.4;
-      } else if (clampedP <= 0.84) {
+      } else if (clampedP <= 0.56) {
         // Black Hole Singularity approach and pass-through
-        if (clampedP <= 0.78) {
-          const t = (clampedP - 0.73) / 0.05;
+        if (clampedP <= 0.53) {
+          const t = (clampedP - 0.50) / 0.03;
           const ease = t * t * (3 - 2 * t);
           camX = (isMobile ? 0 : 0.3) * (1 - ease);
           camZ = 5.3 - 0.9 * ease; // 5.3 -> 4.4
           lookX = (isMobile ? 0 : 0.4) * (1 - ease);
         } else {
-          const t = (clampedP - 0.78) / 0.06;
+          const t = (clampedP - 0.53) / 0.03;
           const ease = t * t * (3 - 2 * t);
           camX = (isMobile ? 0 : 0.3) * ease;
           camZ = 4.4 + 1.0 * ease; // 4.4 -> 5.4
           lookX = (isMobile ? 0 : 0.4) * ease;
         }
+      } else if (clampedP <= 0.74) {
+        // BankSys focal plane
+        camX = isMobile ? 0 : 0.3;
+        camZ = 5.4;
+        lookX = isMobile ? 0 : 0.4;
+      } else if (clampedP <= 0.78) {
+        // Deep Space Continuum Handoff Bridge
+        const t = (clampedP - 0.74) / 0.04;
+        camX = isMobile ? 0 : 0.3;
+        camZ = 5.4 + Math.sin(t * Math.PI) * 0.5;
+        lookX = isMobile ? 0 : 0.4;
       } else {
-        // Bank Transaction System focal plane
+        // AlgoVista (Deep Space 1) focal plane
         camX = isMobile ? 0 : 0.3;
         camZ = 5.4;
         lookX = isMobile ? 0 : 0.4;
@@ -296,36 +347,43 @@ function SpatialContinuumController({
 
       // ── 2. STRICT VISIBILITY THRESHOLDS (LOADED != VISIBLE) ──
       const showStation = isMobile
-        ? clampedP >= 0.05 && clampedP <= 0.40
-        : clampedP >= 0.06 && clampedP <= 0.44;
+        ? clampedP >= 0.03 && clampedP <= 0.28
+        : clampedP >= 0.04 && clampedP <= 0.29;
       if (stationRootRef.current) {
         stationRootRef.current.visible = showStation;
       }
 
       const showSatellite = isMobile
-        ? clampedP >= 0.36 && clampedP <= 0.78
-        : clampedP >= 0.36 && clampedP <= 0.78;
+        ? clampedP >= 0.26 && clampedP <= 0.52
+        : clampedP >= 0.27 && clampedP <= 0.52;
       if (satelliteRootRef.current) {
         satelliteRootRef.current.visible = showSatellite;
       }
 
       const showBlackHole = isMobile
-        ? clampedP >= 0.70 && clampedP <= 0.82
-        : clampedP >= 0.72 && clampedP <= 0.84;
+        ? clampedP >= 0.48 && clampedP <= 0.57
+        : clampedP >= 0.49 && clampedP <= 0.57;
       if (blackHoleRootRef.current) {
         blackHoleRootRef.current.visible = showBlackHole;
       }
 
       const showRocket = isMobile
-        ? clampedP >= 0.76 && clampedP <= 1.00
-        : clampedP >= 0.80 && clampedP <= 1.00;
+        ? clampedP >= 0.53 && clampedP <= 0.77
+        : clampedP >= 0.54 && clampedP <= 0.77;
       if (rocketRootRef.current) {
         rocketRootRef.current.visible = showRocket;
       }
 
+      const showProbe = isMobile
+        ? clampedP >= 0.74 && clampedP <= 1.00
+        : clampedP >= 0.75 && clampedP <= 1.00;
+      if (probeRootRef.current) {
+        probeRootRef.current.visible = showProbe;
+      }
+
       const showAsteroid = isMobile
-        ? clampedP >= 0.05 && clampedP <= 0.98
-        : clampedP >= 0.08 && clampedP <= 0.95;
+        ? clampedP >= 0.04 && clampedP <= 0.98
+        : clampedP >= 0.05 && clampedP <= 0.98;
       if (asteroidRootRef.current) {
         asteroidRootRef.current.visible = showAsteroid;
       }
@@ -337,29 +395,28 @@ function SpatialContinuumController({
         let tdZ = -8.5;
         let tdScale = 0.25;
 
-        if (clampedP < 0.10) {
+        if (clampedP < 0.06) {
           tdZ = -8.5;
           tdScale = 0.25;
-        } else if (clampedP <= 0.24) {
+        } else if (clampedP <= 0.16) {
           // Arrival from depth into right focal plane
-          const t = (clampedP - 0.10) / 0.14;
+          const t = (clampedP - 0.06) / 0.10;
           const ease = t * t * (3 - 2 * t);
           tdZ = -8.5 + (isMobile ? 8.0 : 8.7) * ease; // -> -0.5 / +0.2
           tdScale = 0.25 + (isMobile ? 0.35 : 0.7) * ease; // -> 0.6 / 0.95
-        } else if (clampedP <= 0.36) {
+        } else if (clampedP <= 0.24) {
           // Stillness & architecture inspection
           tdZ = isMobile ? -0.5 : 0.2;
           tdScale = isMobile ? 0.6 : 0.95;
-        } else if (clampedP <= 0.46) {
+        } else if (clampedP <= 0.29) {
           // Recedes across to deep left during handoff (COEXISTENCE WINDOW)
-          const t = (clampedP - 0.36) / 0.10;
+          const t = (clampedP - 0.24) / 0.05;
           const ease = t * t * (3 - 2 * t);
-          tdX = (isMobile ? 0 : 1.8) - (isMobile ? 2.5 : 7.2) * ease; // -> -5.4
+          tdX = (isMobile ? 0 : 1.8) - (isMobile ? 2.5 : 7.2) * ease;
           tdY = (isMobile ? 1.2 : 0) + 0.5 * ease;
-          tdZ = (isMobile ? -0.5 : 0.2) - 6.5 * ease; // -> -6.3
-          tdScale = (isMobile ? 0.6 : 0.95) - 0.65 * ease; // -> 0.3
+          tdZ = (isMobile ? -0.5 : 0.2) - 6.5 * ease;
+          tdScale = (isMobile ? 0.6 : 0.95) - 0.65 * ease;
         } else {
-          // Distant presence
           tdX = isMobile ? -2.5 : -5.4;
           tdY = isMobile ? 1.7 : 0.5;
           tdZ = -6.8;
@@ -377,18 +434,18 @@ function SpatialContinuumController({
         let caZ = -8.0;
         let caScale = 0.25;
 
-        if (clampedP < 0.40) {
+        if (clampedP < 0.27) {
           caX = isMobile ? 2.5 : 5.8;
           caZ = -8.0;
           caScale = 0.25;
-        } else if (clampedP <= 0.52) {
+        } else if (clampedP <= 0.35) {
           // Sweeps in from right & depth during handoff (COEXISTENCE WINDOW)
-          const t = (clampedP - 0.40) / 0.12;
+          const t = (clampedP - 0.27) / 0.08;
           const ease = t * t * (3 - 2 * t);
-          caX = (isMobile ? 2.5 : 5.8) - (isMobile ? 2.5 : 4.0) * ease; // -> isMobile 0 : 1.8
-          caZ = -8.0 + (isMobile ? 7.5 : 8.2) * ease; // -> -0.5 / +0.2
-          caScale = 0.25 + (isMobile ? 0.35 : 0.7) * ease; // -> 0.6 / 0.95
-        } else if (clampedP <= 0.70) {
+          caX = (isMobile ? 2.5 : 5.8) - (isMobile ? 2.5 : 4.0) * ease;
+          caZ = -8.0 + (isMobile ? 7.5 : 8.2) * ease;
+          caScale = 0.25 + (isMobile ? 0.35 : 0.7) * ease;
+        } else if (clampedP <= 0.48) {
           // Focal dominance & stillness
           caX = isMobile ? 0 : 1.8;
           caY = isMobile ? 1.2 : 0;
@@ -396,7 +453,7 @@ function SpatialContinuumController({
           caScale = isMobile ? 0.6 : 0.95;
         } else {
           // Recedes left as Black Hole singularity takes over
-          const t = (clampedP - 0.70) / 0.04;
+          const t = (clampedP - 0.48) / 0.04;
           const ease = t * t * (3 - 2 * t);
           caX = (isMobile ? 0 : 1.8) - (isMobile ? 2.0 : 6.0) * ease;
           caZ = (isMobile ? -0.5 : 0.2) - 6.0 * ease;
@@ -410,17 +467,18 @@ function SpatialContinuumController({
       // ── 5. BLACK HOLE SINGULARITY TRAJECTORY ──
       if (blackHoleScrollGroupRef.current && showBlackHole) {
         let bhZ = -5.0;
-        let bhScale = 0.6;
-        if (clampedP <= 0.78) {
-          const t = (clampedP - 0.72) / 0.06;
-          bhZ = -5.0 + 3.5 * t; // -5.0 -> -1.5
-          bhScale = 0.6 + 0.4 * t; // 0.6 -> 1.0
+        let bhScale = isMobile ? 0.75 : 0.6;
+        if (clampedP <= 0.53) {
+          const t = Math.max(0, Math.min(1, (clampedP - (isMobile ? 0.48 : 0.49)) / (isMobile ? 0.05 : 0.04)));
+          bhZ = -5.0 + 3.5 * t;
+          bhScale = (isMobile ? 0.75 : 0.6) + 0.4 * t;
         } else {
-          const t = (clampedP - 0.78) / 0.06;
-          bhZ = -1.5 + 2.0 * t; // -1.5 -> 0.5
-          bhScale = 1.0 + 0.3 * t; // 1.0 -> 1.3
+          const t = Math.max(0, Math.min(1, (clampedP - 0.53) / 0.04));
+          bhZ = -1.5 + 2.0 * t;
+          bhScale = (isMobile ? 1.15 : 1.0) + 0.3 * t;
         }
-        blackHoleScrollGroupRef.current.position.set(0, 0, bhZ);
+        const bhY = isMobile ? 0.2 : 0;
+        blackHoleScrollGroupRef.current.position.set(0, bhY, bhZ);
         blackHoleScrollGroupRef.current.scale.set(bhScale, bhScale, bhScale);
       }
 
@@ -431,28 +489,66 @@ function SpatialContinuumController({
         let rkZ = -8.0;
         let rkScale = 0.25;
 
-        if (clampedP <= (isMobile ? 0.88 : 0.88)) {
+        if (clampedP <= (isMobile ? 0.60 : 0.59)) {
           // Enters from right & depth as black hole transition concludes
-          const enterStart = isMobile ? 0.83 : 0.82;
-          const enterDuration = isMobile ? 0.05 : 0.06;
+          const enterStart = isMobile ? 0.54 : 0.53;
+          const enterDuration = isMobile ? 0.06 : 0.06;
           const t = Math.max(0, Math.min(1, (clampedP - enterStart) / enterDuration));
           const ease = t * t * (3 - 2 * t);
-          rkX = (isMobile ? 2.5 : 5.8) - (isMobile ? 2.5 : 4.0) * ease; // -> isMobile 0 : 1.8
-          rkZ = -8.0 + (isMobile ? 7.6 : 8.2) * ease; // -> -0.4 / +0.2
-          rkScale = 0.25 + (isMobile ? 0.30 : 0.70) * ease; // -> 0.55 / 0.95
-        } else {
+          rkX = (isMobile ? 2.5 : 5.8) - (isMobile ? 2.5 : 4.0) * ease;
+          rkZ = -8.0 + (isMobile ? 7.6 : 8.2) * ease;
+          rkScale = 0.25 + (isMobile ? 0.30 : 0.70) * ease;
+        } else if (clampedP <= 0.72) {
           // Focal dominance & stillness throughout transaction narrative
           rkX = isMobile ? 0 : 1.8;
           rkY = isMobile ? 1.35 : 0;
           rkZ = isMobile ? -0.4 : 0.2;
           rkScale = isMobile ? 0.55 : 0.95;
+        } else {
+          // Recedes forward/left into deep space as AlgoVista approaches
+          const t = (clampedP - 0.72) / 0.05;
+          const ease = t * t * (3 - 2 * t);
+          rkX = (isMobile ? 0 : 1.8) - (isMobile ? 2.5 : 6.0) * ease;
+          rkY = (isMobile ? 1.35 : 0) + (isMobile ? 0.5 : 1.0) * ease;
+          rkZ = (isMobile ? -0.4 : 0.2) - 8.0 * ease;
+          rkScale = (isMobile ? 0.55 : 0.95) - (isMobile ? 0.35 : 0.70) * ease;
         }
 
         rocketScrollGroupRef.current.position.set(rkX, rkY, rkZ);
         rocketScrollGroupRef.current.scale.set(rkScale, rkScale, rkScale);
       }
 
-      // ── 7. ASTEROID TRAJECTORY (SUBORDINATE DEEP BACKGROUND) ──
+      // ── 7. ALGOVISTA (DEEP SPACE 1 SPACECRAFT) TRAJECTORY ──
+      if (probeScrollGroupRef.current && showProbe) {
+        let prbX = isMobile ? 2.5 : 5.8;
+        let prbY = isMobile ? 1.2 : 0;
+        let prbZ = -8.5;
+        let prbScale = 0.25;
+
+        if (clampedP < 0.77) {
+          prbX = isMobile ? 2.5 : 5.8;
+          prbZ = -8.5;
+          prbScale = 0.25;
+        } else if (clampedP <= (isMobile ? 0.83 : 0.83)) {
+          // Sweeps in from right & depth as space opens
+          const t = Math.max(0, Math.min(1, (clampedP - 0.77) / 0.06));
+          const ease = t * t * (3 - 2 * t);
+          prbX = (isMobile ? 2.5 : 5.8) - (isMobile ? 2.5 : 4.0) * ease; // -> isMobile 0 : 1.8
+          prbZ = -8.5 + (isMobile ? 8.1 : 8.7) * ease; // -> -0.4 / +0.2
+          prbScale = 0.25 + (isMobile ? 0.30 : 0.70) * ease; // -> 0.55 / 0.95
+        } else {
+          // Focal dominance & stillness throughout algorithm visualization
+          prbX = isMobile ? 0 : 1.8;
+          prbY = isMobile ? 1.3 : 0;
+          prbZ = isMobile ? -0.4 : 0.2;
+          prbScale = isMobile ? 0.55 : 0.95;
+        }
+
+        probeScrollGroupRef.current.position.set(prbX, prbY, prbZ);
+        probeScrollGroupRef.current.scale.set(prbScale, prbScale, prbScale);
+      }
+
+      // ── 8. ASTEROID TRAJECTORY (SUBORDINATE DEEP BACKGROUND) ──
       if (asteroidScrollGroupRef.current && showAsteroid) {
         const driftX = (clampedP - 0.5) * -3.0 - 2.0;
         asteroidScrollGroupRef.current.position.set(driftX, -1.8, -14.0);
@@ -536,6 +632,22 @@ function SpatialContinuumController({
                 isPageVisible={isPageVisible}
                 prefersReducedMotion={prefersReducedMotion}
                 ambientGroupRef={rocketAmbientGroupRef}
+              />
+            </Suspense>
+          </group>
+        </group>
+      </group>
+
+      {/* ── ALGOVISTA (DEEP SPACE 1 SPACECRAFT) ── */}
+      <group ref={probeRootRef} visible={false}>
+        <group ref={probeScrollGroupRef}>
+          <group ref={probeAmbientGroupRef}>
+            <Suspense fallback={null}>
+              <ProbeHero
+                isActive={isActive}
+                isPageVisible={isPageVisible}
+                prefersReducedMotion={prefersReducedMotion}
+                ambientGroupRef={probeAmbientGroupRef}
               />
             </Suspense>
           </group>

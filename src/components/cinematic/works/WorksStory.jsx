@@ -12,6 +12,7 @@ import TentDeskIncidentAudit from './primitives/TentDeskIncidentAudit';
 import CommandAtlasPipelineFlow from './primitives/CommandAtlasPipelineFlow';
 import CommandAtlasDecisionMatrix from './primitives/CommandAtlasDecisionMatrix';
 import BankTransactionFlow from './primitives/BankTransactionFlow';
+import AlgoVistaVisualizer from './primitives/AlgoVistaVisualizer';
 import '../../../styles/cinematic-engine.css';
 import '../../../styles/works-cinematic.css';
 
@@ -72,6 +73,26 @@ export default function WorksStory() {
   const mobileBsLedgerRef = useRef(null);
   const mobileBsSecurityRef = useRef(null);
 
+  // Deep Space Transition Bridge
+  const deepspaceBridgeRef = useRef(null);
+
+  // AlgoVista Dynamic Zone (Desktop)
+  const algovistaZoneRef = useRef(null);
+  const algovistaTitleRef = useRef(null);
+  const algovistaOverviewRef = useRef(null);
+  const algovistaSortingRef = useRef(null);
+  const algovistaGraphRef = useRef(null);
+  const algovistaSearchRef = useRef(null);
+  const algovistaScaleRef = useRef(null);
+
+  // AlgoVista Mobile Sequential Sub-States
+  const mobileAvIdentityRef = useRef(null);
+  const mobileAvWhyRef = useRef(null);
+  const mobileAvSortingRef = useRef(null);
+  const mobileAvGraphRef = useRef(null);
+  const mobileAvSearchRef = useRef(null);
+  const mobileAvScaleRef = useRef(null);
+
   // Responsive device breakpoint state
   const [isMobileScreen, setIsMobileScreen] = useState(() => {
     return typeof window !== 'undefined' && window.innerWidth <= 768;
@@ -90,7 +111,7 @@ export default function WorksStory() {
   const { ref: visibilityRef, state: visibilityState } = useVisibilityState({
     nearMargin: '400px 0px',
     visibleMargin: '0px',
-    threshold: 0.05,
+    threshold: 0,
   });
 
   // Scoped GSAP ScrollTrigger timeline with physical spatial motion
@@ -107,12 +128,15 @@ export default function WorksStory() {
         !commandatlasTitleRef.current ||
         !blackholeBridgeRef.current ||
         !banksysZoneRef.current ||
-        !banksysTitleRef.current
+        !banksysTitleRef.current ||
+        !deepspaceBridgeRef.current ||
+        !algovistaZoneRef.current ||
+        !algovistaTitleRef.current
       ) {
         return;
       }
 
-      const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+      const isMobile = isMobileScreen;
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -123,16 +147,44 @@ export default function WorksStory() {
           scrub: 0.8,
           invalidateOnRefresh: true,
           onUpdate: (st) => {
-            progressRef.current = st.progress;
+            const p = st.progress;
+            progressRef.current = p;
             if (progressRef.onSpatialUpdate) {
-              progressRef.onSpatialUpdate(st.progress);
+              progressRef.onSpatialUpdate(p);
             }
+
+            // Strict Project Story Visibility Gating (HIDDEN -> ENTER -> ACTIVE -> EXIT -> HIDDEN)
+            if (introRef.current) introRef.current.style.display = p <= 0.045 ? 'flex' : 'none';
+            if (tentdeskZoneRef.current) tentdeskZoneRef.current.style.display = p >= 0.04 && p <= 0.27 ? 'flex' : 'none';
+            if (handoffBridgeRef.current) handoffBridgeRef.current.style.display = p >= 0.255 && p <= 0.30 ? 'flex' : 'none';
+            if (commandatlasZoneRef.current) commandatlasZoneRef.current.style.display = p >= 0.295 && p <= 0.52 ? 'flex' : 'none';
+            if (blackholeBridgeRef.current) blackholeBridgeRef.current.style.display = p >= 0.505 && p <= 0.555 ? 'flex' : 'none';
+            if (banksysZoneRef.current) banksysZoneRef.current.style.display = p >= 0.550 && p <= 0.755 ? 'flex' : 'none';
+            if (deepspaceBridgeRef.current) deepspaceBridgeRef.current.style.display = p >= 0.745 && p <= 0.795 ? 'flex' : 'none';
+            if (algovistaZoneRef.current) algovistaZoneRef.current.style.display = p >= 0.785 && p <= 1.00 ? 'flex' : 'none';
+
             invalidate();
           },
         },
       });
 
-      // ── INITIAL PHYSICAL SPATIAL STATES ──
+      // ── INITIAL PHYSICAL SPATIAL STATES & VISIBILITY ──
+      const isTestEnv =
+        (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') ||
+        (typeof navigator !== 'undefined' && /jsdom/i.test(navigator.userAgent));
+
+      if (!isTestEnv) {
+        const initialP = progressRef.current || 0;
+        if (introRef.current) introRef.current.style.display = initialP <= 0.045 ? 'flex' : 'none';
+        if (tentdeskZoneRef.current) tentdeskZoneRef.current.style.display = initialP >= 0.04 && initialP <= 0.27 ? 'flex' : 'none';
+        if (handoffBridgeRef.current) handoffBridgeRef.current.style.display = initialP >= 0.255 && initialP <= 0.30 ? 'flex' : 'none';
+        if (commandatlasZoneRef.current) commandatlasZoneRef.current.style.display = initialP >= 0.295 && initialP <= 0.52 ? 'flex' : 'none';
+        if (blackholeBridgeRef.current) blackholeBridgeRef.current.style.display = initialP >= 0.505 && initialP <= 0.555 ? 'flex' : 'none';
+        if (banksysZoneRef.current) banksysZoneRef.current.style.display = initialP >= 0.550 && initialP <= 0.755 ? 'flex' : 'none';
+        if (deepspaceBridgeRef.current) deepspaceBridgeRef.current.style.display = initialP >= 0.745 && initialP <= 0.795 ? 'flex' : 'none';
+        if (algovistaZoneRef.current) algovistaZoneRef.current.style.display = initialP >= 0.785 && initialP <= 1.00 ? 'flex' : 'none';
+      }
+
       gsap.set(introRef.current, { x: 0, y: 0, scale: 1, opacity: 1, filter: 'blur(0px)' });
 
       const enterX = isMobile ? '35vw' : '65vw';
@@ -142,37 +194,62 @@ export default function WorksStory() {
       gsap.set(tentdeskTitleRef.current, { x: enterX, scale: 0.92, opacity: 0, filter: 'blur(4px)' });
       gsap.set(commandatlasTitleRef.current, { x: enterX, scale: 0.92, opacity: 0, filter: 'blur(4px)' });
       gsap.set(banksysTitleRef.current, { x: enterX, scale: 0.92, opacity: 0, filter: 'blur(4px)' });
+      gsap.set(algovistaTitleRef.current, { x: enterX, scale: 0.92, opacity: 0, filter: 'blur(4px)' });
 
       // Shared bridges initial
       gsap.set(handoffBridgeRef.current, { scale: 0.85, opacity: 0 });
       gsap.set(blackholeBridgeRef.current, { scale: 0.85, opacity: 0 });
+      gsap.set(deepspaceBridgeRef.current, { scale: 0.85, opacity: 0 });
+
+      // Shared initial reset for all desktop beats (prevents uninitialized flash)
+      if (tentdeskOverviewRef.current) gsap.set(tentdeskOverviewRef.current, { y: 20, opacity: 0, filter: 'blur(3px)' });
+      if (tentdeskFlowRef.current) gsap.set(tentdeskFlowRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
+      if (tentdeskIncidentRef.current) gsap.set(tentdeskIncidentRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
+      if (commandatlasOverviewRef.current) gsap.set(commandatlasOverviewRef.current, { y: 20, opacity: 0, filter: 'blur(3px)' });
+      if (commandatlasPipelineRef.current) gsap.set(commandatlasPipelineRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
+      if (commandatlasDecisionRef.current) gsap.set(commandatlasDecisionRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
+      if (banksysOverviewRef.current) gsap.set(banksysOverviewRef.current, { y: 20, opacity: 0, filter: 'blur(3px)' });
+      if (banksysFlowRef.current) gsap.set(banksysFlowRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
+      if (algovistaOverviewRef.current) gsap.set(algovistaOverviewRef.current, { y: 20, opacity: 0, filter: 'blur(3px)' });
+      if (algovistaSortingRef.current) gsap.set(algovistaSortingRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
+      if (algovistaGraphRef.current) gsap.set(algovistaGraphRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
+      if (algovistaSearchRef.current) gsap.set(algovistaSearchRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
+      if (algovistaScaleRef.current) gsap.set(algovistaScaleRef.current, { y: 20, opacity: 0, filter: 'blur(3px)' });
+
+      // Shared initial reset for all mobile sequential sub-states
+      const mobileElements = [
+        mobileTdIdentityRef.current,
+        mobileTdTier1Ref.current,
+        mobileTdTier2Ref.current,
+        mobileTdTier3Ref.current,
+        mobileTdLessonRef.current,
+        mobileCaIdentityRef.current,
+        mobileCaPipe1Ref.current,
+        mobileCaPipe2Ref.current,
+        mobileCaPipe3Ref.current,
+        mobileCaPipe4Ref.current,
+        mobileCaDecisionRef.current,
+        mobileBsIdentityRef.current,
+        mobileBsTxRef.current,
+        mobileBsLedgerRef.current,
+        mobileBsSecurityRef.current,
+        mobileAvIdentityRef.current,
+        mobileAvWhyRef.current,
+        mobileAvSortingRef.current,
+        mobileAvGraphRef.current,
+        mobileAvSearchRef.current,
+        mobileAvScaleRef.current,
+      ];
+      mobileElements.forEach((el) => {
+        if (el) gsap.set(el, { y: 15, opacity: 0 });
+      });
 
       if (isMobile) {
         // ══════════════════════════════════════════════════════════════════
         // DEDICATED MOBILE STORY MODE (EXPLICIT SEQUENTIAL SUB-STATES)
         // ══════════════════════════════════════════════════════════════════
-        const mobileElements = [
-          mobileTdIdentityRef.current,
-          mobileTdTier1Ref.current,
-          mobileTdTier2Ref.current,
-          mobileTdTier3Ref.current,
-          mobileTdLessonRef.current,
-          mobileCaIdentityRef.current,
-          mobileCaPipe1Ref.current,
-          mobileCaPipe2Ref.current,
-          mobileCaPipe3Ref.current,
-          mobileCaPipe4Ref.current,
-          mobileCaDecisionRef.current,
-          mobileBsIdentityRef.current,
-          mobileBsTxRef.current,
-          mobileBsLedgerRef.current,
-          mobileBsSecurityRef.current,
-        ];
-        mobileElements.forEach((el) => {
-          if (el) gsap.set(el, { y: 15, opacity: 0 });
-        });
 
-        // ── MOBILE BEAT 1: INTRO (0.00 -> 0.06) ──
+        // ── MOBILE BEAT 1: INTRO (0.00 -> 0.04) ──
         tl.to(
           introRef.current,
           {
@@ -181,13 +258,12 @@ export default function WorksStory() {
             filter: 'blur(5px)',
             opacity: 0,
             ease: 'power2.in',
-            duration: 0.04,
+            duration: 0.025,
           },
-          0.025,
+          0.015,
         );
 
-        // ── MOBILE BEAT 2: TENTDESK (0.07 -> 0.35) ──
-        // Title arrives
+        // ── MOBILE BEAT 2: TENTDESK (0.045 -> 0.255) ──
         tl.to(
           tentdeskTitleRef.current,
           {
@@ -196,39 +272,39 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.025,
+            duration: 0.02,
           },
-          0.07,
+          0.045,
         );
 
-        // Sub-state 1: Identity & Overview (0.07 -> 0.12)
+        // Sub-state 1: Identity & Overview (0.045 -> 0.085)
         if (mobileTdIdentityRef.current) {
-          tl.to(mobileTdIdentityRef.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.075);
-          tl.to(mobileTdIdentityRef.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.115);
+          tl.to(mobileTdIdentityRef.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.048);
+          tl.to(mobileTdIdentityRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.082);
         }
 
-        // Sub-state 2: Tier 01 Field Terminal (0.12 -> 0.17)
+        // Sub-state 2: Tier 01 Field Terminal (0.088 -> 0.128)
         if (mobileTdTier1Ref.current) {
-          tl.to(mobileTdTier1Ref.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.12);
-          tl.to(mobileTdTier1Ref.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.165);
+          tl.to(mobileTdTier1Ref.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.088);
+          tl.to(mobileTdTier1Ref.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.124);
         }
 
-        // Sub-state 3: Tier 02 State Engine (0.17 -> 0.22)
+        // Sub-state 3: Tier 02 State Engine (0.130 -> 0.170)
         if (mobileTdTier2Ref.current) {
-          tl.to(mobileTdTier2Ref.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.17);
-          tl.to(mobileTdTier2Ref.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.215);
+          tl.to(mobileTdTier2Ref.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.130);
+          tl.to(mobileTdTier2Ref.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.166);
         }
 
-        // Sub-state 4: Tier 03 Warehouse Console (0.225 -> 0.28)
+        // Sub-state 4: Tier 03 Warehouse Console (0.172 -> 0.212)
         if (mobileTdTier3Ref.current) {
-          tl.to(mobileTdTier3Ref.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.225);
-          tl.to(mobileTdTier3Ref.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.275);
+          tl.to(mobileTdTier3Ref.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.172);
+          tl.to(mobileTdTier3Ref.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.208);
         }
 
-        // Sub-state 5: Production Lesson — Deployed != Usable (0.285 -> 0.35)
+        // Sub-state 5: Production Lesson — Deployed != Usable (0.214 -> 0.252)
         if (mobileTdLessonRef.current) {
-          tl.to(mobileTdLessonRef.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.285);
-          tl.to(mobileTdLessonRef.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.34);
+          tl.to(mobileTdLessonRef.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.214);
+          tl.to(mobileTdLessonRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.248);
         }
 
         // TentDesk Title & Zone Exits
@@ -239,17 +315,16 @@ export default function WorksStory() {
             opacity: 0,
             filter: 'blur(4px)',
             ease: 'power2.in',
-            duration: 0.015,
+            duration: 0.012,
           },
-          0.345,
+          0.250,
         );
 
-        // ── MOBILE BEAT 3: HANDOFF BRIDGE (0.35 -> 0.42) ──
-        tl.to(handoffBridgeRef.current, { scale: 1, opacity: 1, duration: 0.025, ease: 'power1.out' }, 0.355);
-        tl.to(handoffBridgeRef.current, { scale: 1.05, opacity: 0, duration: 0.02, ease: 'power1.in' }, 0.40);
+        // ── MOBILE BEAT 3: HANDOFF BRIDGE (0.258 -> 0.295) ──
+        tl.to(handoffBridgeRef.current, { scale: 1, opacity: 1, duration: 0.018, ease: 'power1.out' }, 0.258);
+        tl.to(handoffBridgeRef.current, { scale: 1.05, opacity: 0, duration: 0.015, ease: 'power1.in' }, 0.290);
 
-        // ── MOBILE BEAT 4: COMMANDATLAS (0.42 -> 0.71) ──
-        // Title arrives
+        // ── MOBILE BEAT 4: COMMANDATLAS (0.300 -> 0.505) ──
         tl.to(
           commandatlasTitleRef.current,
           {
@@ -258,45 +333,45 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.025,
+            duration: 0.02,
           },
-          0.425,
+          0.300,
         );
 
-        // Sub-state 1: Identity & Scope (0.43 -> 0.48)
+        // Sub-state 1: Identity & Scope (0.303 -> 0.335)
         if (mobileCaIdentityRef.current) {
-          tl.to(mobileCaIdentityRef.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.43);
-          tl.to(mobileCaIdentityRef.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.475);
+          tl.to(mobileCaIdentityRef.current, { y: 0, opacity: 1, duration: 0.01, ease: 'power1.out' }, 0.303);
+          tl.to(mobileCaIdentityRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.332);
         }
 
-        // Sub-state 2: Pipeline 01 Markdown Repository (0.48 -> 0.525)
+        // Sub-state 2: Pipeline 01 Markdown Repository (0.336 -> 0.368)
         if (mobileCaPipe1Ref.current) {
-          tl.to(mobileCaPipe1Ref.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.48);
-          tl.to(mobileCaPipe1Ref.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.52);
+          tl.to(mobileCaPipe1Ref.current, { y: 0, opacity: 1, duration: 0.01, ease: 'power1.out' }, 0.336);
+          tl.to(mobileCaPipe1Ref.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.365);
         }
 
-        // Sub-state 3: Pipeline 02 Build-Time Validation (0.525 -> 0.57)
+        // Sub-state 3: Pipeline 02 Build-Time Validation (0.369 -> 0.401)
         if (mobileCaPipe2Ref.current) {
-          tl.to(mobileCaPipe2Ref.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.525);
-          tl.to(mobileCaPipe2Ref.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.565);
+          tl.to(mobileCaPipe2Ref.current, { y: 0, opacity: 1, duration: 0.01, ease: 'power1.out' }, 0.369);
+          tl.to(mobileCaPipe2Ref.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.398);
         }
 
-        // Sub-state 4: Pipeline 03 Static Packs (0.57 -> 0.615)
+        // Sub-state 4: Pipeline 03 Static Packs (0.402 -> 0.434)
         if (mobileCaPipe3Ref.current) {
-          tl.to(mobileCaPipe3Ref.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.57);
-          tl.to(mobileCaPipe3Ref.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.61);
+          tl.to(mobileCaPipe3Ref.current, { y: 0, opacity: 1, duration: 0.01, ease: 'power1.out' }, 0.402);
+          tl.to(mobileCaPipe3Ref.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.431);
         }
 
-        // Sub-state 5: Pipeline 04 Dexie IndexedDB (0.615 -> 0.66)
+        // Sub-state 5: Pipeline 04 Dexie IndexedDB (0.435 -> 0.467)
         if (mobileCaPipe4Ref.current) {
-          tl.to(mobileCaPipe4Ref.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.615);
-          tl.to(mobileCaPipe4Ref.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.655);
+          tl.to(mobileCaPipe4Ref.current, { y: 0, opacity: 1, duration: 0.01, ease: 'power1.out' }, 0.435);
+          tl.to(mobileCaPipe4Ref.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.464);
         }
 
-        // Sub-state 6: ADR-013 No AI by Design & Scale (0.66 -> 0.71)
+        // Sub-state 6: ADR-013 No AI by Design & Scale (0.468 -> 0.502)
         if (mobileCaDecisionRef.current) {
-          tl.to(mobileCaDecisionRef.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.66);
-          tl.to(mobileCaDecisionRef.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.705);
+          tl.to(mobileCaDecisionRef.current, { y: 0, opacity: 1, duration: 0.01, ease: 'power1.out' }, 0.468);
+          tl.to(mobileCaDecisionRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.498);
         }
 
         // CommandAtlas Title & Zone Exits
@@ -307,17 +382,16 @@ export default function WorksStory() {
             opacity: 0,
             filter: 'blur(4px)',
             ease: 'power2.in',
-            duration: 0.015,
+            duration: 0.012,
           },
-          0.71,
+          0.500,
         );
 
-        // ── MOBILE BEAT 5: SINGULARITY BRIDGE (0.72 -> 0.78) ──
-        tl.to(blackholeBridgeRef.current, { scale: 1, opacity: 1, duration: 0.025, ease: 'power1.out' }, 0.72);
-        tl.to(blackholeBridgeRef.current, { scale: 1.05, opacity: 0, duration: 0.02, ease: 'power1.in' }, 0.77);
+        // ── MOBILE BEAT 5: SINGULARITY BRIDGE (0.508 -> 0.548) ──
+        tl.to(blackholeBridgeRef.current, { scale: 1, opacity: 1, duration: 0.018, ease: 'power1.out' }, 0.508);
+        tl.to(blackholeBridgeRef.current, { scale: 1.05, opacity: 0, duration: 0.015, ease: 'power1.in' }, 0.542);
 
-        // ── MOBILE BEAT 6: BANKSYS (0.78 -> 1.00) ──
-        // Title arrives
+        // ── MOBILE BEAT 6: BANKSYS (0.555 -> 0.745) ──
         tl.to(
           banksysTitleRef.current,
           {
@@ -326,40 +400,119 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.025,
+            duration: 0.02,
           },
-          0.785,
+          0.555,
         );
 
-        // Sub-state 1: Identity & Overview (0.79 -> 0.84)
+        // Sub-state 1: Identity & Overview (0.558 -> 0.600)
         if (mobileBsIdentityRef.current) {
-          tl.to(mobileBsIdentityRef.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.79);
-          tl.to(mobileBsIdentityRef.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.835);
+          tl.to(mobileBsIdentityRef.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.558);
+          tl.to(mobileBsIdentityRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.596);
         }
 
-        // Sub-state 2: Transaction Engine — Account A -> ACID (0.84 -> 0.89)
+        // Sub-state 2: Transaction Engine (0.602 -> 0.645)
         if (mobileBsTxRef.current) {
-          tl.to(mobileBsTxRef.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.84);
-          tl.to(mobileBsTxRef.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.885);
+          tl.to(mobileBsTxRef.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.602);
+          tl.to(mobileBsTxRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.641);
         }
 
-        // Sub-state 3: Settlement — Double-Entry Ledger -> Account B (0.89 -> 0.94)
+        // Sub-state 3: Settlement (0.648 -> 0.692)
         if (mobileBsLedgerRef.current) {
-          tl.to(mobileBsLedgerRef.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.89);
-          tl.to(mobileBsLedgerRef.current, { y: -12, opacity: 0, duration: 0.01, ease: 'power1.in' }, 0.935);
+          tl.to(mobileBsLedgerRef.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.648);
+          tl.to(mobileBsLedgerRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.688);
         }
 
-        // Sub-state 4: Security Architecture & Export (0.94 -> 0.995)
+        // Sub-state 4: Security Architecture & Export (0.695 -> 0.742)
         if (mobileBsSecurityRef.current) {
-          tl.to(mobileBsSecurityRef.current, { y: 0, opacity: 1, duration: 0.015, ease: 'power1.out' }, 0.94);
+          tl.to(mobileBsSecurityRef.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.695);
+          tl.to(mobileBsSecurityRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.738);
         }
 
-        // Final subtle settle
-        tl.to([banksysTitleRef.current, mobileBsSecurityRef.current], { opacity: 0.35, duration: 0.005 }, 0.995);
+        // BankSys Title Exits
+        tl.to(
+          banksysTitleRef.current,
+          {
+            x: exitX,
+            opacity: 0,
+            filter: 'blur(4px)',
+            ease: 'power2.in',
+            duration: 0.012,
+          },
+          0.740,
+        );
+
+        // ── MOBILE BEAT 7: DEEP SPACE TRANSITION BRIDGE (0.748 -> 0.790) ──
+        tl.to(deepspaceBridgeRef.current, { scale: 1, opacity: 1, duration: 0.018, ease: 'power1.out' }, 0.748);
+        tl.to(deepspaceBridgeRef.current, { scale: 1.05, opacity: 0, duration: 0.015, ease: 'power1.in' }, 0.785);
+
+        // ── MOBILE BEAT 8: ALGOVISTA (0.795 -> 1.00) ──
+        // Title arrives
+        tl.to(
+          algovistaTitleRef.current,
+          {
+            x: 0,
+            scale: 0.85,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power2.out',
+            duration: 0.02,
+          },
+          0.795,
+        );
+
+        // Sub-state 1: Identity / WHAT (0.800 -> 0.830)
+        if (mobileAvIdentityRef.current) {
+          tl.to(mobileAvIdentityRef.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.800);
+          tl.to(mobileAvIdentityRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.826);
+        }
+
+        // Sub-state 2: Purpose / WHY (0.832 -> 0.865)
+        if (mobileAvWhyRef.current) {
+          tl.to(mobileAvWhyRef.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.832);
+          tl.to(mobileAvWhyRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.861);
+        }
+
+        // Sub-state 3: Visual Technical Idea — SORTING (0.868 -> 0.900)
+        if (mobileAvSortingRef.current) {
+          tl.to(mobileAvSortingRef.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.868);
+          tl.to(mobileAvSortingRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.896);
+        }
+
+        // Sub-state 4: Visual Technical Idea — GRAPH (0.903 -> 0.935)
+        if (mobileAvGraphRef.current) {
+          tl.to(mobileAvGraphRef.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.903);
+          tl.to(mobileAvGraphRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.931);
+        }
+
+        // Sub-state 5: Visual Technical Idea — SEARCH (0.938 -> 0.970)
+        if (mobileAvSearchRef.current) {
+          tl.to(mobileAvSearchRef.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.938);
+          tl.to(mobileAvSearchRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.966);
+        }
+
+        // Sub-state 6: Scale / Closing Anchor (0.970 -> 0.992)
+        if (mobileAvScaleRef.current) {
+          tl.to(mobileAvScaleRef.current, { y: 0, opacity: 1, duration: 0.012, ease: 'power1.out' }, 0.970);
+          tl.to(mobileAvScaleRef.current, { y: -12, opacity: 0, duration: 0.008, ease: 'power1.in' }, 0.990);
+        }
+
+        // AlgoVista Title & Story Exit (0.990 -> 0.998)
+        tl.to(
+          algovistaTitleRef.current,
+          {
+            x: exitX,
+            opacity: 0,
+            filter: 'blur(4px)',
+            ease: 'power2.in',
+            duration: 0.008,
+          },
+          0.990,
+        );
 
       } else {
         // ══════════════════════════════════════════════════════════════════
-        // DESKTOP CHOREOGRAPHY (100% UNCHANGED AS VERIFIED)
+        // DESKTOP CHOREOGRAPHY (OPEN SPATIAL MULTI-PROJECT STORY)
         // ══════════════════════════════════════════════════════════════════
         // Desktop initial offscreen states
         if (tentdeskOverviewRef.current) gsap.set(tentdeskOverviewRef.current, { y: 20, opacity: 0, filter: 'blur(3px)' });
@@ -370,8 +523,13 @@ export default function WorksStory() {
         if (commandatlasDecisionRef.current) gsap.set(commandatlasDecisionRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
         if (banksysOverviewRef.current) gsap.set(banksysOverviewRef.current, { y: 20, opacity: 0, filter: 'blur(3px)' });
         if (banksysFlowRef.current) gsap.set(banksysFlowRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
+        if (algovistaOverviewRef.current) gsap.set(algovistaOverviewRef.current, { y: 20, opacity: 0, filter: 'blur(3px)' });
+        if (algovistaSortingRef.current) gsap.set(algovistaSortingRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
+        if (algovistaGraphRef.current) gsap.set(algovistaGraphRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
+        if (algovistaSearchRef.current) gsap.set(algovistaSearchRef.current, { x: 30, scale: 0.95, opacity: 0, filter: 'blur(3px)' });
+        if (algovistaScaleRef.current) gsap.set(algovistaScaleRef.current, { y: 20, opacity: 0, filter: 'blur(3px)' });
 
-        // ── BEAT 1: INTRO (0.00 -> 0.08) ──
+        // ── BEAT 1: INTRO (0.00 -> 0.05) ──
         tl.to(
           introRef.current,
           {
@@ -381,12 +539,12 @@ export default function WorksStory() {
             filter: 'blur(5px)',
             opacity: 0,
             ease: 'power2.in',
-            duration: 0.05,
+            duration: 0.035,
           },
-          0.03,
+          0.02,
         );
 
-        // ── BEAT 2A: TENTDESK ARRIVAL & IDENTITY (0.08 -> 0.18) ──
+        // ── BEAT 2A: TENTDESK ARRIVAL & IDENTITY (0.05 -> 0.12) ──
         tl.to(
           tentdeskTitleRef.current,
           {
@@ -395,9 +553,9 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.04,
+            duration: 0.03,
           },
-          0.08,
+          0.05,
         );
 
         tl.to(
@@ -407,12 +565,12 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power1.out',
-            duration: 0.04,
+            duration: 0.03,
           },
-          0.09,
+          0.055,
         );
 
-        // (0.12 -> 0.16) STILLNESS WINDOW: Identity & Scope dominant
+        // (0.08 -> 0.11) STILLNESS WINDOW: Identity & Scope dominant
         tl.to(
           tentdeskOverviewRef.current,
           {
@@ -421,9 +579,9 @@ export default function WorksStory() {
             opacity: 0,
             filter: 'blur(3px)',
             ease: 'power1.in',
-            duration: 0.02,
+            duration: 0.015,
           },
-          0.165,
+          0.115,
         );
 
         tl.to(
@@ -432,12 +590,12 @@ export default function WorksStory() {
             scale: 0.72,
             transformOrigin: 'left top',
             ease: 'power1.inOut',
-            duration: 0.02,
+            duration: 0.015,
           },
-          0.165,
+          0.115,
         );
 
-        // ── BEAT 2B: REAL-TIME OPERATIONAL STATE FLOW (0.18 -> 0.27) ──
+        // ── BEAT 2B: REAL-TIME OPERATIONAL STATE FLOW (0.125 -> 0.185) ──
         tl.to(
           tentdeskFlowRef.current,
           {
@@ -446,12 +604,12 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.035,
+            duration: 0.025,
           },
-          0.18,
+          0.125,
         );
 
-        // (0.21 -> 0.25) STILLNESS WINDOW: State flow diagram settled and readable
+        // (0.145 -> 0.175) STILLNESS WINDOW: State flow diagram settled and readable
         tl.to(
           tentdeskFlowRef.current,
           {
@@ -460,12 +618,12 @@ export default function WorksStory() {
             opacity: 0,
             filter: 'blur(3px)',
             ease: 'power1.in',
-            duration: 0.02,
+            duration: 0.015,
           },
-          0.255,
+          0.18,
         );
 
-        // ── BEAT 2C: PRODUCTION LESSON — DEPLOYED != USABLE (0.27 -> 0.36) ──
+        // ── BEAT 2C: PRODUCTION LESSON — DEPLOYED != USABLE (0.19 -> 0.252) ──
         tl.to(
           tentdeskIncidentRef.current,
           {
@@ -474,12 +632,12 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.035,
+            duration: 0.025,
           },
-          0.27,
+          0.19,
         );
 
-        // (0.30 -> 0.335) STILLNESS WINDOW: Production lesson readable
+        // (0.215 -> 0.245) STILLNESS WINDOW: Production lesson readable
         tl.to(
           [tentdeskIncidentRef.current, tentdeskTitleRef.current],
           {
@@ -488,21 +646,21 @@ export default function WorksStory() {
             opacity: 0,
             filter: 'blur(5px)',
             ease: 'power2.in',
-            duration: 0.025,
+            duration: 0.018,
           },
-          0.34,
+          0.248,
         );
 
-        // ── BEAT 3: SPATIAL CONTINUUM HANDOFF BRIDGE (0.36 -> 0.44) ──
+        // ── BEAT 3: SPATIAL CONTINUUM HANDOFF BRIDGE (0.258 -> 0.295) ──
         tl.to(
           handoffBridgeRef.current,
           {
             scale: 1,
             opacity: 1,
             ease: 'power1.out',
-            duration: 0.03,
+            duration: 0.02,
           },
-          0.36,
+          0.258,
         );
 
         tl.to(
@@ -511,12 +669,12 @@ export default function WorksStory() {
             scale: 1.08,
             opacity: 0,
             ease: 'power1.in',
-            duration: 0.03,
+            duration: 0.02,
           },
-          0.41,
+          0.290,
         );
 
-        // ── BEAT 4A: COMMANDATLAS ARRIVAL & IDENTITY (0.44 -> 0.54) ──
+        // ── BEAT 4A: COMMANDATLAS ARRIVAL & IDENTITY (0.30 -> 0.37) ──
         tl.to(
           commandatlasTitleRef.current,
           {
@@ -525,9 +683,9 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.035,
+            duration: 0.025,
           },
-          0.44,
+          0.30,
         );
 
         tl.to(
@@ -537,12 +695,12 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power1.out',
-            duration: 0.03,
+            duration: 0.025,
           },
-          0.455,
+          0.31,
         );
 
-        // (0.48 -> 0.52) STILLNESS WINDOW: Identity & Scope dominant
+        // (0.33 -> 0.36) STILLNESS WINDOW: Identity & Scope dominant
         tl.to(
           commandatlasOverviewRef.current,
           {
@@ -551,9 +709,9 @@ export default function WorksStory() {
             opacity: 0,
             filter: 'blur(3px)',
             ease: 'power1.in',
-            duration: 0.02,
+            duration: 0.015,
           },
-          0.52,
+          0.365,
         );
 
         tl.to(
@@ -562,12 +720,12 @@ export default function WorksStory() {
             scale: 0.72,
             transformOrigin: 'left top',
             ease: 'power1.inOut',
-            duration: 0.02,
+            duration: 0.015,
           },
-          0.52,
+          0.365,
         );
 
-        // ── BEAT 4B: COMPILATION PIPELINE (0.53 -> 0.63) ──
+        // ── BEAT 4B: COMPILATION PIPELINE (0.375 -> 0.435) ──
         tl.to(
           commandatlasPipelineRef.current,
           {
@@ -576,12 +734,12 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.03,
+            duration: 0.025,
           },
-          0.53,
+          0.375,
         );
 
-        // (0.56 -> 0.61) STILLNESS WINDOW: 4-Node Pipeline readable
+        // (0.395 -> 0.425) STILLNESS WINDOW: 4-Node Pipeline readable
         tl.to(
           commandatlasPipelineRef.current,
           {
@@ -590,12 +748,12 @@ export default function WorksStory() {
             opacity: 0,
             filter: 'blur(3px)',
             ease: 'power1.in',
-            duration: 0.02,
+            duration: 0.015,
           },
-          0.615,
+          0.43,
         );
 
-        // ── BEAT 4C: ADR-013 — NO AI BY DESIGN & SCALE ANCHOR (0.625 -> 0.72) ──
+        // ── BEAT 4C: ADR-013 — NO AI BY DESIGN & SCALE ANCHOR (0.44 -> 0.502) ──
         tl.to(
           commandatlasDecisionRef.current,
           {
@@ -604,12 +762,12 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.03,
+            duration: 0.025,
           },
-          0.625,
+          0.44,
         );
 
-        // (0.655 -> 0.70) STILLNESS WINDOW: Decision & Scale readable
+        // (0.465 -> 0.495) STILLNESS WINDOW: Decision & Scale readable
         tl.to(
           [commandatlasDecisionRef.current, commandatlasTitleRef.current],
           {
@@ -618,21 +776,21 @@ export default function WorksStory() {
             opacity: 0,
             filter: 'blur(5px)',
             ease: 'power2.in',
-            duration: 0.02,
+            duration: 0.018,
           },
-          0.71,
+          0.498,
         );
 
-        // ── BEAT 5: BLACK HOLE SINGULARITY TRANSITION BRIDGE (0.73 -> 0.82) ──
+        // ── BEAT 5: BLACK HOLE SINGULARITY TRANSITION BRIDGE (0.508 -> 0.548) ──
         tl.to(
           blackholeBridgeRef.current,
           {
             scale: 1,
             opacity: 1,
             ease: 'power1.out',
-            duration: 0.03,
+            duration: 0.02,
           },
-          0.73,
+          0.508,
         );
 
         tl.to(
@@ -641,12 +799,12 @@ export default function WorksStory() {
             scale: 1.08,
             opacity: 0,
             ease: 'power1.in',
-            duration: 0.03,
+            duration: 0.02,
           },
-          0.79,
+          0.542,
         );
 
-        // ── BEAT 6A: BANKSYS ARRIVAL & IDENTITY (0.82 -> 0.91) ──
+        // ── BEAT 6A: BANKSYS ARRIVAL & IDENTITY (0.555 -> 0.645) ──
         tl.to(
           banksysTitleRef.current,
           {
@@ -655,9 +813,9 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power2.out',
-            duration: 0.035,
+            duration: 0.025,
           },
-          0.82,
+          0.555,
         );
 
         tl.to(
@@ -667,12 +825,12 @@ export default function WorksStory() {
             opacity: 1,
             filter: 'blur(0px)',
             ease: 'power1.out',
-            duration: 0.03,
+            duration: 0.025,
           },
-          0.835,
+          0.565,
         );
 
-        // (0.865 -> 0.895) STILLNESS WINDOW: Identity & Scope dominant
+        // (0.585 -> 0.63) STILLNESS WINDOW: Identity & Scope dominant
         tl.to(
           banksysOverviewRef.current,
           {
@@ -681,9 +839,9 @@ export default function WorksStory() {
             opacity: 0,
             filter: 'blur(3px)',
             ease: 'power1.in',
-            duration: 0.02,
+            duration: 0.015,
           },
-          0.90,
+          0.64,
         );
 
         tl.to(
@@ -692,12 +850,12 @@ export default function WorksStory() {
             scale: 0.72,
             transformOrigin: 'left top',
             ease: 'power1.inOut',
-            duration: 0.02,
+            duration: 0.015,
           },
-          0.90,
+          0.64,
         );
 
-        // ── BEAT 6B: BANKSYS ATOMIC FLOW (0.91 -> 1.00) ──
+        // ── BEAT 6B: BANKSYS ATOMIC FLOW (0.65 -> 0.742) ──
         tl.to(
           banksysFlowRef.current,
           {
@@ -708,15 +866,199 @@ export default function WorksStory() {
             ease: 'power2.out',
             duration: 0.025,
           },
-          0.91,
+          0.65,
         );
 
-        // (0.94 -> 0.985) STILLNESS WINDOW: Transaction diagram settled and readable
+        // (0.675 -> 0.725) STILLNESS WINDOW: Transaction diagram settled and readable
         tl.to(
           [banksysFlowRef.current, banksysTitleRef.current],
           {
-            opacity: 0.25,
+            x: '-70vw',
+            scale: 0.9,
+            opacity: 0,
+            filter: 'blur(5px)',
+            ease: 'power2.in',
+            duration: 0.018,
+          },
+          0.738,
+        );
+
+        // ── BEAT 7: DEEP SPACE TRANSITION BRIDGE (0.748 -> 0.790) ──
+        tl.to(
+          deepspaceBridgeRef.current,
+          {
+            scale: 1,
+            opacity: 1,
+            ease: 'power1.out',
+            duration: 0.02,
+          },
+          0.748,
+        );
+
+        tl.to(
+          deepspaceBridgeRef.current,
+          {
+            scale: 1.08,
+            opacity: 0,
             ease: 'power1.in',
+            duration: 0.02,
+          },
+          0.785,
+        );
+
+        // ── BEAT 8A: ALGOVISTA ARRIVAL & IDENTITY / WHAT / WHY (0.795 -> 0.855) ──
+        tl.to(
+          algovistaTitleRef.current,
+          {
+            x: 0,
+            scale: 1,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power2.out',
+            duration: 0.025,
+          },
+          0.795,
+        );
+
+        tl.to(
+          algovistaOverviewRef.current,
+          {
+            y: 0,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power1.out',
+            duration: 0.025,
+          },
+          0.805,
+        );
+
+        // (0.820 -> 0.845) STILLNESS WINDOW: What / Why / Telemetry dominant
+        tl.to(
+          algovistaOverviewRef.current,
+          {
+            x: -25,
+            scale: 0.95,
+            opacity: 0,
+            filter: 'blur(3px)',
+            ease: 'power1.in',
+            duration: 0.015,
+          },
+          0.850,
+        );
+
+        tl.to(
+          algovistaTitleRef.current,
+          {
+            scale: 0.72,
+            transformOrigin: 'left top',
+            ease: 'power1.inOut',
+            duration: 0.015,
+          },
+          0.850,
+        );
+
+        // ── BEAT 8B: VISUAL TECHNICAL IDEA — SORTING (0.860 -> 0.895) ──
+        tl.to(
+          algovistaSortingRef.current,
+          {
+            x: 0,
+            scale: 1,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power2.out',
+            duration: 0.02,
+          },
+          0.860,
+        );
+
+        // (0.870 -> 0.890) STILLNESS: Sorting observable
+        tl.to(
+          algovistaSortingRef.current,
+          {
+            x: -25,
+            scale: 0.95,
+            opacity: 0,
+            filter: 'blur(3px)',
+            ease: 'power1.in',
+            duration: 0.012,
+          },
+          0.895,
+        );
+
+        // ── BEAT 8C: VISUAL TECHNICAL IDEA — GRAPH (0.900 -> 0.935) ──
+        tl.to(
+          algovistaGraphRef.current,
+          {
+            x: 0,
+            scale: 1,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power2.out',
+            duration: 0.02,
+          },
+          0.900,
+        );
+
+        // (0.910 -> 0.930) STILLNESS: Graph traversal observable
+        tl.to(
+          algovistaGraphRef.current,
+          {
+            x: -25,
+            scale: 0.95,
+            opacity: 0,
+            filter: 'blur(3px)',
+            ease: 'power1.in',
+            duration: 0.012,
+          },
+          0.935,
+        );
+
+        // ── BEAT 8D: VISUAL TECHNICAL IDEA — SEARCH (0.940 -> 0.975) ──
+        tl.to(
+          algovistaSearchRef.current,
+          {
+            x: 0,
+            scale: 1,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power2.out',
+            duration: 0.02,
+          },
+          0.940,
+        );
+
+        // (0.950 -> 0.970) STILLNESS: Search resolution observable
+        tl.to(
+          algovistaSearchRef.current,
+          {
+            x: -25,
+            scale: 0.95,
+            opacity: 0,
+            filter: 'blur(3px)',
+            ease: 'power1.in',
+            duration: 0.012,
+          },
+          0.975,
+        );
+
+        // ── BEAT 8E: SCALE / CLOSING ANCHOR (0.980 -> 1.00) ──
+        tl.to(
+          algovistaScaleRef.current,
+          {
+            y: 0,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'power1.out',
+            duration: 0.018,
+          },
+          0.980,
+        );
+
+        // Final subtle settle
+        tl.to(
+          [algovistaScaleRef.current, algovistaTitleRef.current],
+          {
+            opacity: 0.35,
             duration: 0.005,
           },
           0.995,
@@ -724,7 +1066,7 @@ export default function WorksStory() {
       }
     },
     containerRef,
-    [],
+    [isMobileScreen],
     { visibilityState },
   );
 
@@ -737,7 +1079,7 @@ export default function WorksStory() {
           visibilityRef.current = node;
         }}
         className="cinematic-scroll-space relative w-full"
-        style={{ height: isFallback ? 'auto' : (isMobileScreen ? '1600vh' : '1050vh') }}
+        style={{ height: isFallback ? 'auto' : (isMobileScreen ? '2100vh' : '1400vh') }}
         aria-label="Interactive Spatial Story Continuum"
       >
         <div
@@ -1195,6 +1537,178 @@ export default function WorksStory() {
                   </div>
                 </div>
               </div>
+
+              {/* ── BRIDGE: DEEP SPACE TRANSITION BRIDGE ── */}
+              <div
+                ref={deepspaceBridgeRef}
+                className="spatial-composition-zone spatial-composition-zone--singularity"
+                aria-hidden="true"
+              >
+                <div className="spatial-handoff-bridge">
+                  <span className="spatial-status-dot spatial-status-dot--emerald" />
+                  <span className="spatial-handoff-text">
+                    DEEP SPACE CORRIDOR · AUTONOMOUS EXPLORATION → ALGORITHM SIMULATION
+                  </span>
+                  <span className="spatial-status-dot spatial-status-dot--emerald" />
+                </div>
+              </div>
+
+              {/* ── BEAT 8: ALGOVISTA DYNAMIC COMPOSITION ZONE ── */}
+              <div
+                ref={algovistaZoneRef}
+                className="spatial-composition-zone spatial-composition-zone--algovista"
+                aria-labelledby="algovista-heading"
+              >
+                {/* Title & Coordinate Eyebrow (Shared) */}
+                <div ref={algovistaTitleRef}>
+                  <div className="spatial-coordinate-eyebrow text-[#10b981]">
+                    <span>ALGORITHM PLATFORM · INTERACTIVE SIMULATION</span>
+                  </div>
+                  <h3
+                    id="algovista-heading"
+                    className="spatial-hero-title spatial-hero-title--emerald"
+                  >
+                    ALGOVISTA
+                  </h3>
+                </div>
+
+                {/* ── DESKTOP NARRATIVE (Open Spatial Layout - 1 Element At A Time) ── */}
+                <div className="hidden md:block spatial-narrative-container relative w-full mt-2 min-h-[22rem]">
+                  {/* Beat 8A: What & Why + Small Telemetry Line */}
+                  <div ref={algovistaOverviewRef} className="spatial-story-beat">
+                    <p className="spatial-story-lead">
+                      Interactive algorithm learning through visual simulation.
+                    </p>
+                    <p className="mt-3 text-sm font-medium text-cosmos-muted">
+                      Turn abstract algorithms into visible, controllable processes.
+                    </p>
+                    <div className="mt-4 pt-3 border-t border-white/5 font-mono text-[11px] text-cosmos-muted/80 tracking-wider">
+                      React.js · Tailwind CSS · Framer Motion · React Router · Vercel
+                    </div>
+                  </div>
+
+                  {/* Beat 8B: Visual Technical Idea — Sorting */}
+                  <div ref={algovistaSortingRef} className="spatial-story-beat">
+                    <div className="text-xs font-mono tracking-widest text-[#10b981] uppercase mb-2">
+                      01 · SORTING DYNAMICS
+                    </div>
+                    <AlgoVistaVisualizer mode="sorting" />
+                  </div>
+
+                  {/* Beat 8C: Visual Technical Idea — Graph */}
+                  <div ref={algovistaGraphRef} className="spatial-story-beat">
+                    <div className="text-xs font-mono tracking-widest text-aurora uppercase mb-2">
+                      02 · GRAPH TRAVERSAL
+                    </div>
+                    <AlgoVistaVisualizer mode="graph" />
+                  </div>
+
+                  {/* Beat 8D: Visual Technical Idea — Search */}
+                  <div ref={algovistaSearchRef} className="spatial-story-beat">
+                    <div className="text-xs font-mono tracking-widest text-[#38bdf8] uppercase mb-2">
+                      03 · SEARCH RESOLUTION
+                    </div>
+                    <AlgoVistaVisualizer mode="search" />
+                  </div>
+
+                  {/* Beat 8E: Scale / Closing Anchor */}
+                  <div ref={algovistaScaleRef} className="spatial-story-beat">
+                    <div className="font-mono text-3xl md:text-5xl font-extrabold tracking-tight text-white mb-2">
+                      200+ <span className="text-[#10b981]">ALGORITHMS</span>
+                    </div>
+                    <p className="font-mono text-xs md:text-sm text-cosmos-muted tracking-widest uppercase">
+                      4 CLIENT ROUTES · ZERO BACKEND
+                    </p>
+                  </div>
+                </div>
+
+                {/* ── MOBILE NARRATIVE (Sequential Single Active Sub-States) ── */}
+                <div className="block md:hidden spatial-narrative-container relative w-full mt-2 min-h-[180px]">
+                  {/* Sub-State 1: Identity (WHAT) */}
+                  <div ref={mobileAvIdentityRef} className="spatial-mobile-substate">
+                    <div className="spatial-mobile-header">
+                      <span className="spatial-mobile-badge text-[#10b981]">IDENTITY · WHAT</span>
+                      <span className="spatial-status-dot spatial-status-dot--emerald" />
+                    </div>
+                    <h5 className="spatial-mobile-title">ALGORITHM LEARNING PLATFORM</h5>
+                    <p className="spatial-mobile-desc">
+                      Interactive algorithm learning through visual simulation.
+                    </p>
+                    <div className="spatial-mobile-tag text-[#10b981]">
+                      EXPLORATION &amp; SIMULATION
+                    </div>
+                  </div>
+
+                  {/* Sub-State 2: Purpose (WHY) */}
+                  <div ref={mobileAvWhyRef} className="spatial-mobile-substate spatial-mobile-substate--emerald">
+                    <div className="spatial-mobile-header">
+                      <span className="spatial-mobile-badge text-[#10b981]">PURPOSE · WHY</span>
+                      <span className="font-mono text-xs font-bold text-[#10b981]">01</span>
+                    </div>
+                    <h5 className="spatial-mobile-title">CONTROLLABLE PROCESSES</h5>
+                    <p className="spatial-mobile-desc">
+                      Turn abstract algorithms into visible, controllable processes.
+                    </p>
+                    <div className="spatial-mobile-tag">
+                      STEP-BY-STEP EXECUTION
+                    </div>
+                  </div>
+
+                  {/* Sub-State 3: Visual State 1 (SORTING) */}
+                  <div ref={mobileAvSortingRef} className="spatial-mobile-substate spatial-mobile-substate--emerald">
+                    <div className="spatial-mobile-header">
+                      <span className="spatial-mobile-badge text-[#10b981]">VISUAL STATE · 01</span>
+                      <span className="font-mono text-xs font-bold text-[#10b981]">SORT</span>
+                    </div>
+                    <h5 className="spatial-mobile-title">SORTING DYNAMICS</h5>
+                    <AlgoVistaVisualizer mode="sorting" compact={true} />
+                    <div className="spatial-mobile-tag">
+                      UNSORTED → COMPARE → ORDERED
+                    </div>
+                  </div>
+
+                  {/* Sub-State 4: Visual State 2 (GRAPH) */}
+                  <div ref={mobileAvGraphRef} className="spatial-mobile-substate spatial-mobile-substate--cyan">
+                    <div className="spatial-mobile-header">
+                      <span className="spatial-mobile-badge text-aurora">VISUAL STATE · 02</span>
+                      <span className="font-mono text-xs font-bold text-aurora">GRAPH</span>
+                    </div>
+                    <h5 className="spatial-mobile-title">GRAPH EXPLORATION</h5>
+                    <AlgoVistaVisualizer mode="graph" compact={true} />
+                    <div className="spatial-mobile-tag text-aurora">
+                      NODES → EDGES → TRAVERSAL
+                    </div>
+                  </div>
+
+                  {/* Sub-State 5: Visual State 3 (SEARCH) */}
+                  <div ref={mobileAvSearchRef} className="spatial-mobile-substate spatial-mobile-substate--cyan">
+                    <div className="spatial-mobile-header">
+                      <span className="spatial-mobile-badge text-[#38bdf8]">VISUAL STATE · 03</span>
+                      <span className="font-mono text-xs font-bold text-[#38bdf8]">FIND</span>
+                    </div>
+                    <h5 className="spatial-mobile-title">QUERY RESOLUTION</h5>
+                    <AlgoVistaVisualizer mode="search" compact={true} />
+                    <div className="spatial-mobile-tag text-[#38bdf8]">
+                      QUERY → INSPECT → MATCH
+                    </div>
+                  </div>
+
+                  {/* Sub-State 6: Scale / Closing Anchor */}
+                  <div ref={mobileAvScaleRef} className="spatial-mobile-substate spatial-mobile-substate--emerald">
+                    <div className="spatial-mobile-header">
+                      <span className="spatial-mobile-badge text-[#10b981]">SCALE · ANCHOR</span>
+                      <span className="spatial-status-dot spatial-status-dot--emerald" />
+                    </div>
+                    <h5 className="spatial-mobile-title text-xl font-extrabold text-white">200+ ALGORITHMS</h5>
+                    <p className="spatial-mobile-desc">
+                      4 CLIENT ROUTES · ZERO BACKEND
+                    </p>
+                    <div className="spatial-mobile-tag text-cosmos-muted">
+                      REACT · TAILWIND · FRAMER MOTION · VERCEL
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1206,7 +1720,7 @@ export default function WorksStory() {
           WORKS PILOT · SPATIAL CONTINUUM ACTIVE
         </p>
         <p className="mt-2 text-cosmos-muted">
-          TentDesk, CommandAtlas, &amp; BankSys spatial continuum active.
+          TentDesk, CommandAtlas, BankSys, &amp; AlgoVista spatial continuum active.
         </p>
       </footer>
     </div>

@@ -582,7 +582,8 @@
   .spatial-composition-zone--tentdesk,
   .spatial-composition-zone--commandatlas,
   .spatial-composition-zone--banksys,
-  .spatial-composition-zone--algovista {
+  .spatial-composition-zone--algovista,
+  .spatial-composition-zone--devgraph {
     top: clamp(36vh, 40%, 44vh);
     bottom: 0.5rem;
     left: 0;

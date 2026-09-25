@@ -2048,11 +2048,10 @@ export default function WorksStory() {
                     </div>
                     <h5 className="spatial-mobile-title">DEVELOPER KNOWLEDGE GRAPH</h5>
                     <p className="spatial-mobile-desc">
-                      Developer knowledge management for capturing, searching, and connecting technical notes.
+                      Capture, search, and connect technical knowledge.
                     </p>
-                    <div className="devgraph-category-constellation mt-2">
-                      <span className="devgraph-category-pill devgraph-category-pill--indigo">7 CATEGORIES</span>
-                      <span className="devgraph-category-pill">CONSTELLATION CLUSTERS</span>
+                    <div className="spatial-mobile-tag text-[#818cf8]">
+                      7 CATEGORIES · CONSTELLATION CLUSTERS
                     </div>
                   </div>
 
@@ -2064,7 +2063,7 @@ export default function WorksStory() {
                     </div>
                     <h5 className="spatial-mobile-title">CONNECTED TECHNICAL MEMORY</h5>
                     <p className="spatial-mobile-desc">
-                      Turn scattered debugging knowledge into a connected technical memory.
+                      Turn scattered debugging knowledge into connected technical memory.
                     </p>
                     <div className="spatial-mobile-tag text-[#818cf8]">
                       SPARSE STARS → KNOWLEDGE NETWORK
@@ -2078,9 +2077,11 @@ export default function WorksStory() {
                       <span className="font-mono text-xs font-bold text-[#818cf8]">02</span>
                     </div>
                     <h5 className="spatial-mobile-title">HYBRID SEARCH ARCHITECTURE</h5>
-                    <DevGraphSearchFlow compact={true} />
-                    <div className="spatial-mobile-tag">
-                      3-LAYER RETRIEVAL ENGINE
+                    <p className="spatial-mobile-desc">
+                      Multi-layer retrieval combining client in-memory index and server full-text search.
+                    </p>
+                    <div className="spatial-mobile-tag text-[#818cf8]">
+                      FLEXSEARCH + PG TSVECTOR + SUBSTRING FALLBACK
                     </div>
                   </div>
 
@@ -2094,7 +2095,7 @@ export default function WorksStory() {
                       7 CATEGORIES · USER-SCOPED
                     </h5>
                     <p className="spatial-mobile-desc">
-                      Supabase Auth + RLS + request validation + rate limiting + XSS sanitization
+                      Supabase Auth + RLS + validation + rate limiting
                     </p>
                     <div className="spatial-mobile-tag text-cosmos-muted">
                       PRIVATE &amp; SECURE STORAGE

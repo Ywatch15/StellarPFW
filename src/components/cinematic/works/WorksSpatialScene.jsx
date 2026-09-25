@@ -570,7 +570,7 @@ function SpatialContinuumController({
       // ── 8. DEVGRAPH (LIVING CONSTELLATION / KNOWLEDGE CLUSTER) TRAJECTORY ──
       if (devgraphScrollGroupRef.current && showDevGraph) {
         let dgX = isMobile ? 2.5 : 5.8;
-        let dgY = isMobile ? 1.25 : 0;
+        let dgY = isMobile ? 1.15 : 0;
         let dgZ = -8.5;
         let dgScale = 0.25;
 
@@ -584,20 +584,20 @@ function SpatialContinuumController({
           const ease = t * t * (3 - 2 * t);
           dgX = (isMobile ? 2.5 : 5.8) - (isMobile ? 2.5 : 4.0) * ease;
           dgZ = -8.5 + (isMobile ? 8.1 : 8.7) * ease;
-          dgScale = 0.25 + (isMobile ? 0.40 : 0.80) * ease;
+          dgScale = 0.25 + (isMobile ? 0.15 : 0.80) * ease;
         } else if (clampedP <= 0.985) {
           // Focal dominance & living ambient motion throughout knowledge graph beats
           dgX = isMobile ? 0 : 1.8;
-          dgY = isMobile ? 1.25 : 0;
+          dgY = isMobile ? 1.15 : 0;
           dgZ = isMobile ? -0.4 : 0.2;
-          dgScale = isMobile ? 0.65 : 1.05;
+          dgScale = isMobile ? 0.40 : 1.05;
         } else {
           // Gentle expansion / settle toward future final synthesis
           const t = (clampedP - 0.985) / 0.015;
           dgX = isMobile ? 0 : 1.8;
-          dgY = isMobile ? 1.25 : 0;
+          dgY = isMobile ? 1.15 : 0;
           dgZ = isMobile ? -0.4 : 0.2;
-          dgScale = (isMobile ? 0.65 : 1.05) + (isMobile ? 0.05 : 0.10) * t;
+          dgScale = (isMobile ? 0.40 : 1.05) + (isMobile ? 0.03 : 0.10) * t;
         }
 
         devgraphScrollGroupRef.current.position.set(dgX, dgY, dgZ);

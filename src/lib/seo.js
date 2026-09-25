@@ -8,9 +8,9 @@
 export const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  '@id': 'https://stellar-pfw.vercel.app/#person',
+  '@id': 'https://sundram-stellar.vercel.app/#person',
   name: 'Sundram Pathak',
-  url: 'https://stellar-pfw.vercel.app',
+  url: 'https://sundram-stellar.vercel.app',
   jobTitle: 'Full-Stack Software Engineer',
   description:
     'Full-stack engineer crafting performant, accessible digital experiences with React, Node.js, and Three.js.',
@@ -66,10 +66,10 @@ export function projectJsonLd(project) {
     '@type': 'CreativeWork',
     name: project.title,
     description: project.description,
-    url: project.url || `https://stellar-pfw.vercel.app/works#${project.id}`,
+    url: project.url || `https://sundram-stellar.vercel.app/works#${project.id}`,
     creator: {
       '@type': 'Person',
-      '@id': 'https://stellar-pfw.vercel.app/#person',
+      '@id': 'https://sundram-stellar.vercel.app/#person',
       name: 'Sundram Pathak',
     },
     keywords: project.tags?.join(', '),
@@ -82,21 +82,21 @@ export function projectJsonLd(project) {
 export const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  '@id': 'https://stellar-pfw.vercel.app/#website',
+  '@id': 'https://sundram-stellar.vercel.app/#website',
   name: 'Stellar Portfolio',
-  url: 'https://stellar-pfw.vercel.app',
+  url: 'https://sundram-stellar.vercel.app',
   description:
     'Full-stack developer portfolio showcasing projects, skills, and experience with interactive 3D visualizations.',
   author: {
     '@type': 'Person',
-    '@id': 'https://stellar-pfw.vercel.app/#person',
+    '@id': 'https://sundram-stellar.vercel.app/#person',
     name: 'Sundram Pathak',
   },
   potentialAction: {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://stellar-pfw.vercel.app/works?q={search_term_string}',
+      urlTemplate: 'https://sundram-stellar.vercel.app/works?q={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },
@@ -108,13 +108,13 @@ export const websiteJsonLd = {
 export const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  '@id': 'https://stellar-pfw.vercel.app/#organization',
+  '@id': 'https://sundram-stellar.vercel.app/#organization',
   name: 'Stellar Portfolio',
   description: 'Full-stack development portfolio',
-  url: 'https://stellar-pfw.vercel.app',
+  url: 'https://sundram-stellar.vercel.app',
   founder: {
     '@type': 'Person',
-    '@id': 'https://stellar-pfw.vercel.app/#person',
+    '@id': 'https://sundram-stellar.vercel.app/#person',
     name: 'Sundram Pathak',
   },
 };
@@ -130,7 +130,7 @@ export function breadcrumbJsonLd(items) {
       '@type': 'ListItem',
       position: i + 1,
       name: item.name,
-      item: `https://stellar-pfw.vercel.app${item.url}`,
+      item: `https://sundram-stellar.vercel.app${item.url}`,
     })),
   };
 }

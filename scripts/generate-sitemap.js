@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const BASE_URL = process.env.SITE_URL || 'https://stellar-pfw.vercel.app';
+const BASE_URL = process.env.SITE_URL || 'https://sundram-stellar.vercel.app';
 const today = new Date().toISOString().split('T')[0];
 
 const routes = [

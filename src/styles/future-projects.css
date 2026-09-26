@@ -1,0 +1,53 @@
+/* FILE: src/styles/future-projects.css */
+/* Styles for Future Project Loading Sequence & Deep Space Reservoir */
+
+.future-project-field {
+  background-color: #050816;
+  position: relative;
+  width: 100%;
+}
+
+.future-pinned-stage {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: #050816;
+  contain: paint layout;
+}
+
+.future-3d-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.future-3d-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #050816;
+}
+
+.future-hud-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 4.5rem);
+}
+
+@media (min-width: 768px) {
+  .future-hud-overlay {
+    padding-top: 5.5rem;
+  }
+}

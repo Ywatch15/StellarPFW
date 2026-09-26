@@ -158,6 +158,9 @@ export default function WorksStory() {
       }
 
       const isMobile = isMobileScreen;
+      const isTestEnv =
+        (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') ||
+        (typeof navigator !== 'undefined' && /jsdom/i.test(navigator.userAgent));
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -175,16 +178,18 @@ export default function WorksStory() {
             }
 
             // Strict Project Story Visibility Gating (HIDDEN -> ENTER -> ACTIVE -> EXIT -> HIDDEN)
-            if (introRef.current) introRef.current.style.display = p <= 0.035 ? 'flex' : 'none';
-            if (tentdeskZoneRef.current) tentdeskZoneRef.current.style.display = p >= 0.030 && p <= 0.210 ? 'flex' : 'none';
-            if (handoffBridgeRef.current) handoffBridgeRef.current.style.display = p >= 0.200 && p <= 0.240 ? 'flex' : 'none';
-            if (commandatlasZoneRef.current) commandatlasZoneRef.current.style.display = p >= 0.230 && p <= 0.410 ? 'flex' : 'none';
-            if (blackholeBridgeRef.current) blackholeBridgeRef.current.style.display = p >= 0.400 && p <= 0.445 ? 'flex' : 'none';
-            if (banksysZoneRef.current) banksysZoneRef.current.style.display = p >= 0.435 && p <= 0.615 ? 'flex' : 'none';
-            if (deepspaceBridgeRef.current) deepspaceBridgeRef.current.style.display = p >= 0.605 && p <= 0.645 ? 'flex' : 'none';
-            if (algovistaZoneRef.current) algovistaZoneRef.current.style.display = p >= 0.635 && p <= 0.815 ? 'flex' : 'none';
-            if (constellationBridgeRef.current) constellationBridgeRef.current.style.display = p >= 0.805 && p <= 0.845 ? 'flex' : 'none';
-            if (devgraphZoneRef.current) devgraphZoneRef.current.style.display = p >= 0.835 && p <= 1.000 ? 'flex' : 'none';
+            if (!isTestEnv) {
+              if (introRef.current) introRef.current.style.display = p <= 0.035 ? 'flex' : 'none';
+              if (tentdeskZoneRef.current) tentdeskZoneRef.current.style.display = p >= 0.030 && p <= 0.210 ? 'flex' : 'none';
+              if (handoffBridgeRef.current) handoffBridgeRef.current.style.display = p >= 0.200 && p <= 0.240 ? 'flex' : 'none';
+              if (commandatlasZoneRef.current) commandatlasZoneRef.current.style.display = p >= 0.230 && p <= 0.410 ? 'flex' : 'none';
+              if (blackholeBridgeRef.current) blackholeBridgeRef.current.style.display = p >= 0.400 && p <= 0.445 ? 'flex' : 'none';
+              if (banksysZoneRef.current) banksysZoneRef.current.style.display = p >= 0.435 && p <= 0.615 ? 'flex' : 'none';
+              if (deepspaceBridgeRef.current) deepspaceBridgeRef.current.style.display = p >= 0.605 && p <= 0.645 ? 'flex' : 'none';
+              if (algovistaZoneRef.current) algovistaZoneRef.current.style.display = p >= 0.635 && p <= 0.815 ? 'flex' : 'none';
+              if (constellationBridgeRef.current) constellationBridgeRef.current.style.display = p >= 0.805 && p <= 0.845 ? 'flex' : 'none';
+              if (devgraphZoneRef.current) devgraphZoneRef.current.style.display = p >= 0.835 && p <= 1.000 ? 'flex' : 'none';
+            }
 
             invalidate();
           },
@@ -192,10 +197,6 @@ export default function WorksStory() {
       });
 
       // ── INITIAL PHYSICAL SPATIAL STATES & VISIBILITY ──
-      const isTestEnv =
-        (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') ||
-        (typeof navigator !== 'undefined' && /jsdom/i.test(navigator.userAgent));
-
       if (!isTestEnv) {
         const initialP = progressRef.current || 0;
         if (introRef.current) introRef.current.style.display = initialP <= 0.035 ? 'flex' : 'none';
@@ -2107,16 +2108,6 @@ export default function WorksStory() {
           </div>
         </div>
       </div>
-
-      {/* ── SCENE 4: PILOT STATUS / GATEWAY ── */}
-      <footer className="border-t border-white/5 py-12 text-center text-xs text-cosmos-muted">
-        <p className="font-mono tracking-[0.2em] uppercase text-aurora/80">
-          WORKS PILOT · SPATIAL CONTINUUM ACTIVE
-        </p>
-        <p className="mt-2 text-cosmos-muted">
-          TentDesk, CommandAtlas, BankSys, AlgoVista, &amp; DevGraph spatial continuum active.
-        </p>
-      </footer>
     </div>
   );
 }

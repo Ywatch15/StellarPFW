@@ -8,6 +8,7 @@ import { useSearchParams } from 'react-router-dom';
 import useSEO from '../hooks/useSEO';
 import SolarSystem from '../components/SolarSystem';
 import WorksStory from '../components/cinematic/works/WorksStory';
+import FutureProjectField from '../components/cinematic/works/future/FutureProjectField';
 
 // Master toggle: set to false or use ?legacy=true to view purely the original planetary system
 const ENABLE_CINEMATIC_WORKS = true;
@@ -43,9 +44,10 @@ export default function Works() {
             <span className="mt-2 font-mono text-xs text-aurora/70 ml-0.5 md:ml-0">↓</span>
           </div>
 
-          {/* ── SECTION B: CINEMATIC PROJECT STORY & SECTION C: CONTENT ARCHIVE ── */}
+          {/* ── SECTION B: CINEMATIC PROJECT STORY & SECTION C: CONTENT ARCHIVE & FUTURE RESERVOIR ── */}
           <section aria-label="Cinematic Project Stories" className="works-cinematic relative w-full">
             <WorksStory />
+            <FutureProjectField />
           </section>
         </>
       )}

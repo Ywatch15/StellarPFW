@@ -59,3 +59,44 @@ This project incorporates selected 3D models for educational and technical portf
 * **License & Rights:** Public Domain (United States Government work under 17 U.S.C. § 105; free for public informational, educational, and creative use without copyright restriction, subject to standard non-endorsement terms).
 * **Technical Details:** Spacecraft featuring solar concentrator arrays (SCARLET), xenon ion propulsion engine, high-gain antenna, and autonomous navigation sensors. Employed as a visual metaphor for exploration, algorithm simulation, and visual experimentation.
 
+---
+
+### 6. Post-DevGraph Future Signal 01: Hubble Space Telescope
+* **Filename:** `future/hubble-space-telescope.glb` (1.69 MB / 1,694,988 bytes)
+* **Model Identifier:** Hubble Space Telescope (HST)
+* **Source:** [NASA 3D Resources — Hubble Space Telescope](https://science.nasa.gov/3d-resources/hubble-space-telescope/)
+* **Contributing Center:** NASA Goddard Space Flight Center (GSFC) / Space Telescope Science Institute (STScI)
+* **License & Rights:** Public Domain (United States Government work under 17 U.S.C. § 105; free for public informational, educational, and creative use without copyright restriction, subject to standard non-endorsement terms).
+* **Technical Details:** Highly detailed telescope assembly with cylindrical primary baffle, aperture door, twin solar arrays, and high-gain communications antennas. Employed as a visual metaphor for deep observation and upcoming horizons.
+
+---
+
+### 7. Post-DevGraph Future Signal 02: Lunar Planetary Body
+* **Filename:** `future/nasa-moon-1024.jpg` (238 KB / 238,093 bytes)
+* **Texture Identifier:** Global Lunar Surface Topology Map
+* **Source:** [NASA 3D Resources — The Moon](https://science.nasa.gov/3d-resources/moon/) / Lunar Reconnaissance Orbiter (LRO)
+* **Contributing Center:** NASA Goddard Space Flight Center (GSFC) / Scientific Visualization Studio (SVS)
+* **License & Rights:** Public Domain (United States Government work under 17 U.S.C. § 105; free for public use without copyright restriction).
+* **Technical Details:** Real photographic elevation and reflectance mosaic captured by the Lunar Reconnaissance Orbiter Camera (LROC). Mapped onto a PBR Three.js sphere with authentic cratered specular relief.
+
+---
+
+### 8. Post-DevGraph Future Signal 03: Pioneer 10 Deep Space Probe
+* **Filename:** `future/pioneer-10.glb` (2.05 MB / 2,049,840 bytes)
+* **Model Identifier:** Pioneer 10 Deep Space Probe
+* **Source:** [NASA 3D Resources — Pioneer 10](https://science.nasa.gov/3d-resources/pioneer-10/)
+* **Contributing Center:** NASA Ames Research Center (ARC) / NASA Jet Propulsion Laboratory (JPL)
+* **License & Rights:** Public Domain (United States Government work under 17 U.S.C. § 105; free for public informational, educational, and creative use without copyright restriction).
+* **Technical Details:** Interstellar probe featuring a parabolic high-gain antenna, radioisotope thermoelectric generator (RTG) booms, and scientific magnetometer sensor mast.
+
+---
+
+### 9. Post-DevGraph Future Signal 04: Mars Global Surveyor
+* **Filename:** `future/mars-global-surveyor.glb` (1.92 MB / 1,921,268 bytes)
+* **Model Identifier:** Mars Global Surveyor (MGS) Spacecraft
+* **Source:** [NASA 3D Resources — Mars Global Surveyor](https://science.nasa.gov/3d-resources/mars-global-surveyor/)
+* **Contributing Center:** NASA Jet Propulsion Laboratory (JPL-Caltech)
+* **License & Rights:** Public Domain (United States Government work under 17 U.S.C. § 105; free for public informational, educational, and creative use without copyright restriction).
+* **Technical Details:** Planetary orbiter assembly featuring dual deployable solar array wings, high-gain communications dish, and Nadir-pointed planetary science instrument deck.
+
+
